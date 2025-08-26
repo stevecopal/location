@@ -1,4 +1,4 @@
-from django import forms
+from django.utils import translation  # ← bien le module, pas la fonction set_languagefrom django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _  # ← import pour i18n
@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.utils.translation import activate  # Importation corrigée
+
+LANGUAGE_SESSION_KEY = 'django_language'
 
 def home(request):
     properties = Property.objects.filter(is_available=True)
@@ -249,3 +252,22 @@ def contact(request):
         form = ContactForm()
 
     return render(request, "about.html", {"contact_form": form})
+
+def set_language(request):
+    if request.method == 'POST':
+        language = request.POST.get('language')
+        next_url = request.POST.get('next', request.META.get('HTTP_REFERER', '/'))
+        if language in dict(settings.LANGUAGES):
+            activate(language)
+            request.session['django_language'] = language  # Utilisation de la clé explicite
+            # Gérer les préfixes de langue dans l'URL
+            if next_url.startswith('/'):
+                # Supprimer l'ancien préfixe de langue (par exemple, /en/, /fr/)
+                for lang_code, _ in settings.LANGUAGES:
+                    if next_url.startswith(f'/{lang_code}/'):
+                        next_url = next_url[len(lang_code) + 1:] or '/'
+                        break
+                # Ajouter le nouveau préfixe de langue
+                next_url = f'/{language}{next_url}'
+        return redirect(next_url)
+    return redirect('/')

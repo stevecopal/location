@@ -13,6 +13,7 @@ urlpatterns += i18n_patterns(
     
     path('auth/', include('apploc.authentication.urls')),
     path('', include('apploc.urls')),
+    path('set-language/', include('apploc.urls')),  # Inclure set_language dans i18n_patterns
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

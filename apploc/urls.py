@@ -16,4 +16,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard_redirect, name='dashboard_redirect'),
     path('reviews/all/', views.all_reviews, name='all_reviews'),
     path('contact/', views.contact, name='contact'),
+    path('set-language/', views.set_language, name='set_language'),
 ]
