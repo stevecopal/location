@@ -76,15 +76,15 @@
                     <a href="{% url 'login' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">{% trans "Log In" %}</a>
                 {% endif %}
                 <!-- Language Switcher -->
-                <form action="{% url 'set_language' %}" method="post" class="inline-flex">
+                <form method="post" action="{% url 'set_language' %}" class="inline">
                     {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                    <select name="language" onchange="this.form.submit()" class="border border-gray-300 rounded-lg p-2 text-primary-blue bg-white focus:outline-none">
-                        {% get_current_language as LANGUAGE_CODE %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <select name="language" onchange="this.form.submit()" class="border rounded px-2 py-1 text-sm">
+                        {% get_current_language as CURRENT_LANG %}
                         {% get_available_languages as LANGUAGES %}
-                        {% for lang in LANGUAGES %}
-                            <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
-                                {{ lang.1 }}
+                        {% for lang_code, lang_name in LANGUAGES %}
+                            <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANG %}selected{% endif %}>
+                                {{ lang_name }}
                             </option>
                         {% endfor %}
                     </select>

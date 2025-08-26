@@ -256,18 +256,23 @@ def contact(request):
 def set_language(request):
     if request.method == 'POST':
         language = request.POST.get('language')
+        # On récupère l'URL précédente ou "/" par défaut
         next_url = request.POST.get('next', request.META.get('HTTP_REFERER', '/'))
+
         if language in dict(settings.LANGUAGES):
+            # Active la langue pour la session en cours
             activate(language)
-            request.session['django_language'] = language  # Utilisation de la clé explicite
-            # Gérer les préfixes de langue dans l'URL
-            if next_url.startswith('/'):
-                # Supprimer l'ancien préfixe de langue (par exemple, /en/, /fr/)
-                for lang_code, _ in settings.LANGUAGES:
-                    if next_url.startswith(f'/{lang_code}/'):
-                        next_url = next_url[len(lang_code) + 1:] or '/'
-                        break
-                # Ajouter le nouveau préfixe de langue
-                next_url = f'/{language}{next_url}'
+            request.session['django_language'] = language
+
+            # Supprime l'ancien préfixe de langue dans l'URL
+            for lang_code, _ in settings.LANGUAGES:
+                if next_url.startswith(f'/{lang_code}/'):
+                    next_url = next_url[len(lang_code) + 1:] or '/'
+                    break
+
+            # Ajoute le nouveau préfixe de langue
+            next_url = f'/{language}{next_url}'
+
         return redirect(next_url)
+
     return redirect('/')
