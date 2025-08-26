@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} Property -  CopalFinder{% endblock %}
+
+{% block content %}
+<section class="py-8">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-primary-blue">{{ action }} <span class="text-accent-orange">Property</span></h2>
+        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">
+            {% if action == 'Create' %}
+                Add a new property to your  CopalFinder portfolio.
+            {% else %}
+                Update the details of your existing property.
+            {% endif %}
+        </p>
+    </div>
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md">
+        <form method="post" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+            <!-- Property Details -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-primary-blue mb-4">Property Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {% for field in property_form %}
+                        <div class="relative">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-primary-blue mb-2">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <p class="text-red-600 text-sm mt-1" role="alert">{{ field.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Photos -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-primary-blue mb-4">Photos</h3>
+                {{ photo_formset.management_form }}
+                <div class="space-y-4">
+                    {% for form in photo_formset %}
+                        <div class="relative">
+                            {% for field in form %}
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-primary-blue mb-2">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <p class="text-red-600 text-sm mt-1" role="alert">{{ field.errors.as_text }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Videos -->
+            <div class="pb-6">
+                <h3 class="text-xl font-semibold text-primary-blue mb-4">Videos</h3>
+                {{ video_formset.management_form }}
+                <div class="space-y-4">
+                    {% for form in video_formset %}
+                        <div class="relative">
+                            {% for field in form %}
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-primary-blue mb-2">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <p class="text-red-600 text-sm mt-1" role="alert">{{ field.errors.as_text }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Form Actions -->
+            <div class="text-center space-x-4">
+                <button type="submit" class="bg-primary-blue hover:bg-primary-light text-white px-8 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
+                    <i class="fas fa-save mr-2"></i>
+                    {{ action }} Property
+                </button>
+                <a href="{% url 'owner_dashboard' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<style>
+    .transition-colors {
+        transition: color 0.2s, background-color 0.2s;
+    }
+    .transition-shadow {
+        transition: box-shadow 0.3s;
+    }
+    /* Form field styles aligned with base.html */
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="file"]:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #1e4a76; /* --primary-blue */
+        box-shadow: 0 0 0 3px rgba(30, 74, 118, 0.1);
+    }
+    label {
+        font-weight: 500;
+        color: #1e4a76; /* --primary-blue */
+    }
+</style>
+
+<script>
+    // Enhanced mobile menu toggle with accessibility
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const menuLinks = mobileMenu.querySelectorAll('a');
+    
+    mobileMenuButton.addEventListener('click', () => {
+        const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+        mobileMenuButton.setAttribute('aria-expanded', !expanded);
+        mobileMenu.classList.toggle('hidden');
+    });
+    
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+        });
+    });
+</script>
+{% endblock %}

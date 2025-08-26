@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} CopalFinder - Premium Rentals{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            blue: '#1e4a76',
+                            light: '#4a76a8',
+                        },
+                        accent: {
+                            orange: '#ff7e30',
+                            light: '#ffaa70',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e4a76;
+            --primary-light: #4a76a8;
+            --accent-orange: #ff7e30;
+            --accent-light: #ffaa70;
+        }
+        
+        /* Styles pour les champs de formulaire */
+        input[type="text"], 
+        input[type="password"], 
+        input[type="email"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        input[type="text"]:focus, 
+        input[type="password"]:focus, 
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 74, 118, 0.1);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-white text-gray-800 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md py-4 px-4 md:px-8 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'home' %}" class="flex items-center text-primary-blue text-2xl font-bold">
+                <i class="fas fa-home mr-2 text-accent-orange"></i>
+                Copal<span class="text-accent-orange">Finder</span>
+            </a>
+            
+            <button class="md:hidden text-primary-blue focus:outline-none" id="mobile-menu-button">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="{% url 'home' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Home</a>
+                <a href="{% url 'all_properties' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Properties</a>
+                <a href="{% url 'about' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">About</a>
+                
+                {% if request.session.user_id %}
+                    <a href="{% url 'dashboard_redirect' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Dashboard</a>
+                    <a href="{% url 'logout' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">Log Out</a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Sign Up</a>
+                    <a href="{% url 'login' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">Log In</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden bg-white py-4 px-4 mt-2 rounded-lg shadow-lg" id="mobile-menu">
+            <a href="{% url 'home' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Home</a>
+            <a href="{% url 'all_properties' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Properties</a>
+            <a href="{% url 'about' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">About</a>
+            
+            {% if request.session.user_id %}
+                <a href="{% url 'dashboard_redirect' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Dashboard</a>
+                <a href="{% url 'logout' %}" class="block mt-2 bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full text-center transition-colors">Log Out</a>
+            {% else %}
+                <a href="{% url 'signup' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Sign Up</a>
+                <a href="{% url 'login' %}" class="block mt-2 bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full text-center transition-colors">Log In</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 md:px-8 py-6">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-3">
+                {% for message in messages %}
+                    <div class="p-4 rounded-lg border-l-4 
+                        {% if message.tags == 'success' %}bg-green-100 border-green-500 text-green-700{% endif %}
+                        {% if message.tags == 'error' %}bg-red-100 border-red-500 text-red-700{% endif %}
+                        {% if message.tags == 'warning' %}bg-yellow-100 border-yellow-500 text-yellow-700{% endif %}
+                        {% if message.tags == 'info' %}bg-blue-100 border-blue-500 text-blue-700{% endif %}
+                        flex justify-between items-center">
+                        <span>{{ message }}</span>
+                        <button type="button" class="text-xl" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Main Content Block -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="bg-primary-blue text-white py-12 mt-12">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <!-- Branding Section -->
+                <div class="">
+                    <h3 class="text-xl font-bold mb-4 text-center">CopalFinder</h3>
+                    <p class="mb-6 text-gray-200">Find your perfect rental home for unforgettable experiences and memories.
+                    </p>
+                    <div class="flex space-x-6 gap-5 ">
+                        <a href="#" class="text-white hover:text-accent-orange transition-colors " aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent-orange transition-colors" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent-orange transition-colors" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-accent-orange transition-colors" aria-label="Pinterest">
+                            <i class="fab fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div  class="ml-20">
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url 'about' %}"
+                                class="text-gray-200 hover:text-accent-orange transition-colors">About Us</a></li>
+                        <li><a href="{% url 'about' %}#contact"
+                                class="text-gray-200 hover:text-accent-orange transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-primary-light mt-10 pt-8 text-center">
+                <p class="text-gray-200">&copy; 2025 CopalFinder - Premium Rental Homes. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

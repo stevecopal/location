@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Owner Dashboard -  CopalFinder{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-6">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-primary-blue mb-2">{{ owner.name }} Dashboard</h1>
+        <p class="text-gray-600">Welcome back! Manage your properties and track your performance.</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-home text-primary-blue text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-2xl font-bold text-primary-blue">{{ properties.count }}</p>
+                    <p class="text-sm text-gray-600">Total Properties</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-calendar-check text-green-600 text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-2xl font-bold text-primary-blue">{% widthratio properties.count 2 1 %}</p>
+                    <p class="text-sm text-gray-600">Occupied</p>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <!-- Action Button -->
+    <div class="mb-8">
+        <a href="{% url 'property_create' %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
+            <i class="fas fa-plus-circle mr-2"></i>
+            Add New Property
+        </a>
+    </div>
+
+    <!-- Properties Grid -->
+    {% if properties %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for property in properties %}
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
+            <!-- Property Image -->
+            <div class="relative">
+                {% if property.photos.first %}
+                    <img src="{{ property.photos.first.image.url }}" class="w-full h-48 object-cover" alt="{{ property.category.name }}">
+                {% else %}
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-home text-4xl text-gray-400"></i>
+                    </div>
+                {% endif %}
+                <div class="absolute top-3 left-3">
+                    <span class="bg-{% if property.is_available %}green{% else %}gray{% endif %}-500 text-white text-xs px-2 py-1 rounded-full">
+                        {% if property.is_available %}Available{% else %}Occupied{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Property Details -->
+            <div class="p-5">
+                <h3 class="font-semibold text-lg text-primary-blue mb-2">{{ property.category.name }}</h3>
+                <p class="text-gray-600 text-sm mb-3 flex items-center">
+                    <i class="fas fa-map-marker-alt text-accent-orange mr-2"></i>
+                    {{ property.location }}
+                </p>
+                <p class="text-gray-700 text-sm mb-4 line-clamp-2">{{ property.description|truncatewords:20 }}</p>
+                
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xl font-bold text-accent-orange">${{ property.price_per_month }}</span>
+                    <span class="text-sm text-gray-600">/month</span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-2">
+                    <a href="{% url 'property_detail' property.id %}" class="flex-1 bg-blue-100 text-primary-blue hover:bg-primary-blue hover:text-white text-center py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                        <i class="fas fa-eye mr-1"></i> View
+                    </a>
+                    <a href="{% url 'property_update' property.id %}" class="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-600 hover:text-white text-center py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </a>
+                    <a href="{% url 'property_delete' property.id %}" class="flex-1 bg-red-100 text-red-600 hover:bg-red-600 hover:text-white text-center py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                        <i class="fas fa-trash mr-1"></i> Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="bg-white rounded-xl shadow-sm p-12 text-center">
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-home text-3xl text-gray-400"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">No properties yet</h3>
+        <p class="text-gray-500 mb-6">Get started by adding your first property to your portfolio</p>
+        <a href="{% url 'property_create' %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
+            <i class="fas fa-plus-circle mr-2"></i>
+            Add Your First Property
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .transition-colors {
+        transition: color 0.2s, background-color 0.2s;
+    }
+    .transition-shadow {
+        transition: box-shadow 0.3s;
+    }
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

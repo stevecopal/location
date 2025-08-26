@@ -8,8 +8,7 @@ vi/
 
 # Django
 db.sqlite3
-/static/
-media/
+migrations/
 
 # Fichiers sensibles
 .env

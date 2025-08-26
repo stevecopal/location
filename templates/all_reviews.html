@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}All Reviews - CopalFinder{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-primary-blue mb-4">Tenant Reviews</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">Discover what our community has to say about their rental experiences</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-comment text-primary-blue text-2xl"></i>
+            </div>
+            <p class="text-3xl font-bold text-primary-blue">{{ reviews.count }}</p>
+            <p class="text-sm text-gray-600">Total Reviews</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-star text-green-600 text-2xl"></i>
+            </div>
+            <p class="text-3xl font-bold text-primary-blue">4.8</p>
+            <p class="text-sm text-gray-600">Average Rating</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
+            <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-users text-accent-orange text-2xl"></i>
+            </div>
+            <p class="text-3xl font-bold text-primary-blue">250+</p>
+            <p class="text-sm text-gray-600">Happy Tenants</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-home text-purple-600 text-2xl"></i>
+            </div>
+            <p class="text-3xl font-bold text-primary-blue">120+</p>
+            <p class="text-sm text-gray-600">Properties Reviewed</p>
+        </div>
+    </div>
+
+    <!-- Filter Options -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <h3 class="text-lg font-semibold text-primary-blue">Filter Reviews</h3>
+            <div class="flex flex-wrap gap-4">
+                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-orange">
+                    <option>All Properties</option>
+                    <option>Apartments</option>
+                    <option>Houses</option>
+                    <option>Villas</option>
+                </select>
+                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-orange">
+                    <option>All Ratings</option>
+                    <option>5 Stars</option>
+                    <option>4 Stars</option>
+                    <option>3 Stars</option>
+                </select>
+                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-orange">
+                    <option>Newest First</option>
+                    <option>Oldest First</option>
+                    <option>Highest Rated</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Grid -->
+    {% if reviews %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {% for review in reviews %}
+        <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-300">
+            <!-- Reviewer Info -->
+            <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold mr-4">
+                    {{ review.tenant.name|slice:":1"|upper }}
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-primary-blue">{{ review.tenant.name }}</h4>
+                    <p class="text-sm text-gray-500">
+                        {{ review.property.category.name }}
+                        {% if request.session.user_id %}- {{ review.property.location }}{% endif %}
+                    </p>
+                </div>
+                <div class="flex text-accent-orange text-sm">
+                    {% for i in "12345" %}
+                        <i class="fas fa-star{% if forloop.counter > review.rating %}-o{% endif %}"></i>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Review Content -->
+            <div class="mb-4">
+                <p class="text-gray-700 italic">"{{ review.message|truncatewords:40 }}"</p>
+            </div>
+
+            <!-- Review Meta -->
+            <div class="flex items-center justify-between border-t border-gray-100 pt-4">
+                <span class="text-sm text-gray-500">
+                    <i class="far fa-clock mr-1"></i>
+                    {{ review.date_posted|date:"M d, Y" }}
+                </span>
+                
+                {% if request.session.user_type == 'tenant' and review.tenant_id == request.session.user_id %}
+                <div class="flex space-x-2">
+                    <a href="{% url 'review_update' review.id %}" class="text-primary-blue hover:text-accent-orange transition-colors">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'review_delete' review.id %}" class="text-red-600 hover:text-red-800 transition-colors">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="bg-white rounded-xl shadow-sm p-12 text-center">
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-comments text-3xl text-gray-400"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">No reviews yet</h3>
+        <p class="text-gray-500 mb-6">Be the first to share your experience with our community</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            {% if request.session.user_type == 'tenant' %}
+            <a href="{% url 'review_list' %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                Write a Review
+            </a>
+            {% else %}
+            <a href="{% url 'signup' %}" class="bg-primary-blue hover:bg-primary-light text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                Sign Up as Tenant
+            </a>
+            {% endif %}
+            <a href="{% url 'home' %}" class="border border-primary-blue text-primary-blue hover:bg-primary-blue hover:text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                Browse Properties
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Pagination -->
+    {% if reviews.has_other_pages %}
+    <div class="flex justify-center">
+        <nav class="flex items-center space-x-2">
+            {% if reviews.has_previous %}
+                <a href="?page={{ reviews.previous_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            {% endif %}
+
+            {% for num in reviews.paginator.page_range %}
+                {% if reviews.number == num %}
+                    <span class="px-3 py-2 bg-accent-orange text-white rounded-lg">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if reviews.has_next %}
+                <a href="?page={{ reviews.next_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .transition-colors {
+        transition: color 0.2s, background-color 0.2s;
+    }
+    .transition-shadow {
+        transition: box-shadow 0.3s;
+    }
+</style>
+{% endblock %}

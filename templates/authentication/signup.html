@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Tenant Sign Up -  CopalFinder{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8 mt-8">
+    <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-primary-blue">Create Tenant Account</h2>
+        <p class="text-gray-600 mt-2">Join  CopalFinderto find your perfect rental home</p>
+    </div>
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                {{ field.label }}
+                {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+            </label>
+            {{ field }}
+            {% if field.help_text %}
+                <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+            {% endif %}
+            {% if field.errors %}
+            <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="flex items-center mt-4">
+            <input type="checkbox" id="terms" name="terms" class="h-4 w-4 text-accent-orange focus:ring-accent-orange border-gray-300 rounded">
+            <label for="terms" class="ml-2 block text-sm text-gray-700">
+                I agree to the <a href="#" class="text-primary-blue hover:text-accent-orange">Terms of Service</a> and <a href="#" class="text-primary-blue hover:text-accent-orange">Privacy Policy</a>
+            </label>
+        </div>
+
+        <button type="submit" class="w-full bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors mt-4">
+            Sign Up
+        </button>
+    </form>
+
+    <div class="mt-6 text-center">
+        <p class="text-gray-600">Already have an account? 
+            <a href="{% url 'login' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Log in</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    /* Styles pour les champs de formulaire */
+    input[type="text"], 
+    input[type="password"], 
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        font-size: 0.875rem;
+    }
+    
+    input[type="text"]:focus, 
+    input[type="password"]:focus, 
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(30, 74, 118, 0.1);
+    }
+    
+    /* Styles pour les cases à cocher */
+    input[type="checkbox"] {
+        border: 1px solid #d1d5db;
+        border-radius: 0.25rem;
+        color: var(--accent-orange);
+    }
+    
+    input[type="checkbox"]:focus {
+        outline: none;
+        ring: 2px;
+        ring-color: var(--accent-orange);
+        ring-opacity: 0.5;
+    }
+    
+    /* Styles pour les sélecteurs */
+    select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+</style>
+{% endblock %}

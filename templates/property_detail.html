@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ property.category.name }} - {{ property.location }} |  CopalFinder{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4">
+    <!-- Breadcrumb Navigation -->
+    <nav class="mb-6">
+        <ol class="flex items-center space-x-2 text-sm text-gray-600">
+            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">Home</a></li>
+            <li><i class="fas fa-chevron-right text-xs"></i></li>
+            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">Properties</a></li>
+            <li><i class="fas fa-chevron-right text-xs"></i></li>
+            <li class="text-accent-orange">Property Details</li>
+        </ol>
+    </nav>
+
+    <!-- Property Header -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+            <div>
+                <div class="flex items-center mt-2 text-gray-600">
+                    <i class="fas fa-map-marker-alt text-accent-orange mr-2"></i>
+                    {% if show_sensitive_info %}
+                        {{ property.location }}
+                    {% else %}
+                        <span>Please <a href="{% url 'login' %}" class="text-accent-orange hover:underline">log in</a> to view exact location</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="text-2xl font-bold text-accent-orange">Fcfa{{ property.price_per_month }}<span class="text-sm font-normal text-gray-600">/month</span></div>
+        </div>
+        
+        <div class="flex flex-wrap gap-3 mt-4">
+            
+            <div class="flex items-center bg-gray-100 px-3 py-1 rounded-full text-sm">
+                <i class="fas fa-calendar-check text-primary-blue mr-2"></i>
+                {% if property.is_available %}Available Now{% else %}Not Available{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Property Gallery -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        {% if property.photos.all %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for photo in property.photos.all %}
+                    <div class="overflow-hidden rounded-lg">
+                        <img src="{{ photo.image.url }}" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" alt="Property photo">
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                <i class="fas fa-home text-4xl text-gray-400"></i>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Property Details -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Description -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-primary-blue mb-4">Description</h2>
+                <p class="text-gray-600 leading-relaxed">{{ property.description }}</p>
+            </div>
+
+            <!-- Amenities -->
+            
+
+            <!-- Videos -->
+            {% if property.videos.all %}
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-primary-blue mb-4">Videos</h2>
+                <div class="grid gap-4">
+                    {% for video in property.videos.all %}
+                    <video class="w-full rounded-lg" controls>
+                        <source src="{{ video.video_file.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Reviews -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-primary-blue mb-4">Reviews</h2>
+                {% if property.reviews.all %}
+                    <div class="space-y-4">
+                        {% for review in property.reviews.all %}
+                        <div class="border-b border-gray-100 pb-4 last:border-b-0">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold mr-3">
+                                    {{ review.tenant.name|first|upper }}
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">{{ review.tenant.name }}</h4>
+                                    <div class="flex text-accent-orange text-sm">
+                                        {% for i in "12345" %}
+                                            <i class="fas fa-star{% if forloop.counter > review.rating %}-o{% endif %}"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm">{{ review.message }}</p>
+                            <p class="text-gray-400 text-xs mt-2">{{ review.date_posted|date:"M d, Y" }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-600 text-center py-4">No reviews yet.</p>
+                {% endif %}
+
+                {% if request.session.user_type == 'tenant' %}
+                <div class="mt-6 text-center">
+                    <a href="{% url 'review_create' property.id %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-2 rounded-full transition-colors inline-flex items-center">
+                        <i class="fas fa-plus mr-2"></i>
+                        Add Review
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Contact Information -->
+            <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+                <h3 class="text-lg font-semibold text-primary-blue mb-4">Contact</h3>
+                
+                {% if show_sensitive_info %}
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-accent-orange mr-3"></i>
+                            <div>
+                                <p class="text-sm text-gray-600">Phone</p>
+                                <p class="font-medium">{{ property.contact_phone }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-accent-orange mr-3"></i>
+                            <div>
+                                <p class="text-sm text-gray-600">Email</p>
+                                <p class="font-medium">{{ property.contact_email }}</p>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full bg-accent-orange hover:bg-accent-light text-white py-2 px-4 rounded-full transition-colors mt-4">
+                            <i class="fas fa-calendar mr-2"></i>
+                            Schedule Viewing
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-lock text-3xl text-accent-orange mb-3"></i>
+                        <p class="text-gray-600 mb-4">Log in to view contact information</p>
+                        <a href="{% url 'login' %}" class="bg-accent-orange hover:bg-accent-light text-white py-2 px-4 rounded-full transition-colors">
+                            Log In
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Similar Properties -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-primary-blue mb-4">Similar Properties</h3>
+                <div class="space-y-4">
+                    {% for similar in similar_properties|slice:":2" %}
+                    <div class="border border-gray-100 rounded-lg p-3 hover:shadow-md transition-shadow">
+                        {% if similar.photos.first %}
+                        <img src="{{ similar.photos.first.image.url }}" class="w-full h-32 object-cover rounded mb-2" alt="{{ similar.category.name }}">
+                        {% endif %}
+                        <h4 class="font-semibold text-sm">{{ similar.category.name }}</h4>
+                        <p class="text-accent-orange font-bold text-sm">Fcfa{{ similar.price_per_month }}/month</p>
+                        <a href="{% url 'property_detail' similar.id %}" class="text-primary-blue hover:text-accent-orange text-sm transition-colors">
+                            View Details →
+                        </a>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-600 text-sm">No similar properties found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .transition-colors {
+        transition: color 0.2s, background-color 0.2s;
+    }
+    .transition-transform {
+        transition: transform 0.3s;
+    }
+</style>
+{% endblock %}

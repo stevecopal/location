@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - CopalFinder{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-primary-blue mb-4">About CopalFinder</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">Discover the story behind our passion for connecting people with their perfect homes</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+        
+        <div>
+            <h2 class="text-3xl font-bold text-primary-blue mb-6">Who We Are</h2>
+            <div class="space-y-4 text-gray-700">
+                <p>At <strong class="text-accent-orange">CopalFinder</strong>, we are more than just a rental platform—we are a community dedicated to transforming the way people find and manage their perfect homes.</p>
+                <p>Founded with a vision to simplify the rental process, we bring together property owners and tenants through a seamless, transparent, and user-friendly experience.</p>
+                <p>Our team is driven by a commitment to excellence, ensuring every property listed meets the highest standards of quality and every tenant finds a place they can truly call home.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Values Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <!-- Mission -->
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-bullseye text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-primary-blue mb-4">Our Mission</h3>
+            <p class="text-gray-600">To empower property owners and tenants by providing a trusted platform that makes renting effortless, secure, and rewarding for everyone involved.</p>
+        </div>
+
+        <!-- Values -->
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-heart text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-primary-blue mb-4">Our Values</h3>
+            <p class="text-gray-600">Integrity, innovation, and customer satisfaction are at the heart of everything we do. We believe in building lasting relationships based on trust and mutual respect.</p>
+        </div>
+
+        <!-- Promise -->
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-handshake text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-primary-blue mb-4">Our Promise</h3>
+            <p class="text-gray-600">We are committed to delivering exceptional service, from user-friendly tools for owners to personalized support for tenants throughout their journey.</p>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="bg-primary-blue rounded-xl p-12 text-white text-center mb-16">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+                <div class="text-4xl font-bold mb-2">50+</div>
+                <div class="text-sm uppercase tracking-wider">Properties</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold mb-2">60+</div>
+                <div class="text-sm uppercase tracking-wider">Happy Clients</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold mb-2">10+</div>
+                <div class="text-sm uppercase tracking-wider">Cities</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold mb-2">24/7</div>
+                <div class="text-sm uppercase tracking-wider">Support</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="mb-16">
+        <h2 class="text-3xl font-bold text-primary-blue text-center mb-12">Our Leadership Team</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-user text-4xl text-gray-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-primary-blue mb-2">COPAL STEVE</h3>
+                <p class="text-accent-orange mb-2">Founder & CEO</p>
+                <p class="text-gray-600 text-sm">Visionary leader </p>
+            </div>
+            <div class="text-center">
+                <div class="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-user text-4xl text-gray-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-primary-blue mb-2">Sarah Chen</h3>
+                <p class="text-accent-orange mb-2">Chief Operations Officer</p>
+                <p class="text-gray-600 text-sm">Expert in customer experience and operational excellence</p>
+            </div>
+            <div class="text-center">
+                <div class="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-user text-4xl text-gray-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-primary-blue mb-2">Mike Johnson</h3>
+                <p class="text-accent-orange mb-2">Technology Director</p>
+                <p class="text-gray-600 text-sm">Tech innovator passionate about building seamless platforms</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="text-center bg-gray-50 rounded-xl p-8" id="contact">
+        <h2 class="text-3xl font-bold text-primary-blue mb-4">Contact Us</h2>
+        <p class="text-gray-600 text-lg mb-6 max-w-lg mx-auto">Have questions or need assistance? Fill out the form below to get in touch.</p>
+        <form method="post" action="{% url 'contact' %}" class="max-w-md mx-auto space-y-4">
+            {% csrf_token %}
+            <div>
+                {{ contact_form.name }}
+            </div>
+            <div>
+                {{ contact_form.email }}
+            </div>
+            <div>
+                {{ contact_form.subject }}
+            </div>
+            <div>
+                {{ contact_form.message }}
+            </div>
+            <button type="submit" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-2 rounded-full font-semibold transition-colors w-full">
+                Send Message
+            </button>
+        </form>
+    </div>
+
+</div>
+
+<style>
+    .transition-colors {
+        transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+    }
+    .transition-shadow {
+        transition: box-shadow 0.3s;
+    }
+</style>
+{% endblock %}
