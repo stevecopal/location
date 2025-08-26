@@ -1,23 +1,34 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Delete Review -  CopalFinder{% endblock %}
+{% block title %}{% trans "Delete Review" %} - CopalFinder{% endblock %}
 
 {% block content %}
 <section class="py-6">
     <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-primary-blue">Delete <span class="text-accent-orange">Review</span></h2>
-        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Are you sure you want to delete this review?</p>
+        <h2 class="text-3xl font-bold text-primary-blue">
+            {% trans "Delete" %} <span class="text-accent-orange">{% trans "Review" %}</span>
+        </h2>
+        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">{% trans "Are you sure you want to delete this review?" %}</p>
     </div>
     <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-md">
-        <h3 class="text-xl font-semibold text-primary-blue mb-4">Review for {{ review.property.category.name }} - {{ review.property.location }}</h3>
-        <p class="text-gray-600 mb-4 italic">"{{ review.message|truncatewords:30 }}"</p>
-        <p class="text-gray-600 mb-6">This action cannot be undone. Please confirm to delete the review.</p>
+        <h3 class="text-xl font-semibold text-primary-blue mb-4">
+            {% blocktrans %}Review for {{ review.property.category.name }} - {{ review.property.location }}{% endblocktrans %}
+        </h3>
+        <p class="text-gray-600 mb-4 italic">
+            "{% blocktrans %}{{ review.message|truncatewords:30 }}{% endblocktrans %}"
+        </p>
+        <p class="text-gray-600 mb-6">{% trans "This action cannot be undone. Please confirm to delete the review." %}</p>
         <form method="post">
             {% csrf_token %}
             <div class="text-center">
-                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">Delete Review</button>
-                <a href="{% url 'review_list' %}" class="bg-primary-light hover:bg-primary-blue text-white px-6 py-3 rounded-lg font-medium transition-colors ml-4">Cancel</a>
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    {% trans "Delete Review" %}
+                </button>
+                <a href="{% url 'review_list' %}" class="bg-primary-light hover:bg-primary-blue text-white px-6 py-3 rounded-lg font-medium transition-colors ml-4">
+                    {% trans "Cancel" %}
+                </a>
             </div>
         </form>
     </div>

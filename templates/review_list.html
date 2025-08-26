@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Your Reviews -  CopalFinder{% endblock %}
+{% block title %}{% trans "Your Reviews" %} - CopalFinder{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-primary-blue mb-2">Your Reviews</h1>
-            <p class="text-gray-600">Manage and edit your property reviews</p>
+            <h1 class="text-3xl font-bold text-primary-blue mb-2">{% trans "Your Reviews" %}</h1>
+            <p class="text-gray-600">{% trans "Manage and edit your property reviews" %}</p>
         </div>
         <a href="{% url 'home' %}" class="bg-primary-blue hover:bg-primary-light text-white px-4 py-2 rounded-lg font-medium inline-flex items-center transition-colors mt-4 sm:mt-0">
             <i class="fas fa-arrow-left mr-2"></i>
-            Back to Properties
+            {% trans "Back to Properties" %}
         </a>
     </div>
 
@@ -26,11 +27,11 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-primary-blue">{{ reviews.count }}</p>
-                    <p class="text-sm text-gray-600">Total Reviews</p>
+                    <p class="text-sm text-gray-600">{% trans "Total Reviews" %}</p>
                 </div>
             </div>
             <div class="text-right">
-                <p class="text-sm text-gray-600">Average Rating</p>
+                <p class="text-sm text-gray-600">{% trans "Average Rating" %}</p>
                 <div class="flex text-accent-orange">
                     {% for i in "12345" %}
                         <i class="fas fa-star{% if forloop.counter > average_rating %}-o{% endif %}"></i>
@@ -70,16 +71,16 @@
             <div class="flex items-center justify-between border-t border-gray-100 pt-4">
                 <div class="text-sm text-gray-500">
                     <i class="far fa-clock mr-1"></i>
-                    Posted on {{ review.date_posted|date:"F d, Y" }}
+                    {% blocktrans %}Posted on {{ review.date_posted|date:"F d, Y" }}{% endblocktrans %}
                 </div>
                 <div class="flex space-x-2">
                     <a href="{% url 'review_update' review.id %}" class="bg-primary-light hover:bg-primary-blue text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
                         <i class="fas fa-edit mr-1"></i>
-                        Edit
+                        {% trans "Edit" %}
                     </a>
                     <a href="{% url 'review_delete' review.id %}" class="bg-red-100 hover:bg-red-600 hover:text-white text-red-600 px-3 py-1 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
                         <i class="fas fa-trash mr-1"></i>
-                        Delete
+                        {% trans "Delete" %}
                     </a>
                 </div>
             </div>
@@ -92,11 +93,11 @@
         <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="fas fa-comment-slash text-3xl text-gray-400"></i>
         </div>
-        <h3 class="text-xl font-semibold text-gray-600 mb-2">No reviews yet</h3>
-        <p class="text-gray-500 mb-6">You haven't posted any reviews yet. Share your experience with other tenants!</p>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">{% trans "No reviews yet" %}</h3>
+        <p class="text-gray-500 mb-6">{% trans "You haven't posted any reviews yet. Share your experience with other tenants!" %}</p>
         <a href="{% url 'home' %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
             <i class="fas fa-home mr-2"></i>
-            Browse Properties
+            {% trans "Browse Properties" %}
         </a>
     </div>
     {% endif %}
@@ -104,9 +105,9 @@
     <!-- Pagination (if needed) -->
     {% if reviews.has_other_pages %}
     <div class="flex justify-center mt-8">
-        <nav class="flex items-center space-x-2" aria-label="Pagination">
+        <nav class="flex items-center space-x-2" aria-label="{% trans 'Pagination' %}">
             {% if reviews.has_previous %}
-                <a href="?page={{ reviews.previous_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" aria-label="Previous page">
+                <a href="?page={{ reviews.previous_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" aria-label="{% trans 'Previous page' %}">
                     <i class="fas fa-chevron-left"></i>
                 </a>
             {% endif %}
@@ -120,7 +121,7 @@
             {% endfor %}
 
             {% if reviews.has_next %}
-                <a href="?page={{ reviews.next_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" aria-label="Next page">
+                <a href="?page={{ reviews.next_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" aria-label="{% trans 'Next page' %}">
                     <i class="fas fa-chevron-right"></i>
                 </a>
             {% endif %}

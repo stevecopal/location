@@ -1,14 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Tenant Dashboard -  CopalFinder{% endblock %}
+{% block title %}{% trans "Tenant Dashboard - CopalFinder" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 py-6">
     <!-- Header -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-primary-blue mb-2">{{ tenant.name }} Dashboard</h1>
-        <p class="text-gray-600">Welcome back! Discover your next perfect home from our curated collection.</p>
+        <h1 class="text-3xl font-bold text-primary-blue mb-2">
+            {{ tenant.name }} {% trans "Dashboard" %}
+        </h1>
+        <p class="text-gray-600">
+            {% trans "Welcome back! Discover your next perfect home from our curated collection." %}
+        </p>
     </div>
 
     <!-- Quick Stats -->
@@ -20,23 +25,20 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-primary-blue">{{ properties.count }}</p>
-                    <p class="text-sm text-gray-600">Available Properties</p>
+                    <p class="text-sm text-gray-600">{% trans "Available Properties" %}</p>
                 </div>
             </div>
         </div>
-
-    
     </div>
 
     <!-- Action Button -->
     <div class="mb-8">
-        <a href="{% url 'review_list' %}" class="bg-primary-blue hover:bg-primary-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
+        <a href="{% url 'review_list' %}" 
+           class="bg-primary-blue hover:bg-primary-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
             <i class="fas fa-comments mr-2"></i>
-            Manage Your Reviews
+            {% trans "Manage Your Reviews" %}
         </a>
     </div>
-
-    
 
     <!-- Properties Grid -->
     {% if properties %}
@@ -46,7 +48,9 @@
             <!-- Property Image -->
             <div class="relative">
                 {% if property.photos.first %}
-                    <img src="{{ property.photos.first.image.url }}" class="w-full h-48 object-cover" alt="{{ property.category.name }}">
+                    <img src="{{ property.photos.first.image.url }}" 
+                         class="w-full h-48 object-cover" 
+                         alt="{{ property.category.name }}">
                 {% else %}
                     <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
                         <i class="fas fa-home text-4xl text-gray-400"></i>
@@ -54,7 +58,11 @@
                 {% endif %}
                 <div class="absolute top-3 left-3">
                     <span class="bg-{% if property.is_available %}green{% else %}gray{% endif %}-500 text-white text-xs px-2 py-1 rounded-full">
-                        {% if property.is_available %}Available{% else %}Occupied{% endif %}
+                        {% if property.is_available %}
+                            {% trans "Available" %}
+                        {% else %}
+                            {% trans "Occupied" %}
+                        {% endif %}
                     </span>
                 </div>
                 <button class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-sm hover:bg-accent-orange hover:text-white transition-colors">
@@ -64,25 +72,29 @@
 
             <!-- Property Details -->
             <div class="p-5">
-                <h3 class="font-semibold text-lg text-primary-blue mb-2">{{ property.category.name }}</h3>
+                <h3 class="font-semibold text-lg text-primary-blue mb-2">
+                    {{ property.category.name }}
+                </h3>
                 <p class="text-gray-600 text-sm mb-3 flex items-center">
                     <i class="fas fa-map-marker-alt text-accent-orange mr-2"></i>
                     {{ property.location }}
                 </p>
-                <p class="text-gray-700 text-sm mb-4 line-clamp-2">{{ property.description|truncatewords:20 }}</p>
-                
-                
-                </div>
-
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-xl font-bold text-accent-orange">${{ property.price_per_month }}</span>
-                    <span class="text-sm text-gray-600">/month</span>
-                </div>
-
-                <a href="{% url 'property_detail' property.id %}" class="block w-full bg-accent-orange hover:bg-accent-light text-white text-center py-2 px-4 rounded-lg font-semibold transition-colors">
-                    View Details
-                </a>
+                <p class="text-gray-700 text-sm mb-4 line-clamp-2">
+                    {{ property.description|truncatewords:20 }}
+                </p>
             </div>
+
+            <div class="flex items-center justify-between mb-4 px-5">
+                <span class="text-xl font-bold text-accent-orange">
+                    ${{ property.price_per_month }}
+                </span>
+                <span class="text-sm text-gray-600">/{% trans "month" %}</span>
+            </div>
+
+            <a href="{% url 'property_detail' property.id %}" 
+               class="block w-full bg-accent-orange hover:bg-accent-light text-white text-center py-2 px-4 rounded-lg font-semibold transition-colors">
+                {% trans "View Details" %}
+            </a>
         </div>
         {% endfor %}
     </div>
@@ -92,17 +104,22 @@
         <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="fas fa-search text-3xl text-gray-400"></i>
         </div>
-        <h3 class="text-xl font-semibold text-gray-600 mb-2">No properties available</h3>
-        <p class="text-gray-500">Check back later for new listings or try adjusting your search filters.</p>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">
+            {% trans "No properties available" %}
+        </h3>
+        <p class="text-gray-500">
+            {% trans "Check back later for new listings or try adjusting your search filters." %}
+        </p>
     </div>
     {% endif %}
 
-    <!-- Pagination (if needed) -->
+    <!-- Pagination -->
     {% if properties.has_other_pages %}
     <div class="flex justify-center mt-8">
         <nav class="flex items-center space-x-2">
             {% if properties.has_previous %}
-                <a href="?page={{ properties.previous_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <a href="?page={{ properties.previous_page_number }}" 
+                   class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     <i class="fas fa-chevron-left"></i>
                 </a>
             {% endif %}
@@ -111,12 +128,14 @@
                 {% if properties.number == num %}
                     <span class="px-3 py-2 bg-accent-orange text-white rounded-lg">{{ num }}</span>
                 {% else %}
-                    <a href="?page={{ num }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">{{ num }}</a>
+                    <a href="?page={{ num }}" 
+                       class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">{{ num }}</a>
                 {% endif %}
             {% endfor %}
 
             {% if properties.has_next %}
-                <a href="?page={{ properties.next_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <a href="?page={{ properties.next_page_number }}" 
+                   class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     <i class="fas fa-chevron-right"></i>
                 </a>
             {% endif %}

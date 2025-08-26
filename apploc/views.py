@@ -1,43 +1,34 @@
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-
+from django.utils.translation import gettext_lazy as _  # ← import pour i18n
 from location import settings
 from .models import Property, Review, Photo, Video
 from .forms import ContactForm, PhotoFormSet, PropertyForm, PhotoForm, VideoForm, ReviewForm, VideoFormSet
 from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
-from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 def home(request):
     properties = Property.objects.filter(is_available=True)
-    reviews = Review.objects.select_related('tenant').order_by('-date_posted')[:3]  # Get 3 latest reviews
+    reviews = Review.objects.select_related('tenant').order_by('-date_posted')[:3]
     is_authenticated = request.session.get('user_id') or (request.user.is_authenticated and request.user.is_staff)
     return render(request, 'home.html', {'properties': properties, 'reviews': reviews, 'is_authenticated': is_authenticated})
-
-# def all_properties(request):
-#     properties = Property.objects.all()
-#     return render(request, 'all_properties.html', {'properties': properties})
 
 def all_properties(request):
     location = request.GET.get('location', '')
     property_type = request.GET.get('property_type', '')
     price_range = request.GET.get('price_range', '')
     
-    # Start with all properties
     properties = Property.objects.all()
     
-    # Filter by location (case-insensitive partial match)
     if location:
         properties = properties.filter(location__icontains=location)
     
-    # Filter by property type
     if property_type:
         properties = properties.filter(category__name=property_type)
     
-    # Filter by price range
     if price_range:
         if price_range == '0-100000':
             properties = properties.filter(price__lte=100000)
@@ -59,10 +50,7 @@ def all_properties(request):
 def property_detail(request, property_id):
     property = get_object_or_404(Property, id=property_id)
     context = {'property': property}
-    if request.session.get('user_id'):
-        context['show_sensitive_info'] = True
-    else:
-        context['show_sensitive_info'] = False
+    context['show_sensitive_info'] = bool(request.session.get('user_id'))
     return render(request, 'property_detail.html', context)
 
 def all_reviews(request):
@@ -70,10 +58,9 @@ def all_reviews(request):
     is_authenticated = request.session.get('user_id') or (request.user.is_authenticated and request.user.is_staff)
     return render(request, 'all_reviews.html', {'reviews': reviews, 'is_authenticated': is_authenticated})
 
-
 def property_create(request):
     if request.session.get('user_type') != 'owner':
-        messages.error(request, 'Only owners can create properties.')
+        messages.error(request, _('Only owners can create properties.'))
         return redirect('login')
     
     if request.method == 'POST':
@@ -98,7 +85,7 @@ def property_create(request):
                     video.property = property
                     video.save()
             
-            messages.success(request, 'Property created successfully.')
+            messages.success(request, _('Property created successfully.'))
             return redirect('owner_dashboard')
     else:
         property_form = PropertyForm()
@@ -109,13 +96,12 @@ def property_create(request):
         'property_form': property_form,
         'photo_formset': photo_formset,
         'video_formset': video_formset,
-        'action': 'Create'
+        'action': _('Create')
     })
-
 
 def property_update(request, property_id):
     if request.session.get('user_type') != 'owner':
-        messages.error(request, 'Only owners can update properties.')
+        messages.error(request, _('Only owners can update properties.'))
         return redirect('login')
     
     property = get_object_or_404(Property, id=property_id, owner_id=request.session['user_id'])
@@ -140,7 +126,7 @@ def property_update(request, property_id):
                     video.property = property
                     video.save()
             
-            messages.success(request, 'Property updated successfully.')
+            messages.success(request, _('Property updated successfully.'))
             return redirect('owner_dashboard')
     else:
         property_form = PropertyForm(instance=property)
@@ -151,35 +137,32 @@ def property_update(request, property_id):
         'property_form': property_form,
         'photo_formset': photo_formset,
         'video_formset': video_formset,
-        'action': 'Update'
+        'action': _('Update')
     })
-
 
 def property_delete(request, property_id):
     if request.session.get('user_type') != 'owner':
-        messages.error(request, 'Only owners can delete properties.')
+        messages.error(request, _('Only owners can delete properties.'))
         return redirect('login')
     
     property = get_object_or_404(Property, id=property_id, owner_id=request.session['user_id'])
     if request.method == 'POST':
         property.delete()
-        messages.success(request, 'Property deleted successfully.')
+        messages.success(request, _('Property deleted successfully.'))
         return redirect('owner_dashboard')
     return render(request, 'property_confirm_delete.html', {'property': property})
 
-
 def review_list(request):
     if request.session.get('user_type') != 'tenant':
-        messages.error(request, 'Only tenants can manage reviews.')
+        messages.error(request, _('Only tenants can manage reviews.'))
         return redirect('login')
     
     reviews = Review.objects.filter(tenant_id=request.session['user_id'])
     return render(request, 'review_list.html', {'reviews': reviews})
 
-
 def review_create(request, property_id):
     if request.session.get('user_type') != 'tenant':
-        messages.error(request, 'Only tenants can create reviews.')
+        messages.error(request, _('Only tenants can create reviews.'))
         return redirect('login')
     
     property = get_object_or_404(Property, id=property_id)
@@ -190,16 +173,15 @@ def review_create(request, property_id):
             review.tenant_id = request.session['user_id']
             review.property = property
             review.save()
-            messages.success(request, 'Review created successfully.')
+            messages.success(request, _('Review created successfully.'))
             return redirect('review_list')
     else:
         form = ReviewForm()
-    return render(request, 'review_form.html', {'form': form, 'property': property, 'action': 'Create'})
-
+    return render(request, 'review_form.html', {'form': form, 'property': property, 'action': _('Create')})
 
 def review_update(request, review_id):
     if request.session.get('user_type') != 'tenant':
-        messages.error(request, 'Only tenants can update reviews.')
+        messages.error(request, _('Only tenants can update reviews.'))
         return redirect('login')
     
     review = get_object_or_404(Review, id=review_id, tenant_id=request.session['user_id'])
@@ -207,30 +189,28 @@ def review_update(request, review_id):
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Review updated successfully.')
+            messages.success(request, _('Review updated successfully.'))
             return redirect('review_list')
     else:
         form = ReviewForm(instance=review)
-    return render(request, 'review_form.html', {'form': form, 'property': review.property, 'action': 'Update'})
+    return render(request, 'review_form.html', {'form': form, 'property': review.property, 'action': _('Update')})
 
 def review_delete(request, review_id):
     if request.session.get('user_type') != 'tenant':
-        messages.error(request, 'Only tenants can delete reviews.')
+        messages.error(request, _('Only tenants can delete reviews.'))
         return redirect('login')
     
     review = get_object_or_404(Review, id=review_id, tenant_id=request.session['user_id'])
     if request.method == 'POST':
         review.delete()
-        messages.success(request, 'Review deleted successfully.')
+        messages.success(request, _('Review deleted successfully.'))
         return redirect('review_list')
     return render(request, 'review_confirm_delete.html', {'review': review})
 
 def about(request):
-    from .forms import ContactForm  # Import explicite pour éviter NameError
+    from .forms import ContactForm
     form = ContactForm()
     return render(request, 'about.html', {'contact_form': form})
-
-
 
 def dashboard_redirect(request):
     if request.user.is_authenticated and request.user.is_staff:
@@ -241,9 +221,8 @@ def dashboard_redirect(request):
             return redirect('owner_dashboard')
         elif user_type == 'tenant':
             return redirect('tenant_dashboard')
-    messages.error(request, 'Please log in to access your dashboard.')
+    messages.error(request, _('Please log in to access your dashboard.'))
     return redirect('login')
-
 
 def contact(request):
     if request.method == "POST":
@@ -251,19 +230,20 @@ def contact(request):
         if form.is_valid():
             form.save()
             data = form.cleaned_data
-            subject = f"New Contact Message: {data['subject']}"
+            subject = _("New Contact Message: {subject}").format(subject=data['subject'])
             from_email = settings.DEFAULT_FROM_EMAIL
             to_email = [settings.EMAIL_HOST_USER]
 
-            # Render HTML content
             html_content = render_to_string("emails/contact_email.html", {"data": data})
-            text_content = f"Name: {data['name']}\nEmail: {data['email']}\nMessage: {data['message']}"
+            text_content = _("Name: {name}\nEmail: {email}\nMessage: {message}").format(
+                name=data['name'], email=data['email'], message=data['message']
+            )
 
             email = EmailMultiAlternatives(subject, text_content, from_email, to_email)
             email.attach_alternative(html_content, "text/html")
             email.send(fail_silently=False)
 
-            messages.success(request, "Votre message a été envoyé avec succès !")
+            messages.success(request, _('Your message has been sent successfully!'))
             return redirect('contact')
     else:
         form = ContactForm()

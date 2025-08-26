@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Owner Dashboard -  CopalFinder{% endblock %}
+{% block title %}{% blocktrans %}Owner Dashboard - CopalFinder{% endblocktrans %}{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 py-6">
     <!-- Header -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-primary-blue mb-2">{{ owner.name }} Dashboard</h1>
-        <p class="text-gray-600">Welcome back! Manage your properties and track your performance.</p>
+        <h1 class="text-3xl font-bold text-primary-blue mb-2">{{ owner.name }} {% trans "Dashboard" %}</h1>
+        <p class="text-gray-600">{% trans "Welcome back! Manage your properties and track your performance." %}</p>
     </div>
 
     <!-- Stats Overview -->
@@ -20,7 +21,7 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-primary-blue">{{ properties.count }}</p>
-                    <p class="text-sm text-gray-600">Total Properties</p>
+                    <p class="text-sm text-gray-600">{% trans "Total Properties" %}</p>
                 </div>
             </div>
         </div>
@@ -32,19 +33,17 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-primary-blue">{% widthratio properties.count 2 1 %}</p>
-                    <p class="text-sm text-gray-600">Occupied</p>
+                    <p class="text-sm text-gray-600">{% trans "Occupied" %}</p>
                 </div>
             </div>
         </div>
-
-        
     </div>
 
     <!-- Action Button -->
     <div class="mb-8">
         <a href="{% url 'property_create' %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
             <i class="fas fa-plus-circle mr-2"></i>
-            Add New Property
+            {% trans "Add New Property" %}
         </a>
     </div>
 
@@ -64,7 +63,7 @@
                 {% endif %}
                 <div class="absolute top-3 left-3">
                     <span class="bg-{% if property.is_available %}green{% else %}gray{% endif %}-500 text-white text-xs px-2 py-1 rounded-full">
-                        {% if property.is_available %}Available{% else %}Occupied{% endif %}
+                        {% if property.is_available %}{% trans "Available" %}{% else %}{% trans "Occupied" %}{% endif %}
                     </span>
                 </div>
             </div>
@@ -80,19 +79,19 @@
                 
                 <div class="flex items-center justify-between mb-4">
                     <span class="text-xl font-bold text-accent-orange">${{ property.price_per_month }}</span>
-                    <span class="text-sm text-gray-600">/month</span>
+                    <span class="text-sm text-gray-600">/ {% trans "month" %}</span>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="flex space-x-2">
                     <a href="{% url 'property_detail' property.id %}" class="flex-1 bg-blue-100 text-primary-blue hover:bg-primary-blue hover:text-white text-center py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                        <i class="fas fa-eye mr-1"></i> View
+                        <i class="fas fa-eye mr-1"></i> {% trans "View" %}
                     </a>
                     <a href="{% url 'property_update' property.id %}" class="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-600 hover:text-white text-center py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                        <i class="fas fa-edit mr-1"></i> Edit
+                        <i class="fas fa-edit mr-1"></i> {% trans "Edit" %}
                     </a>
                     <a href="{% url 'property_delete' property.id %}" class="flex-1 bg-red-100 text-red-600 hover:bg-red-600 hover:text-white text-center py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                        <i class="fas fa-trash mr-1"></i> Delete
+                        <i class="fas fa-trash mr-1"></i> {% trans "Delete" %}
                     </a>
                 </div>
             </div>
@@ -105,11 +104,11 @@
         <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="fas fa-home text-3xl text-gray-400"></i>
         </div>
-        <h3 class="text-xl font-semibold text-gray-600 mb-2">No properties yet</h3>
-        <p class="text-gray-500 mb-6">Get started by adding your first property to your portfolio</p>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">{% trans "No properties yet" %}</h3>
+        <p class="text-gray-500 mb-6">{% trans "Get started by adding your first property to your portfolio" %}</p>
         <a href="{% url 'property_create' %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
             <i class="fas fa-plus-circle mr-2"></i>
-            Add Your First Property
+            {% trans "Add Your First Property" %}
         </a>
     </div>
     {% endif %}

@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}{{ property.category.name }} - {{ property.location }} |  CopalFinder{% endblock %}
+{% block title %}{{ property.category.name }} - {{ property.location }} | CopalFinder{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto px-4">
     <!-- Breadcrumb Navigation -->
     <nav class="mb-6">
         <ol class="flex items-center space-x-2 text-sm text-gray-600">
-            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">Home</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">{% trans "Home" %}</a></li>
             <li><i class="fas fa-chevron-right text-xs"></i></li>
-            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">Properties</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">{% trans "Properties" %}</a></li>
             <li><i class="fas fa-chevron-right text-xs"></i></li>
-            <li class="text-accent-orange">Property Details</li>
+            <li class="text-accent-orange">{% trans "Property Details" %}</li>
         </ol>
     </nav>
 
@@ -25,18 +26,23 @@
                     {% if show_sensitive_info %}
                         {{ property.location }}
                     {% else %}
-                        <span>Please <a href="{% url 'login' %}" class="text-accent-orange hover:underline">log in</a> to view exact location</span>
+                        {% url 'login' as login_url %}
+                        <span>
+                            {% blocktrans %}
+                                Please <a href="{{ login_url }}">log in</a> to view exact location
+                            {% endblocktrans %}
+                        </span>
+
                     {% endif %}
                 </div>
             </div>
-            <div class="text-2xl font-bold text-accent-orange">Fcfa{{ property.price_per_month }}<span class="text-sm font-normal text-gray-600">/month</span></div>
+            <div class="text-2xl font-bold text-accent-orange">Fcfa{{ property.price_per_month }}<span class="text-sm font-normal text-gray-600">/{% trans "month" %}</span></div>
         </div>
         
         <div class="flex flex-wrap gap-3 mt-4">
-            
             <div class="flex items-center bg-gray-100 px-3 py-1 rounded-full text-sm">
                 <i class="fas fa-calendar-check text-primary-blue mr-2"></i>
-                {% if property.is_available %}Available Now{% else %}Not Available{% endif %}
+                {% if property.is_available %}{% trans "Available Now" %}{% else %}{% trans "Not Available" %}{% endif %}
             </div>
         </div>
     </div>
@@ -47,7 +53,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {% for photo in property.photos.all %}
                     <div class="overflow-hidden rounded-lg">
-                        <img src="{{ photo.image.url }}" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" alt="Property photo">
+                        <img src="{{ photo.image.url }}" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" alt="{% trans "Property photo" %}">
                     </div>
                 {% endfor %}
             </div>
@@ -64,22 +70,19 @@
         <div class="lg:col-span-2 space-y-6">
             <!-- Description -->
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold text-primary-blue mb-4">Description</h2>
+                <h2 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Description" %}</h2>
                 <p class="text-gray-600 leading-relaxed">{{ property.description }}</p>
             </div>
-
-            <!-- Amenities -->
-            
 
             <!-- Videos -->
             {% if property.videos.all %}
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold text-primary-blue mb-4">Videos</h2>
+                <h2 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Videos" %}</h2>
                 <div class="grid gap-4">
                     {% for video in property.videos.all %}
                     <video class="w-full rounded-lg" controls>
                         <source src="{{ video.video_file.url }}" type="video/mp4">
-                        Your browser does not support the video tag.
+                        {% trans "Your browser does not support the video tag." %}
                     </video>
                     {% endfor %}
                 </div>
@@ -88,7 +91,7 @@
 
             <!-- Reviews -->
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold text-primary-blue mb-4">Reviews</h2>
+                <h2 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Reviews" %}</h2>
                 {% if property.reviews.all %}
                     <div class="space-y-4">
                         {% for review in property.reviews.all %}
@@ -112,14 +115,14 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-gray-600 text-center py-4">No reviews yet.</p>
+                    <p class="text-gray-600 text-center py-4">{% trans "No reviews yet." %}</p>
                 {% endif %}
 
                 {% if request.session.user_type == 'tenant' %}
                 <div class="mt-6 text-center">
                     <a href="{% url 'review_create' property.id %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-2 rounded-full transition-colors inline-flex items-center">
                         <i class="fas fa-plus mr-2"></i>
-                        Add Review
+                        {% trans "Add Review" %}
                     </a>
                 </div>
                 {% endif %}
@@ -130,14 +133,14 @@
         <div class="space-y-6">
             <!-- Contact Information -->
             <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
-                <h3 class="text-lg font-semibold text-primary-blue mb-4">Contact</h3>
+                <h3 class="text-lg font-semibold text-primary-blue mb-4">{% trans "Contact" %}</h3>
                 
                 {% if show_sensitive_info %}
                     <div class="space-y-3">
                         <div class="flex items-center">
                             <i class="fas fa-phone text-accent-orange mr-3"></i>
                             <div>
-                                <p class="text-sm text-gray-600">Phone</p>
+                                <p class="text-sm text-gray-600">{% trans "Phone" %}</p>
                                 <p class="font-medium">{{ property.contact_phone }}</p>
                             </div>
                         </div>
@@ -145,22 +148,22 @@
                         <div class="flex items-center">
                             <i class="fas fa-envelope text-accent-orange mr-3"></i>
                             <div>
-                                <p class="text-sm text-gray-600">Email</p>
+                                <p class="text-sm text-gray-600">{% trans "Email" %}</p>
                                 <p class="font-medium">{{ property.contact_email }}</p>
                             </div>
                         </div>
                         
                         <button class="w-full bg-accent-orange hover:bg-accent-light text-white py-2 px-4 rounded-full transition-colors mt-4">
                             <i class="fas fa-calendar mr-2"></i>
-                            Schedule Viewing
+                            {% trans "Schedule Viewing" %}
                         </button>
                     </div>
                 {% else %}
                     <div class="text-center py-4">
                         <i class="fas fa-lock text-3xl text-accent-orange mb-3"></i>
-                        <p class="text-gray-600 mb-4">Log in to view contact information</p>
+                        <p class="text-gray-600 mb-4">{% trans "Log in to view contact information" %}</p>
                         <a href="{% url 'login' %}" class="bg-accent-orange hover:bg-accent-light text-white py-2 px-4 rounded-full transition-colors">
-                            Log In
+                            {% trans "Log In" %}
                         </a>
                     </div>
                 {% endif %}
@@ -168,7 +171,7 @@
 
             <!-- Similar Properties -->
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-primary-blue mb-4">Similar Properties</h3>
+                <h3 class="text-lg font-semibold text-primary-blue mb-4">{% trans "Similar Properties" %}</h3>
                 <div class="space-y-4">
                     {% for similar in similar_properties|slice:":2" %}
                     <div class="border border-gray-100 rounded-lg p-3 hover:shadow-md transition-shadow">
@@ -176,13 +179,13 @@
                         <img src="{{ similar.photos.first.image.url }}" class="w-full h-32 object-cover rounded mb-2" alt="{{ similar.category.name }}">
                         {% endif %}
                         <h4 class="font-semibold text-sm">{{ similar.category.name }}</h4>
-                        <p class="text-accent-orange font-bold text-sm">Fcfa{{ similar.price_per_month }}/month</p>
+                        <p class="text-accent-orange font-bold text-sm">Fcfa{{ similar.price_per_month }}/{% trans "month" %}</p>
                         <a href="{% url 'property_detail' similar.id %}" class="text-primary-blue hover:text-accent-orange text-sm transition-colors">
-                            View Details →
+                            {% trans "View Details" %} →
                         </a>
                     </div>
                     {% empty %}
-                    <p class="text-gray-600 text-sm">No similar properties found.</p>
+                    <p class="text-gray-600 text-sm">{% trans "No similar properties found." %}</p>
                     {% endfor %}
                 </div>
             </div>

@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -12,11 +13,11 @@
 </head>
 <body>
     <div class="container">
-        <h2>Nouveau message depuis le formulaire de contact</h2>
-        <p><span class="label">Nom :</span> {{ data.name }}</p>
-        <p><span class="label">Email :</span> {{ data.email }}</p>
-        <p><span class="label">Sujet :</span> {{ data.subject }}</p>
-        <p><span class="label">Message :</span></p>
+        <h2>{% trans "New message from the contact form" %}</h2>
+        <p><span class="label">{% trans "Name" %} :</span> {{ data.name }}</p>
+        <p><span class="label">{% trans "Email" %} :</span> {{ data.email }}</p>
+        <p><span class="label">{% trans "Subject" %} :</span> {{ data.subject }}</p>
+        <p><span class="label">{% trans "Message" %} :</span></p>
         <p>{{ data.message|linebreaks }}</p>
     </div>
 </body>

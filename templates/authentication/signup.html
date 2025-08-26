@@ -1,12 +1,15 @@
-{% extends 'base.html' %}
 
-{% block title %}Tenant Sign Up -  CopalFinder{% endblock %}
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block title %}{% trans "Tenant Sign Up - CopalFinder" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8 mt-8">
     <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-primary-blue">Create Tenant Account</h2>
-        <p class="text-gray-600 mt-2">Join  CopalFinderto find your perfect rental home</p>
+        <h2 class="text-2xl font-bold text-primary-blue">{% trans "Create Tenant Account" %}</h2>
+        <p class="text-gray-600 mt-2">{% trans "Join CopalFinder to find your perfect rental home" %}</p>
     </div>
 
     <form method="post" class="space-y-4">
@@ -23,7 +26,7 @@
                 <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
             {% endif %}
             {% if field.errors %}
-            <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
             {% endif %}
         </div>
         {% endfor %}
@@ -31,18 +34,24 @@
         <div class="flex items-center mt-4">
             <input type="checkbox" id="terms" name="terms" class="h-4 w-4 text-accent-orange focus:ring-accent-orange border-gray-300 rounded">
             <label for="terms" class="ml-2 block text-sm text-gray-700">
-                I agree to the <a href="#" class="text-primary-blue hover:text-accent-orange">Terms of Service</a> and <a href="#" class="text-primary-blue hover:text-accent-orange">Privacy Policy</a>
+                {% trans "I agree to the" %} 
+                <a href="#" class="text-primary-blue hover:text-accent-orange">{% trans "Terms of Service" %}</a> 
+                {% trans "and" %} 
+                <a href="#" class="text-primary-blue hover:text-accent-orange">{% trans "Privacy Policy" %}</a>
             </label>
         </div>
 
         <button type="submit" class="w-full bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors mt-4">
-            Sign Up
+            {% trans "Sign Up" %}
         </button>
     </form>
 
     <div class="mt-6 text-center">
-        <p class="text-gray-600">Already have an account? 
-            <a href="{% url 'login' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Log in</a>
+        <p class="text-gray-600">
+            {% trans "Already have an account?" %}
+            <a href="{% url 'login' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">
+                {% trans "Log in" %}
+            </a>
         </p>
     </div>
 </div>
@@ -76,7 +85,6 @@
         box-shadow: 0 0 0 3px rgba(30, 74, 118, 0.1);
     }
     
-    /* Styles pour les cases à cocher */
     input[type="checkbox"] {
         border: 1px solid #d1d5db;
         border-radius: 0.25rem;
@@ -90,7 +98,6 @@
         ring-opacity: 0.5;
     }
     
-    /* Styles pour les sélecteurs */
     select {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
         background-position: right 0.5rem center;

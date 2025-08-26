@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}{{ action }} Property -  CopalFinder{% endblock %}
+{% block title %}{{ action }} {% trans "Property" %} - CopalFinder{% endblock %}
 
 {% block content %}
 <section class="py-8">
     <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold text-primary-blue">{{ action }} <span class="text-accent-orange">Property</span></h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-primary-blue">
+            {{ action }} <span class="text-accent-orange">{% trans "Property" %}</span>
+        </h2>
         <p class="text-gray-600 mt-2 max-w-2xl mx-auto">
             {% if action == 'Create' %}
-                Add a new property to your  CopalFinder portfolio.
+                {% trans "Add a new property to your CopalFinder portfolio." %}
             {% else %}
-                Update the details of your existing property.
+                {% trans "Update the details of your existing property." %}
             {% endif %}
         </p>
     </div>
@@ -20,7 +23,7 @@
             {% csrf_token %}
             <!-- Property Details -->
             <div class="border-b border-gray-200 pb-6">
-                <h3 class="text-xl font-semibold text-primary-blue mb-4">Property Details</h3>
+                <h3 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Property Details" %}</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {% for field in property_form %}
                         <div class="relative">
@@ -33,9 +36,10 @@
                     {% endfor %}
                 </div>
             </div>
+
             <!-- Photos -->
             <div class="border-b border-gray-200 pb-6">
-                <h3 class="text-xl font-semibold text-primary-blue mb-4">Photos</h3>
+                <h3 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Photos" %}</h3>
                 {{ photo_formset.management_form }}
                 <div class="space-y-4">
                     {% for form in photo_formset %}
@@ -51,9 +55,10 @@
                     {% endfor %}
                 </div>
             </div>
+
             <!-- Videos -->
             <div class="pb-6">
-                <h3 class="text-xl font-semibold text-primary-blue mb-4">Videos</h3>
+                <h3 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Videos" %}</h3>
                 {{ video_formset.management_form }}
                 <div class="space-y-4">
                     {% for form in video_formset %}
@@ -69,15 +74,16 @@
                     {% endfor %}
                 </div>
             </div>
+
             <!-- Form Actions -->
             <div class="text-center space-x-4">
                 <button type="submit" class="bg-primary-blue hover:bg-primary-light text-white px-8 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
                     <i class="fas fa-save mr-2"></i>
-                    {{ action }} Property
+                    {% blocktrans %}{{ action }} Property{% endblocktrans %}
                 </button>
                 <a href="{% url 'owner_dashboard' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
                     <i class="fas fa-times mr-2"></i>
-                    Cancel
+                    {% trans "Cancel" %}
                 </a>
             </div>
         </form>

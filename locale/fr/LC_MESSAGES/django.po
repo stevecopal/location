@@ -1,0 +1,1148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-26 15:49+0100\n"
+"PO-Revision-Date: 2025-08-26 16:00+0100\n"
+"Last-Translator: Steve Satcheme <EMAIL@ADDRESS>\n"
+"Language-Team: French <fr@li.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apploc/authentication/views.py:16
+msgid "Email already exists."
+msgstr "Cet email existe déjà."
+
+#: apploc/authentication/views.py:21
+msgid "Account created successfully. Please log in."
+msgstr "Compte créé avec succès. Veuillez vous connecter."
+
+#: apploc/authentication/views.py:38
+msgid "Logged in successfully as Admin."
+msgstr "Connexion réussie en tant qu'administrateur."
+
+#: apploc/authentication/views.py:44
+msgid "Tenant account is disabled."
+msgstr "Le compte locataire est désactivé."
+
+#: apploc/authentication/views.py:48
+msgid "Logged in successfully as Tenant."
+msgstr "Connexion réussie en tant que locataire."
+
+#: apploc/authentication/views.py:51 apploc/authentication/views.py:63
+#: apploc/authentication/views.py:65
+msgid "Invalid email or password."
+msgstr "Email ou mot de passe invalide."
+
+#: apploc/authentication/views.py:56
+msgid "Owner account is disabled."
+msgstr "Le compte propriétaire est désactivé."
+
+#: apploc/authentication/views.py:60
+msgid "Logged in successfully as Owner."
+msgstr "Connexion réussie en tant que propriétaire."
+
+#: apploc/authentication/views.py:74
+msgid "You have been logged out successfully."
+msgstr "Vous vous êtes déconnecté avec succès."
+
+#: apploc/authentication/views.py:79
+msgid "Please log in as an owner to access the dashboard."
+msgstr "Veuillez vous connecter en tant que propriétaire pour accéder au tableau de bord."
+
+#: apploc/authentication/views.py:88
+msgid "Please log in as a tenant."
+msgstr "Veuillez vous connecter en tant que locataire."
+
+#: apploc/forms.py:11 apploc/models.py:45
+msgid "Category"
+msgstr "Catégorie"
+
+#: apploc/forms.py:12 apploc/models.py:21 apploc/models.py:46
+#: templates/all_properties.html:20
+msgid "Location"
+msgstr "Emplacement"
+
+#: apploc/forms.py:13 apploc/models.py:47
+msgid "Price per Month"
+msgstr "Prix par mois"
+
+#: apploc/forms.py:14 apploc/models.py:48 templates/property_detail.html:73
+msgid "Description"
+msgstr "Description"
+
+#: apploc/forms.py:15 apploc/models.py:49
+msgid "Contact Phone"
+msgstr "Téléphone de contact"
+
+#: apploc/forms.py:16 apploc/models.py:50
+msgid "Is Available"
+msgstr "Disponible"
+
+#: apploc/forms.py:24 apploc/models.py:57
+msgid "Image"
+msgstr "Image"
+
+#: apploc/forms.py:32 apploc/models.py:64
+msgid "Video File"
+msgstr "Fichier vidéo"
+
+#: apploc/forms.py:40 apploc/forms.py:54 apploc/models.py:72
+#: apploc/models.py:82 apploc/models.py:92
+#: templates/emails/contact_email.html:20
+msgid "Message"
+msgstr "Message"
+
+#: apploc/forms.py:51 apploc/models.py:17 apploc/models.py:28
+#: apploc/models.py:38 apploc/models.py:79 apploc/models.py:89
+#: templates/emails/contact_email.html:17
+msgid "Name"
+msgstr "Nom"
+
+#: apploc/forms.py:52 apploc/models.py:19 apploc/models.py:29
+#: apploc/models.py:80 apploc/models.py:90
+#: templates/emails/contact_email.html:18 templates/property_detail.html:151
+msgid "Email"
+msgstr "Email"
+
+#: apploc/forms.py:53 apploc/forms.py:59 apploc/models.py:91
+#: templates/emails/contact_email.html:19
+msgid "Subject"
+msgstr "Sujet"
+
+#: apploc/forms.py:57
+msgid "Your Name"
+msgstr "Votre nom"
+
+#: apploc/forms.py:58
+msgid "Your Email"
+msgstr "Votre email"
+
+#: apploc/forms.py:60
+msgid "Your Message"
+msgstr "Votre message"
+
+#: apploc/models.py:18 apploc/models.py:30 apploc/models.py:81
+#: templates/property_detail.html:143
+msgid "Phone"
+msgstr "Téléphone"
+
+#: apploc/models.py:20 apploc/models.py:31
+msgid "Password"
+msgstr "Mot de passe"
+
+#: apploc/models.py:22 apploc/models.py:32
+msgid "Is Active"
+msgstr "Actif"
+
+#: apploc/models.py:44
+msgid "Owner"
+msgstr "Propriétaire"
+
+#: apploc/models.py:53
+#, python-brace-format
+msgid "{category} - {location}"
+msgstr "{category} - {location}"
+
+#: apploc/models.py:56 apploc/models.py:63 apploc/models.py:70
+#: templates/property_confirm_delete.html:11 templates/property_form.html:5
+#: templates/property_form.html:11
+msgid "Property"
+msgstr "Propriété"
+
+#: apploc/models.py:60
+#, python-brace-format
+msgid "Photo for {property}"
+msgstr "Photo de {property}"
+
+#: apploc/models.py:67
+#, python-brace-format
+msgid "Video for {property}"
+msgstr "Vidéo de {property}"
+
+#: apploc/models.py:71
+msgid "Tenant"
+msgstr "Locataire"
+
+#: apploc/models.py:73
+msgid "Date Posted"
+msgstr "Date de publication"
+
+#: apploc/models.py:76
+#, python-brace-format
+msgid "Review by {tenant} for {property}"
+msgstr "Avis de {tenant} sur {property}"
+
+#: apploc/models.py:83
+msgid "Date Contact"
+msgstr "Date de contact"
+
+#: apploc/models.py:86
+#, python-brace-format
+msgid "Contact from {name}"
+msgstr "Contact de {name}"
+
+#: apploc/models.py:95
+#, python-brace-format
+msgid "Message from {name} - {subject}"
+msgstr "Message de {name} - {subject}"
+
+#: apploc/views.py:63
+msgid "Only owners can create properties."
+msgstr "Seuls les propriétaires peuvent créer des propriétés."
+#: apploc/views.py:88
+msgid "Property created successfully."
+msgstr "Propriété créée avec succès."
+
+#: apploc/views.py:99 apploc/views.py:180
+msgid "Create"
+msgstr "Créer"
+
+#: apploc/views.py:104
+msgid "Only owners can update properties."
+msgstr "Seuls les propriétaires peuvent modifier des propriétés."
+
+#: apploc/views.py:129
+msgid "Property updated successfully."
+msgstr "Propriété mise à jour avec succès."
+
+#: apploc/views.py:140 apploc/views.py:196
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: apploc/views.py:145
+msgid "Only owners can delete properties."
+msgstr "Seuls les propriétaires peuvent supprimer des propriétés."
+
+#: apploc/views.py:151
+msgid "Property deleted successfully."
+msgstr "Propriété supprimée avec succès."
+
+#: apploc/views.py:157
+msgid "Only tenants can manage reviews."
+msgstr "Seuls les locataires peuvent gérer les avis."
+
+#: apploc/views.py:165
+msgid "Only tenants can create reviews."
+msgstr "Seuls les locataires peuvent créer des avis."
+
+#: apploc/views.py:176
+msgid "Review created successfully."
+msgstr "Avis créé avec succès."
+
+#: apploc/views.py:184
+msgid "Only tenants can update reviews."
+msgstr "Seuls les locataires peuvent modifier des avis."
+
+#: apploc/views.py:192
+msgid "Review updated successfully."
+msgstr "Avis mis à jour avec succès."
+
+#: apploc/views.py:200
+msgid "Only tenants can delete reviews."
+msgstr "Seuls les locataires peuvent supprimer des avis."
+
+#: apploc/views.py:206
+msgid "Review deleted successfully."
+msgstr "Avis supprimé avec succès."
+
+#: apploc/views.py:224
+msgid "Please log in to access your dashboard."
+msgstr "Veuillez vous connecter pour accéder à votre tableau de bord."
+
+#: apploc/views.py:233
+#, python-brace-format
+msgid "New Contact Message: {subject}"
+msgstr "Nouveau message de contact : {subject}"
+
+#: apploc/views.py:238
+#, python-brace-format
+msgid ""
+"Name: {name}\n"
+"Email: {email}\n"
+"Message: {message}"
+msgstr ""
+"Nom : {name}\n"
+"Email : {email}\n"
+"Message : {message}"
+
+#: apploc/views.py:246
+msgid "Your message has been sent successfully!"
+msgstr "Votre message a été envoyé avec succès !"
+
+#: templates/about.html:5
+msgid "About Us - CopalFinder"
+msgstr "À propos de nous - CopalFinder"
+
+#: templates/about.html:12
+msgid "About CopalFinder"
+msgstr "À propos de CopalFinder"
+
+#: templates/about.html:13
+msgid ""
+"Discover the story behind our passion for connecting people with their "
+"perfect homes"
+msgstr "Découvrez l'histoire derrière notre passion pour connecter les gens à leur logement idéal."
+
+#: templates/about.html:19
+msgid "Who We Are"
+msgstr "Qui nous sommes"
+
+#: templates/about.html:21
+msgid ""
+"At <strong class=\"text-accent-orange\">CopalFinder</strong>, we are more "
+"than just a rental platform—we are a community dedicated to transforming the "
+"way people find and manage their perfect homes."
+msgstr "Chez <strong class=\"text-accent-orange\">CopalFinder</strong>, nous sommes plus qu'une plateforme de location — nous sommes une communauté dédiée à transformer la manière dont les gens trouvent et gèrent leur logement idéal."
+
+#: templates/about.html:22
+msgid ""
+"Founded with a vision to simplify the rental process, we bring together "
+"property owners and tenants through a seamless, transparent, and user-"
+"friendly experience."
+msgstr "Fondé avec la vision de simplifier le processus de location, nous rapprochons propriétaires et locataires grâce à une expérience fluide, transparente et conviviale."
+
+#: templates/about.html:23
+msgid ""
+"Our team is driven by a commitment to excellence, ensuring every property "
+"listed meets the highest standards of quality and every tenant finds a place "
+"they can truly call home."
+msgstr "Notre équipe est animée par un engagement envers l'excellence, garantissant que chaque bien répertorié respecte les plus hauts standards de qualité et que chaque locataire trouve un lieu qu'il peut vraiment appeler « chez soi »."
+
+#: templates/about.html:35
+msgid "Our Mission"
+msgstr "Notre mission"
+
+#: templates/about.html:36
+msgid ""
+"To empower property owners and tenants by providing a trusted platform that "
+"makes renting effortless, secure, and rewarding for everyone involved."
+msgstr "Donner du pouvoir aux propriétaires et aux locataires en leur offrant une plateforme fiable qui rend la location simple, sécurisée et bénéfique pour toutes les parties."
+
+#: templates/about.html:44
+msgid "Our Values"
+msgstr "Nos valeurs"
+
+#: templates/about.html:45
+msgid ""
+"Integrity, innovation, and customer satisfaction are at the heart of "
+"everything we do. We believe in building lasting relationships based on "
+"trust and mutual respect."
+msgstr "L'intégrité, l'innovation et la satisfaction des clients sont au cœur de tout ce que nous faisons. Nous croyons en la construction de relations durables basées sur la confiance et le respect mutuel."
+
+#: templates/about.html:53
+msgid "Our Promise"
+msgstr "Notre promesse"
+
+#: templates/about.html:54
+msgid ""
+"We are committed to delivering exceptional service, from user-friendly tools "
+"for owners to personalized support for tenants throughout their journey."
+msgstr "Nous nous engageons à offrir un service exceptionnel, des outils conviviaux pour les propriétaires à un accompagnement personnalisé pour les locataires tout au long de leur parcours."
+
+#: templates/about.html:63 templates/base.html:68 templates/base.html:84
+#: templates/home.html:32 templates/property_detail.html:14
+msgid "Properties"
+msgstr "Propriétés"
+
+#: templates/about.html:67
+msgid "Happy Clients"
+msgstr "Clients satisfaits"
+
+#: templates/about.html:71
+msgid "Cities"
+msgstr "Villes"
+
+#: templates/about.html:75
+msgid "Support"
+msgstr "Assistance"
+
+#: templates/about.html:82
+msgid "Our Leadership Team"
+msgstr "Notre équipe dirigeante"
+
+#: templates/about.html:89
+msgid "Founder & CEO"
+msgstr "Fondateur & PDG"
+
+#: templates/about.html:90
+msgid "Visionary leader"
+msgstr "Leader visionnaire"
+
+#: templates/about.html:97
+msgid "Chief Operations Officer"
+msgstr "Directeur des opérations"
+
+#: templates/about.html:98
+msgid "Expert in customer experience and operational excellence"
+msgstr "Expert en expérience client et en excellence opérationnelle"
+
+#: templates/about.html:105
+msgid "Technology Director"
+msgstr "Directeur technique"
+
+#: templates/about.html:106
+msgid "Tech innovator passionate about building seamless platforms"
+msgstr "Innovateur technologique passionné par la création de plateformes fluides"
+
+#: templates/about.html:113
+msgid "Contact Us"
+msgstr "Contactez-nous"
+
+#: templates/about.html:114
+msgid ""
+"Have questions or need assistance? Fill out the form below to get in touch."
+msgstr "Vous avez des questions ou besoin d'aide ? Remplissez le formulaire ci-dessous pour nous contacter."
+
+#: templates/about.html:130
+msgid "Send Message"
+msgstr "Envoyer le message"
+
+#: templates/all_properties.html:5
+msgid "All Properties - CopalFinder"
+msgstr "Toutes les propriétés - CopalFinder"
+
+#: templates/all_properties.html:11
+msgid "Discover Our Properties"
+msgstr "Découvrez nos propriétés"
+
+#: templates/all_properties.html:12
+msgid "Find your perfect rental home from our curated collection"
+msgstr "Trouvez votre logement idéal dans notre collection soigneusement sélectionnée"
+
+#: templates/all_properties.html:21
+msgid "Enter location"
+msgstr "Entrez l'emplacement"
+
+#: templates/all_properties.html:21
+msgid "Search by location"
+msgstr "Rechercher par emplacement"
+
+#: templates/all_properties.html:26
+msgid "Property Type"
+msgstr "Type de propriété"
+
+#: templates/all_properties.html:27
+msgid "Select property type"
+msgstr "Sélectionnez le type de propriété"
+
+#: templates/all_properties.html:28
+msgid "All Types"
+msgstr "Tous les types"
+
+#: templates/all_properties.html:29
+msgid "Apartment"
+msgstr "Appartement"
+
+#: templates/all_properties.html:30
+msgid "House"
+msgstr "Maison"
+
+#: templates/all_properties.html:31
+msgid "Villa"
+msgstr "Villa"
+
+#: templates/all_properties.html:32
+msgid "Studio"
+msgstr "Studio"
+
+#: templates/all_properties.html:38
+msgid "Price Range"
+msgstr "Tranche de prix"
+
+#: templates/all_properties.html:39
+msgid "Select price range"
+msgstr "Sélectionnez une tranche de prix"
+
+#: templates/all_properties.html:40
+msgid "Any Price"
+msgstr "Tout prix"
+
+#: templates/all_properties.html:41
+msgid "Under FCFA 100,000"
+msgstr "Moins de 100 000 FCFA"
+
+#: templates/all_properties.html:42
+msgid "FCFA 100,000 - 200,000"
+msgstr "100 000 - 200 000 FCFA"
+
+#: templates/all_properties.html:43
+msgid "FCFA 200,000 - 500,000"
+msgstr "200 000 - 500 000 FCFA"
+
+#: templates/all_properties.html:44
+msgid "Over FCFA 500,000"
+msgstr "Plus de 500 000 FCFA"
+
+#: templates/all_properties.html:50
+msgid "Search properties"
+msgstr "Rechercher des propriétés"
+
+#: templates/all_properties.html:52
+msgid "Search"
+msgstr "Rechercher"
+
+#: templates/all_properties.html:59
+msgid "Please enter at least one search criterion."
+msgstr "Veuillez saisir au moins un critère de recherche."
+
+#: templates/all_properties.html:114 templates/owner_dashboard.html:66
+#: templates/tenant_dashboard.html:62
+msgid "Available"
+msgstr "Disponible"
+
+#: templates/all_properties.html:114 templates/owner_dashboard.html:36
+#: templates/owner_dashboard.html:66 templates/tenant_dashboard.html:64
+msgid "Occupied"
+msgstr "Occupé"
+
+#: templates/all_properties.html:119
+msgid "/month"
+msgstr "/mois"
+
+#: templates/all_properties.html:122 templates/home.html:62
+#: templates/property_detail.html:184 templates/tenant_dashboard.html:96
+msgid "View Details"
+msgstr "Voir les détails"
+
+#: templates/all_properties.html:131
+msgid "No properties found"
+msgstr "Aucune propriété trouvée"
+
+#: templates/all_properties.html:132
+msgid "Try adjusting your search criteria or check back later for new listings."
+msgstr "Essayez d’ajuster vos critères de recherche ou revenez plus tard pour de nouvelles annonces."
+
+#: templates/all_reviews.html:5
+msgid "All Reviews - CopalFinder"
+msgstr "Tous les avis - CopalFinder"
+
+#: templates/all_reviews.html:11
+msgid "Tenant Reviews"
+msgstr "Avis des locataires"
+
+#: templates/all_reviews.html:12
+msgid "Discover what our community has to say about their rental experiences"
+msgstr "Découvrez ce que notre communauté pense de leurs expériences de location"
+
+#: templates/all_reviews.html:22 templates/review_list.html:30
+msgid "Total Reviews"
+msgstr "Nombre total d'avis"
+
+#: templates/all_reviews.html:30 templates/review_list.html:34
+msgid "Average Rating"
+msgstr "Note moyenne"
+
+#: templates/all_reviews.html:38
+msgid "Happy Tenants"
+msgstr "Locataires satisfaits"
+
+#: templates/all_reviews.html:46
+msgid "Properties Reviewed"
+msgstr "Propriétés évaluées"
+
+#: templates/all_reviews.html:53
+msgid "Filter Reviews"
+msgstr "Filtrer les avis"
+
+#: templates/all_reviews.html:56
+msgid "All Properties"
+msgstr "Toutes les propriétés"
+
+#: templates/all_reviews.html:57
+msgid "Apartments"
+msgstr "Appartements"
+
+#: templates/all_reviews.html:58
+msgid "Houses"
+msgstr "Maisons"
+
+#: templates/all_reviews.html:59
+msgid "Villas"
+msgstr "Villas"
+
+#: templates/all_reviews.html:62
+msgid "All Ratings"
+msgstr "Toutes les notes"
+
+#: templates/all_reviews.html:63 templates/all_reviews.html:64
+#: templates/all_reviews.html:65
+msgid "Stars"
+msgstr "Étoiles"
+
+#: templates/all_reviews.html:68
+msgid "Newest First"
+msgstr "Les plus récents"
+
+#: templates/all_reviews.html:69
+msgid "Oldest First"
+msgstr "Les plus anciens"
+
+#: templates/all_reviews.html:70
+msgid "Highest Rated"
+msgstr "Les mieux notés"
+
+#: templates/all_reviews.html:128 templates/review_list.html:96
+msgid "No reviews yet"
+msgstr "Aucun avis pour l'instant"
+
+#: templates/all_reviews.html:129
+msgid "Be the first to share your experience with our community"
+msgstr "Soyez le premier à partager votre expérience avec notre communauté"
+
+#: templates/all_reviews.html:133
+msgid "Write a Review"
+msgstr "Écrire un avis"
+
+#: templates/all_reviews.html:137 templates/home.html:156
+msgid "Sign Up as Tenant"
+msgstr "S'inscrire en tant que locataire"
+
+#: templates/all_reviews.html:141 templates/review_list.html:100
+msgid "Browse Properties"
+msgstr "Parcourir les propriétés"
+
+#: templates/authentication/login.html:4
+msgid "Log In - CopalFinder"
+msgstr "Connexion - CopalFinder"
+
+#: templates/authentication/login.html:9
+msgid "Welcome Back"
+msgstr "Bon retour"
+
+#: templates/authentication/login.html:10
+msgid "Log in to your CopalFinder account"
+msgstr "Connectez-vous à votre compte CopalFinder"
+
+#: templates/authentication/login.html:29 templates/base.html:76
+#: templates/base.html:92 templates/property_detail.html:166
+msgid "Log In"
+msgstr "Connexion"
+
+#: templates/authentication/login.html:35
+msgid "Don't have an account?"
+msgstr "Vous n'avez pas de compte ?"
+
+#: templates/authentication/login.html:37
+msgid "Sign up"
+msgstr "Inscrivez-vous"
+
+#: templates/authentication/signup.html:4
+msgid "Tenant Sign Up - CopalFinder"
+msgstr "Inscription Locataire - CopalFinder"
+
+#: templates/authentication/signup.html:9
+msgid "Create Tenant Account"
+msgstr "Créer un compte locataire"
+
+#: templates/authentication/signup.html:10
+msgid "Join CopalFinder to find your perfect rental home"
+msgstr "Rejoignez CopalFinder pour trouver votre maison idéale à louer"
+
+#: templates/authentication/signup.html:35
+msgid "I agree to the"
+msgstr "J'accepte les"
+
+#: templates/authentication/signup.html:36
+msgid "Terms of Service"
+msgstr "Conditions d'utilisation"
+
+#: templates/authentication/signup.html:37
+msgid "and"
+msgstr "et"
+
+#: templates/authentication/signup.html:38
+msgid "Privacy Policy"
+msgstr "Politique de confidentialité"
+
+#: templates/authentication/signup.html:43 templates/base.html:75
+#: templates/base.html:91
+msgid "Sign Up"
+msgstr "Inscription"
+
+#: templates/authentication/signup.html:49
+msgid "Already have an account?"
+msgstr "Vous avez déjà un compte ?"
+
+#: templates/authentication/signup.html:51
+msgid "Log in"
+msgstr "Se connecter"
+
+#: templates/base.html:7
+msgid "CopalFinder - Premium Rentals"
+msgstr "CopalFinder - Locations Premium"
+
+#: templates/base.html:59
+msgid "Copal"
+msgstr "Copal"
+
+#: templates/base.html:59
+msgid "Finder"
+msgstr "Finder"
+
+#: templates/base.html:67 templates/base.html:83
+#: templates/property_detail.html:12
+msgid "Home"
+msgstr "Accueil"
+
+#: templates/base.html:69 templates/base.html:85
+msgid "About"
+msgstr "À propos"
+
+#: templates/base.html:72 templates/base.html:88
+#: templates/owner_dashboard.html:11 templates/tenant_dashboard.html:12
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: templates/base.html:73 templates/base.html:89
+msgid "Log Out"
+msgstr "Déconnexion"
+
+#: templates/base.html:125 templates/home.html:90
+msgid "CopalFinder"
+msgstr "CopalFinder"
+
+#: templates/base.html:126
+msgid ""
+"Find your perfect rental home for unforgettable experiences and memories."
+msgstr "Trouvez la maison idéale à louer pour des expériences et souvenirs inoubliables."
+
+#: templates/base.html:144
+msgid "Quick Links"
+msgstr "Liens rapides"
+
+#: templates/base.html:146
+msgid "About Us"
+msgstr "À propos de nous"
+
+#: templates/base.html:147 templates/property_detail.html:136
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/base.html:152
+msgid "CopalFinder - Premium Rental Homes. All rights reserved."
+msgstr "CopalFinder - Maisons en location premium. Tous droits réservés."
+
+#: templates/dashboard_redirect.html:4
+msgid "Redirecting to Dashboard"
+msgstr "Redirection vers le tableau de bord"
+
+#: templates/dashboard_redirect.html:7
+msgid "Redirecting..."
+msgstr "Redirection en cours..."
+
+#: templates/dashboard_redirect.html:10
+#, python-format
+msgid ""
+"\n"
+"        You are being redirected to your dashboard. If not redirected, "
+"please <a href=\"%(login_url)s\">log in</a>.\n"
+"        "
+msgstr ""
+"\n"
+"        Vous êtes redirigé vers votre tableau de bord. Si la redirection ne se fait pas, "
+"veuillez <a href=\"%(login_url)s\">vous connecter</a>.\n"
+"        "
+
+#: templates/emails/contact_email.html:16
+msgid "New message from the contact form"
+msgstr "Nouveau message depuis le formulaire de contact"
+
+#: templates/home.html:3
+msgid "CopalFinder - Find Your Perfect Rental Home"
+msgstr "CopalFinder - Trouvez votre maison idéale à louer"
+
+#: templates/home.html:9
+msgid "Find Your Perfect"
+msgstr "Trouvez votre"
+
+#: templates/home.html:9
+msgid "Rental Home"
+msgstr "Maison idéale à louer"
+
+#: templates/home.html:10
+msgid ""
+"Discover exceptional properties in the most beautiful locations for "
+"unforgettable stays"
+msgstr "Découvrez des propriétés exceptionnelles dans des lieux magnifiques pour des séjours inoubliables"
+
+#: templates/home.html:15
+msgid "500+ Premium Properties"
+msgstr "500+ Propriétés Premium"
+
+#: templates/home.html:19
+msgid "24/7 Customer Support"
+msgstr "Support client 24h/24 et 7j/7"
+
+#: templates/home.html:23
+msgid "Secure Booking"
+msgstr "Réservation sécurisée"
+
+#: templates/home.html:32 templates/home.html:44
+msgid "Featured"
+msgstr "En vedette"
+
+#: templates/home.html:33
+msgid ""
+"Discover our handpicked selection of exceptional homes in the most sought-"
+"after locations"
+msgstr "Découvrez notre sélection exclusive de maisons exceptionnelles dans les zones les plus prisées"
+
+#: templates/home.html:59 templates/owner_dashboard.html:82
+#: templates/property_detail.html:39 templates/property_detail.html:182
+#: templates/tenant_dashboard.html:91
+msgid "month"
+msgstr "mois"
+
+#: templates/home.html:72
+msgid "No properties available at the moment"
+msgstr "Aucune propriété disponible pour le moment"
+
+#: templates/home.html:73
+msgid "Check back soon for new listings!"
+msgstr "Revenez bientôt pour découvrir de nouvelles annonces !"
+
+#: templates/home.html:80
+msgid "View all properties"
+msgstr "Voir toutes les propriétés"
+
+#: templates/home.html:90
+msgid "Why Choose"
+msgstr "Pourquoi choisir"
+
+#: templates/home.html:91
+msgid "Experience the difference with our premium rental service"
+msgstr "Découvrez la différence avec notre service de location premium"
+
+#: templates/home.html:99
+msgid "Verified Properties"
+msgstr "Propriétés vérifiées"
+
+#: templates/home.html:100
+msgid "Every property is personally verified to ensure quality and accuracy."
+msgstr "Chaque propriété est vérifiée personnellement pour garantir qualité et exactitude."
+
+#: templates/home.html:107
+msgid "24/7 Support"
+msgstr "Support 24h/24 et 7j/7"
+
+#: templates/home.html:108
+msgid "Our dedicated team is available around the clock to assist you."
+msgstr "Notre équipe dédiée est disponible à tout moment pour vous assister."
+
+#: templates/home.html:115
+msgid "Premium Experience"
+msgstr "Expérience Premium"
+
+#: templates/home.html:116
+msgid "Enjoy a seamless rental experience from booking to checkout."
+msgstr "Profitez d'une expérience de location fluide, de la réservation au départ."
+
+#: templates/home.html:124
+msgid "What Our"
+msgstr "Ce que nos"
+
+#: templates/home.html:124
+msgid "Tenants Say"
+msgstr "locataires disent"
+
+#: templates/home.html:125
+msgid "Discover why tenants love finding their perfect home with us"
+msgstr "Découvrez pourquoi nos locataires adorent trouver leur maison idéale avec nous"
+
+#: templates/home.html:152
+msgid "No reviews yet. Be the first to share your experience!"
+msgstr "Aucun avis pour le moment. Soyez le premier à partager votre expérience !"
+
+#: templates/home.html:154
+msgid "Add a Review"
+msgstr "Ajouter un avis"
+
+#: templates/home.html:162
+msgid "View All Reviews"
+msgstr "Voir tous les avis"
+
+#: templates/owner_dashboard.html:5
+msgid "Owner Dashboard - CopalFinder"
+msgstr "Tableau de bord Propriétaire - CopalFinder"
+
+#: templates/owner_dashboard.html:12
+msgid "Welcome back! Manage your properties and track your performance."
+msgstr "Bon retour ! Gérez vos propriétés et suivez vos performances."
+
+#: templates/owner_dashboard.html:24
+msgid "Total Properties"
+msgstr "Total des propriétés"
+
+#: templates/owner_dashboard.html:46
+msgid "Add New Property"
+msgstr "Ajouter une nouvelle propriété"
+
+#: templates/owner_dashboard.html:88
+msgid "View"
+msgstr "Voir"
+
+#: templates/owner_dashboard.html:91 templates/review_list.html:79
+msgid "Edit"
+msgstr "Modifier"
+
+#: templates/owner_dashboard.html:94 templates/property_confirm_delete.html:11
+#: templates/review_confirm_delete.html:11 templates/review_list.html:83
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/owner_dashboard.html:107
+msgid "No properties yet"
+msgstr "Aucune propriété pour le moment"
+
+#: templates/owner_dashboard.html:108
+msgid "Get started by adding your first property to your portfolio"
+msgstr "Commencez en ajoutant votre première propriété à votre portfolio"
+
+#: templates/owner_dashboard.html:111
+msgid "Add Your First Property"
+msgstr "Ajouter votre première propriété"
+
+#: templates/property_confirm_delete.html:5
+msgid "Delete Property - CopalFinder"
+msgstr "Supprimer la propriété - CopalFinder"
+
+#: templates/property_confirm_delete.html:14
+#, python-format
+msgid ""
+"\n"
+"            Are you sure you want to delete \"%(property_name)s\"? This "
+"action cannot be undone.\n"
+"            "
+msgstr ""
+"\n"
+"            Êtes-vous sûr de vouloir supprimer \"%(property_name)s\" ? Cette action est irréversible.\n"
+"            "
+
+#: templates/property_confirm_delete.html:25
+msgid "Delete Property"
+msgstr "Supprimer la propriété"
+
+#: templates/property_confirm_delete.html:29 templates/property_form.html:86
+#: templates/review_confirm_delete.html:30 templates/review_form.html:85
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/property_detail.html:16 templates/property_form.html:26
+msgid "Property Details"
+msgstr "Détails de la propriété"
+
+#: templates/property_detail.html:31
+#, python-format
+msgid ""
+"\n"
+"                                Please <a href=\"%(login_url)s\">log in</a> "
+"to view exact location\n"
+"                            "
+msgstr ""
+"\n"
+"                                Veuillez <a href=\"%(login_url)s\">vous connecter</a> "
+"pour voir l'emplacement exact\n"
+"                            "
+
+#: templates/property_detail.html:45
+msgid "Available Now"
+msgstr "Disponible maintenant"
+
+#: templates/property_detail.html:45
+msgid "Not Available"
+msgstr "Indisponible"
+
+#: templates/property_detail.html:56
+msgid "Property photo"
+msgstr "Photo de la propriété"
+
+#: templates/property_detail.html:80 templates/property_form.html:61
+msgid "Videos"
+msgstr "Vidéos"
+
+#: templates/property_detail.html:85
+msgid "Your browser does not support the video tag."
+msgstr "Votre navigateur ne prend pas en charge la balise vidéo."
+
+#: templates/property_detail.html:94
+msgid "Reviews"
+msgstr "Avis"
+
+#: templates/property_detail.html:118
+msgid "No reviews yet."
+msgstr "Aucun avis pour le moment."
+
+#: templates/property_detail.html:125
+msgid "Add Review"
+msgstr "Ajouter un avis"
+
+#: templates/property_detail.html:158
+msgid "Schedule Viewing"
+msgstr "Programmer une visite"
+
+#: templates/property_detail.html:164
+msgid "Log in to view contact information"
+msgstr "Connectez-vous pour voir les informations de contact"
+
+#: templates/property_detail.html:174
+msgid "Similar Properties"
+msgstr "Propriétés similaires"
+
+#: templates/property_detail.html:188
+msgid "No similar properties found."
+msgstr "Aucune propriété similaire trouvée."
+
+#: templates/property_form.html:15
+msgid "Add a new property to your CopalFinder portfolio."
+msgstr "Ajoutez une nouvelle propriété à votre portfolio CopalFinder."
+
+#: templates/property_form.html:17
+msgid "Update the details of your existing property."
+msgstr "Mettez à jour les détails de votre propriété existante."
+
+#: templates/property_form.html:42
+msgid "Photos"
+msgstr "Photos"
+
+#: templates/property_form.html:82
+#, python-format
+msgid "%(action)s Property"
+msgstr "%(action)s la propriété"
+
+#: templates/review_confirm_delete.html:5
+#: templates/review_confirm_delete.html:27
+msgid "Delete Review"
+msgstr "Supprimer l'avis"
+
+#: templates/review_confirm_delete.html:11 templates/review_form.html:5
+#: templates/review_form.html:12
+msgid "Review"
+msgstr "Avis"
+
+#: templates/review_confirm_delete.html:13
+msgid "Are you sure you want to delete this review?"
+msgstr "Êtes-vous sûr de vouloir supprimer cet avis ?"
+
+#: templates/review_confirm_delete.html:17
+#, python-format
+msgid ""
+"Review for %(review.property.category.name)s - %(review.property.location)s"
+msgstr "Avis pour %(review.property.category.name)s - %(review.property.location)s"
+
+#: templates/review_confirm_delete.html:20
+#, python-format
+msgid "%(review.message|truncatewords:30)s"
+msgstr "%(review.message|truncatewords:30)s"
+
+#: templates/review_confirm_delete.html:22
+msgid "This action cannot be undone. Please confirm to delete the review."
+msgstr "Cette action est irréversible. Veuillez confirmer pour supprimer l'avis."
+
+#: templates/review_form.html:15
+#, python-format
+msgid ""
+"Share your experience for %(property.category.name)s in %(property.location)s"
+msgstr "Partagez votre expérience pour %(property.category.name)s à %(property.location)s"
+
+#: templates/review_form.html:47
+msgid "Rating"
+msgstr "Évaluation"
+
+#: templates/review_form.html:65
+msgid "Your Review"
+msgstr "Votre avis"
+
+#: templates/review_form.html:72
+msgid "Share your experience with this property..."
+msgstr "Partagez votre expérience avec cette propriété..."
+
+#: templates/review_form.html:82
+msgid "Submit Review"
+msgstr "Envoyer l'avis"
+
+#: templates/review_form.html:82
+msgid "Update Review"
+msgstr "Mettre à jour l'avis"
+
+#: templates/review_form.html:93
+msgid "Review Guidelines"
+msgstr "Lignes directrices pour les avis"
+
+#: templates/review_form.html:97
+msgid "Be honest and specific about your experience"
+msgstr "Soyez honnête et précis sur votre expérience"
+
+#: templates/review_form.html:101
+msgid "Focus on the property features and amenities"
+msgstr "Concentrez-vous sur les caractéristiques et équipements de la propriété"
+
+#: templates/review_form.html:105
+msgid "Mention the location and neighborhood"
+msgstr "Mentionnez l'emplacement et le quartier"
+
+#: templates/review_form.html:109
+msgid "Keep it respectful and constructive"
+msgstr "Restez respectueux et constructif"
+
+#: templates/review_list.html:5 templates/review_list.html:12
+msgid "Your Reviews"
+msgstr "Vos avis"
+
+#: templates/review_list.html:13
+msgid "Manage and edit your property reviews"
+msgstr "Gérez et modifiez vos avis sur les propriétés"
+
+#: templates/review_list.html:17
+msgid "Back to Properties"
+msgstr "Retour aux propriétés"
+
+#: templates/review_list.html:97
+msgid ""
+"You haven't posted any reviews yet. Share your experience with other tenants!"
+msgstr "Vous n'avez pas encore publié d'avis. Partagez votre expérience avec les autres locataires !"
+
+#: templates/review_list.html:108
+msgid "Pagination"
+msgstr "Pagination"
+
+#: templates/review_list.html:110
+msgid "Previous page"
+msgstr "Page précédente"
+
+#: templates/review_list.html:124
+msgid "Next page"
+msgstr "Page suivante"
+
+#: templates/tenant_dashboard.html:5
+msgid "Tenant Dashboard - CopalFinder"
+msgstr "Tableau de bord Locataire - CopalFinder"
+
+#: templates/tenant_dashboard.html:15
+msgid ""
+"Welcome back! Discover your next perfect home from our curated collection."
+msgstr "Bon retour ! Découvrez votre prochaine maison idéale dans notre sélection."
+
+#: templates/tenant_dashboard.html:28
+msgid "Available Properties"
+msgstr "Propriétés disponibles"
+
+#: templates/tenant_dashboard.html:39
+msgid "Manage Your Reviews"
+msgstr "Gérez vos avis"
+
+#: templates/tenant_dashboard.html:108
+msgid "No properties available"
+msgstr "Aucune propriété disponible"
+
+#: templates/tenant_dashboard.html:111
+msgid "Check back later for new listings or try adjusting your search filters."
+msgstr "Revenez plus tard pour de nouvelles annonces ou essayez de modifier vos filtres de recherche."

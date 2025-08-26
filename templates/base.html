@@ -1,10 +1,10 @@
-{% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} CopalFinder - Premium Rentals{% endblock %}</title>
+    <title>{% block title %}{% trans "CopalFinder - Premium Rentals" %}{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,8 +32,6 @@
             --accent-orange: #ff7e30;
             --accent-light: #ffaa70;
         }
-        
-        /* Styles pour les champs de formulaire */
         input[type="text"], 
         input[type="password"], 
         input[type="email"] {
@@ -43,7 +41,6 @@
             border-radius: 0.5rem;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        
         input[type="text"]:focus, 
         input[type="password"]:focus, 
         input[type="email"]:focus {
@@ -59,7 +56,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <a href="{% url 'home' %}" class="flex items-center text-primary-blue text-2xl font-bold">
                 <i class="fas fa-home mr-2 text-accent-orange"></i>
-                Copal<span class="text-accent-orange">Finder</span>
+                {% trans "Copal" %}<span class="text-accent-orange">{% trans "Finder" %}</span>
             </a>
             
             <button class="md:hidden text-primary-blue focus:outline-none" id="mobile-menu-button">
@@ -67,34 +64,39 @@
             </button>
             
             <div class="hidden md:flex items-center space-x-6">
-                <a href="{% url 'home' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Home</a>
-                <a href="{% url 'all_properties' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Properties</a>
-                <a href="{% url 'about' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">About</a>
+                <a href="{% url 'home' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">{% trans "Home" %}</a>
+                <a href="{% url 'all_properties' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">{% trans "Properties" %}</a>
+                <a href="{% url 'about' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">{% trans "About" %}</a>
                 
                 {% if request.session.user_id %}
-                    <a href="{% url 'dashboard_redirect' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Dashboard</a>
-                    <a href="{% url 'logout' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">Log Out</a>
+                    <a href="{% url 'dashboard_redirect' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">{% trans "Dashboard" %}</a>
+                    <a href="{% url 'logout' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">{% trans "Log Out" %}</a>
                 {% else %}
-                    <a href="{% url 'signup' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Sign Up</a>
-                    <a href="{% url 'login' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">Log In</a>
+                    <a href="{% url 'signup' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">{% trans "Sign Up" %}</a>
+                    <a href="{% url 'login' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">{% trans "Log In" %}</a>
                 {% endif %}
             </div>
+            <div class="hidden md:flex items-center space-x-6">
+
+</div>
+
         </div>
         
         <!-- Mobile menu -->
         <div class="hidden md:hidden bg-white py-4 px-4 mt-2 rounded-lg shadow-lg" id="mobile-menu">
-            <a href="{% url 'home' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Home</a>
-            <a href="{% url 'all_properties' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Properties</a>
-            <a href="{% url 'about' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">About</a>
+            <a href="{% url 'home' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">{% trans "Home" %}</a>
+            <a href="{% url 'all_properties' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">{% trans "Properties" %}</a>
+            <a href="{% url 'about' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">{% trans "About" %}</a>
             
             {% if request.session.user_id %}
-                <a href="{% url 'dashboard_redirect' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Dashboard</a>
-                <a href="{% url 'logout' %}" class="block mt-2 bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full text-center transition-colors">Log Out</a>
+                <a href="{% url 'dashboard_redirect' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">{% trans "Dashboard" %}</a>
+                <a href="{% url 'logout' %}" class="block mt-2 bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full text-center transition-colors">{% trans "Log Out" %}</a>
             {% else %}
-                <a href="{% url 'signup' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">Sign Up</a>
-                <a href="{% url 'login' %}" class="block mt-2 bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full text-center transition-colors">Log In</a>
+                <a href="{% url 'signup' %}" class="block py-2 text-primary-blue hover:text-accent-orange font-medium">{% trans "Sign Up" %}</a>
+                <a href="{% url 'login' %}" class="block mt-2 bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full text-center transition-colors">{% trans "Log In" %}</a>
             {% endif %}
         </div>
+        
     </nav>
 
     <main class="flex-grow container mx-auto px-4 md:px-8 py-6">
@@ -125,9 +127,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                 <!-- Branding Section -->
                 <div class="">
-                    <h3 class="text-xl font-bold mb-4 text-center">CopalFinder</h3>
-                    <p class="mb-6 text-gray-200">Find your perfect rental home for unforgettable experiences and memories.
-                    </p>
+                    <h3 class="text-xl font-bold mb-4 text-center">{% trans "CopalFinder" %}</h3>
+                    <p class="mb-6 text-gray-200">{% trans "Find your perfect rental home for unforgettable experiences and memories." %}</p>
                     <div class="flex space-x-6 gap-5 ">
                         <a href="#" class="text-white hover:text-accent-orange transition-colors " aria-label="Facebook">
                             <i class="fab fa-facebook-f"></i>
@@ -144,24 +145,21 @@
                     </div>
                 </div>
                 <!-- Quick Links -->
-                <div  class="ml-20">
-                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                <div class="ml-20">
+                    <h3 class="text-xl font-bold mb-4">{% trans "Quick Links" %}</h3>
                     <ul class="space-y-3">
-                        <li><a href="{% url 'about' %}"
-                                class="text-gray-200 hover:text-accent-orange transition-colors">About Us</a></li>
-                        <li><a href="{% url 'about' %}#contact"
-                                class="text-gray-200 hover:text-accent-orange transition-colors">Contact</a></li>
+                        <li><a href="{% url 'about' %}" class="text-gray-200 hover:text-accent-orange transition-colors">{% trans "About Us" %}</a></li>
+                        <li><a href="{% url 'about' %}#contact" class="text-gray-200 hover:text-accent-orange transition-colors">{% trans "Contact" %}</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-primary-light mt-10 pt-8 text-center">
-                <p class="text-gray-200">&copy; 2025 CopalFinder - Premium Rental Homes. All rights reserved.</p>
+                <p class="text-gray-200">&copy; 2025 {% trans "CopalFinder - Premium Rental Homes. All rights reserved." %}</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');

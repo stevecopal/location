@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
-
-{% block title %}CopalFinder- Find Your Perfect Rental Home{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "CopalFinder - Find Your Perfect Rental Home" %} {% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-primary-blue to-primary-light rounded-xl p-8 md:p-12 text-white mb-10">
     <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Find Your Perfect <span class="text-accent-orange">Rental Home</span></h1>
-        <p class="text-xl mb-6">Discover exceptional properties in the most beautiful locations for unforgettable stays</p>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{% trans "Find Your Perfect" %} <span class="text-accent-orange">{% trans "Rental Home" %}</span></h1>
+        <p class="text-xl mb-6">{% trans "Discover exceptional properties in the most beautiful locations for unforgettable stays" %}</p>
        
         <div class="mt-6 flex flex-wrap justify-center gap-4">
             <div class="flex items-center">
                 <i class="fas fa-check-circle text-accent-orange mr-2"></i>
-                <span>500+ Premium Properties</span>
+                <span>{% trans "500+ Premium Properties" %}</span>
             </div>
             <div class="flex items-center">
                 <i class="fas fa-check-circle text-accent-orange mr-2"></i>
-                <span>24/7 Customer Support</span>
+                <span>{% trans "24/7 Customer Support" %}</span>
             </div>
             <div class="flex items-center">
                 <i class="fas fa-check-circle text-accent-orange mr-2"></i>
-                <span>Secure Booking</span>
+                <span>{% trans "Secure Booking" %}</span>
             </div>
         </div>
     </div>
@@ -29,8 +29,8 @@
 <!-- Featured Properties Section -->
 <section class="mb-16">
     <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold text-primary-blue">Featured <span class="text-accent-orange">Properties</span></h2>
-        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Discover our handpicked selection of exceptional homes in the most sought-after locations</p>
+        <h2 class="text-3xl font-bold text-primary-blue">{% trans "Featured" %} <span class="text-accent-orange">{% trans "Properties" %}</span></h2>
+        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">{% trans "Discover our handpicked selection of exceptional homes in the most sought-after locations" %}</p>
     </div>
     
     {% if properties %}
@@ -41,7 +41,7 @@
             <div class="h-56 overflow-hidden relative">
                 <img src="{{ property.photos.first.image.url }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" alt="{{ property }}">
                 <div class="absolute top-4 left-4 bg-accent-orange text-white py-1 px-3 rounded-full text-sm font-medium">
-                    Featured
+                    {% trans "Featured" %}
                 </div>
             </div>
             {% endif %}
@@ -53,15 +53,13 @@
                 
                 <p class="text-gray-600 mb-4">{{ property.description|truncatewords:20 }}</p>
                 
-               
-                
                 <div class="flex justify-between items-center">
                     <div>
                         <span class="text-2xl font-bold text-accent-orange">${{ property.price_per_month }}</span>
-                        <span class="text-gray-600">/month</span>
+                        <span class="text-gray-600">/{% trans "month" %}</span>
                     </div>
                     <a href="{% url 'property_detail' property.id %}" class="bg-white border border-primary-blue text-primary-blue hover:bg-primary-blue hover:text-white py-2 px-4 rounded-full transition-colors duration-300">
-                        View Details
+                        {% trans "View Details" %}
                     </a>
                 </div>
             </div>
@@ -71,15 +69,15 @@
     {% else %}
     <div class="text-center py-12">
         <i class="fas fa-home text-4xl text-gray-300 mb-4"></i>
-        <h3 class="text-xl font-semibold text-gray-600">No properties available at the moment</h3>
-        <p class="text-gray-500 mt-2">Check back soon for new listings!</p>
+        <h3 class="text-xl font-semibold text-gray-600">{% trans "No properties available at the moment" %}</h3>
+        <p class="text-gray-500 mt-2">{% trans "Check back soon for new listings!" %}</p>
     </div>
     {% endif %}
     
     {% if properties %}
     <div class="text-center mt-10">
         <a href="{% url 'all_properties' %}" class="inline-flex items-center text-primary-blue hover:text-accent-orange font-medium transition-colors">
-            View all properties
+            {% trans "View all properties" %}
             <i class="fas fa-arrow-right ml-2"></i>
         </a>
     </div>
@@ -89,8 +87,8 @@
 <!-- Why Choose Us Section -->
 <section class="bg-gray-50 py-16 rounded-xl mb-16">
     <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-primary-blue">Why Choose <span class="text-accent-orange">CopalFinder</span></h2>
-        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Experience the difference with our premium rental service</p>
+        <h2 class="text-3xl font-bold text-primary-blue">{% trans "Why Choose" %} <span class="text-accent-orange">{% trans "CopalFinder" %}</span></h2>
+        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">{% trans "Experience the difference with our premium rental service" %}</p>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -98,71 +96,70 @@
             <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-shield-alt text-white text-2xl"></i>
             </div>
-            <h3 class="text-xl font-semibold text-primary-blue mb-2">Verified Properties</h3>
-            <p class="text-gray-600">Every property is personally verified to ensure quality and accuracy.</p>
+            <h3 class="text-xl font-semibold text-primary-blue mb-2">{% trans "Verified Properties" %}</h3>
+            <p class="text-gray-600">{% trans "Every property is personally verified to ensure quality and accuracy." %}</p>
         </div>
         
         <div class="text-center p-6">
             <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-headset text-white text-2xl"></i>
             </div>
-            <h3 class="text-xl font-semibold text-primary-blue mb-2">24/7 Support</h3>
-            <p class="text-gray-600">Our dedicated team is available around the clock to assist you.</p>
+            <h3 class="text-xl font-semibold text-primary-blue mb-2">{% trans "24/7 Support" %}</h3>
+            <p class="text-gray-600">{% trans "Our dedicated team is available around the clock to assist you." %}</p>
         </div>
         
         <div class="text-center p-6">
             <div class="w-16 h-16 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-star text-white text-2xl"></i>
             </div>
-            <h3 class="text-xl font-semibold text-primary-blue mb-2">Premium Experience</h3>
-            <p class="text-gray-600">Enjoy a seamless rental experience from booking to checkout.</p>
+            <h3 class="text-xl font-semibold text-primary-blue mb-2">{% trans "Premium Experience" %}</h3>
+            <p class="text-gray-600">{% trans "Enjoy a seamless rental experience from booking to checkout." %}</p>
         </div>
     </div>
 </section>
 
 <!-- Testimonials Section -->
-    <section class="mb-16">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-primary-blue">What Our <span class="text-accent-orange">Tenants Say</span></h2>
-            <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Discover why tenants love finding their perfect home with us</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for review in reviews %}
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center text-white font-bold mr-4">
-                            {{ review.tenant.name|slice:":2" }}
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-primary-blue">{{ review.tenant.name }}</h4>
-                            <div class="flex text-accent-orange">
-                                {% for i in "12345"|slice:":review.rating" %}
-                                    <i class="fas fa-star"></i>
+<section class="mb-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-primary-blue">{% trans "What Our" %} <span class="text-accent-orange">{% trans "Tenants Say" %}</span></h2>
+        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">{% trans "Discover why tenants love finding their perfect home with us" %}</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for review in reviews %}
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center text-white font-bold mr-4">
+                        {{ review.tenant.name|slice:":2" }}
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-primary-blue">{{ review.tenant.name }}</h4>
+                        <div class="flex text-accent-orange">
+                            {% for i in "12345"|slice:":review.rating" %}
+                                <i class="fas fa-star"></i>
+                            {% endfor %}
+                            {% if review.rating < 5 %}
+                                {% for i in "12345"|slice:review.rating|add:"5" %}
+                                    <i class="far fa-star"></i>
                                 {% endfor %}
-                                {% if review.rating < 5 %}
-                                    {% for i in "12345"|slice:review.rating|add:"5" %}
-                                        <i class="far fa-star"></i>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                    <p class="text-gray-600 italic">"{{ review.message|truncatewords:30 }}"</p>
                 </div>
-            {% empty %}
-                <div class="col-span-3 text-center text-gray-600">
-                    <p>No reviews yet. Be the first to share your experience!</p>
-                    {% if request.session.user_type == 'tenant' %}
-                        <a href="{% url 'review_list' %}" class="btn btn-primary mt-2">Add a Review</a>
-                    {% else %}
-                        <a href="{% url 'signup' %}" class="btn btn-primary mt-2">Sign Up as Tenant</a>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-8">
-            <a href="{% url 'all_reviews' %}"class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">View All Reviews</a>
-        </div>
-    </section>
-
+                <p class="text-gray-600 italic">"{{ review.message|truncatewords:30 }}"</p>
+            </div>
+        {% empty %}
+            <div class="col-span-3 text-center text-gray-600">
+                <p>{% trans "No reviews yet. Be the first to share your experience!" %}</p>
+                {% if request.session.user_type == 'tenant' %}
+                    <a href="{% url 'review_list' %}" class="btn btn-primary mt-2">{% trans "Add a Review" %}</a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="btn btn-primary mt-2">{% trans "Sign Up as Tenant" %}</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-8">
+        <a href="{% url 'all_reviews' %}" class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">{% trans "View All Reviews" %}</a>
+    </div>
+</section>
 {% endblock %}

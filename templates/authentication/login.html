@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-
-{% block title %}Log In -  CopalFinder{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Log In - CopalFinder" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8 mt-8">
     <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-primary-blue">Welcome Back</h2>
-        <p class="text-gray-600 mt-2">Log in to your  CopalFinder account</p>
+        <h2 class="text-2xl font-bold text-primary-blue">{% trans "Welcome Back" %}</h2>
+        <p class="text-gray-600 mt-2">{% trans "Log in to your CopalFinder account" %}</p>
     </div>
 
     <form method="post" class="space-y-4">
@@ -25,13 +25,16 @@
         {% endfor %}
 
         <button type="submit" class="w-full bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors">
-            Log In
+            {% trans "Log In" %}
         </button>
     </form>
 
     <div class="mt-6 text-center">
-        <p class="text-gray-600">Don't have an account? 
-            <a href="{% url 'signup' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">Sign up</a>
+        <p class="text-gray-600">
+            {% trans "Don't have an account?" %}
+            <a href="{% url 'signup' %}" class="text-primary-blue hover:text-accent-orange font-medium transition-colors">
+                {% trans "Sign up" %}
+            </a>
         </p>
     </div>
 </div>
