@@ -3,6 +3,9 @@
 from django.contrib import admin
 from .models import ContactMessage, Owner, Tenant, Category, Property, Photo, Video, Review, Contact
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from .models import Owner, Tenant
+
 
 class PhotoInline(admin.TabularInline):
     model = Photo
@@ -25,6 +28,11 @@ class OwnerAdmin(admin.ModelAdmin):
         if 'password' in form.changed_data:
             obj.password = make_password(form.cleaned_data['password'])
         super().save_model(request, obj, form, change)
+        
+        def save_model(self, request, obj, form, change):
+            super().save_model(request, obj, form, change)
+            create_linked_user(obj.email, obj.password)
+
 
 @admin.register(Tenant)
 class TenantAdmin(admin.ModelAdmin):
@@ -33,6 +41,10 @@ class TenantAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email', 'phone')
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        create_linked_user(obj.email, obj.password)
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -72,3 +84,17 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'subject', 'created_at')
     search_fields = ('name', 'email', 'subject', 'message')
     list_filter = ('created_at',)
+
+def create_linked_user(email, password):
+    """
+    Crée un compte User de base pour le reset et l'auth standard.
+    Si le User existe déjà, on ne fait rien.
+    """
+    if not User.objects.filter(email=email).exists():
+        User.objects.create_user(
+            username=email,
+            email=email,
+            password=password  # sera automatiquement haché
+        )
+
+

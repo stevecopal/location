@@ -29,6 +29,13 @@
         </button>
     </form>
 
+    <!-- Lien pour reset password -->
+    <div class="mt-4 text-center">
+        <a href="{% url 'password_reset_request' %}" class="text-primary-blue hover:text-accent-orange text-sm font-medium transition-colors">
+            {% trans "Forgot your password?" %}
+        </a>
+    </div>
+
     <div class="mt-6 text-center">
         <p class="text-gray-600">
             {% trans "Don't have an account?" %}

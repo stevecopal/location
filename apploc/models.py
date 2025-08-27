@@ -1,4 +1,7 @@
 # Create your models here.
+from datetime import timedelta
+import random
+import string
 from django.db import models
 import uuid
 from django.utils import timezone
@@ -93,3 +96,17 @@ class ContactMessage(BaseModel):
 
     def __str__(self):
         return _("Message from {name} - {subject}").format(name=self.name, subject=self.subject)
+
+
+
+class PendingUser(BaseModel):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=20)
+    password = models.CharField(max_length=128)
+    verification_code = models.CharField(max_length=4)
+    expires_at = models.DateTimeField()
+    user_type = models.CharField(max_length=20, choices=[('tenant', 'Tenant'), ('owner', 'Owner'), ('user', 'User')], default='tenant')
+
+    def __str__(self):
+        return f"Pending {self.name} ({self.email})"

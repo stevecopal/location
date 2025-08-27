@@ -2,6 +2,7 @@ from django.utils import translation  # ← bien le module, pas la fonction set_
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _  # ← import pour i18n
+from apploc.tasks import send_contact_email
 from location import settings
 from .models import Property, Review, Photo, Video
 from .forms import ContactForm, PhotoFormSet, PropertyForm, PhotoForm, VideoForm, ReviewForm, VideoFormSet
@@ -227,27 +228,50 @@ def dashboard_redirect(request):
     messages.error(request, _('Please log in to access your dashboard.'))
     return redirect('login')
 
+# def contact(request):
+#     if request.method == "POST":
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             data = form.cleaned_data
+#             subject = _("New Contact Message: {subject}").format(subject=data['subject'])
+#             from_email = settings.DEFAULT_FROM_EMAIL
+#             to_email = [settings.EMAIL_HOST_USER]
+
+#             html_content = render_to_string("emails/contact_email.html", {"data": data})
+#             text_content = _("Name: {name}\nEmail: {email}\nMessage: {message}").format(
+#                 name=data['name'], email=data['email'], message=data['message']
+#             )
+
+#             email = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+#             email.attach_alternative(html_content, "text/html")
+#             email.send(fail_silently=False)
+            
+            
+
+#             messages.success(request, _('Your message has been sent successfully!'))
+#             return redirect('contact')
+#     else:
+#         form = ContactForm()
+
+#     return render(request, "about.html", {"contact_form": form})
 def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
             data = form.cleaned_data
-            subject = _("New Contact Message: {subject}").format(subject=data['subject'])
-            from_email = settings.DEFAULT_FROM_EMAIL
-            to_email = [settings.EMAIL_HOST_USER]
 
-            html_content = render_to_string("emails/contact_email.html", {"data": data})
-            text_content = _("Name: {name}\nEmail: {email}\nMessage: {message}").format(
-                name=data['name'], email=data['email'], message=data['message']
+            # Envoi en arrière-plan via Celery
+            send_contact_email.delay(
+                name=data['name'],
+                email=data['email'],
+                subject=data['subject'],
+                message=data['message']
             )
 
-            email = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-            email.attach_alternative(html_content, "text/html")
-            email.send(fail_silently=False)
-
             messages.success(request, _('Your message has been sent successfully!'))
-            return redirect('contact')
+            return redirect('about')
     else:
         form = ContactForm()
 
