@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils.translation import gettext_lazy as _  # ← import pour i18n
 from apploc.tasks import send_contact_email
 from location import settings
-from .models import Property, Review, Photo, Video
+from .models import Category, Property, Review, Photo, Video
 from .forms import ContactForm, PhotoFormSet, PropertyForm, PhotoForm, VideoForm, ReviewForm, VideoFormSet
 from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
@@ -21,33 +21,40 @@ def home(request):
     return render(request, 'home.html', {'properties': properties, 'reviews': reviews, 'is_authenticated': is_authenticated})
 
 def all_properties(request):
-    location = request.GET.get('location', '')
+    # Récupérer les paramètres GET
+    location = request.GET.get('location', '').strip()
     property_type = request.GET.get('property_type', '')
     price_range = request.GET.get('price_range', '')
-    
-    properties = Property.objects.select_related('category', 'owner').prefetch_related('photos').all()
-    
+
+    # Filtrer les propriétés disponibles
+    properties = Property.objects.select_related('category', 'owner').prefetch_related('photos').filter(is_available=True)
+
+    # Filtre par localisation
     if location:
         properties = properties.filter(location__icontains=location)
-    
+
+    # Filtre par type de propriété
     if property_type:
-        properties = properties.filter(category__name=property_type)
-    
+        properties = properties.filter(category__name__iexact=property_type)
+
+    # Filtre par tranche de prix
     if price_range:
-        if price_range == '0-100000':
-            properties = properties.filter(price__lte=100000)
-        elif price_range == '100000-200000':
-            properties = properties.filter(price__gte=100000, price__lte=200000)
-        elif price_range == '200000-500000':
-            properties = properties.filter(price__gte=200000, price__lte=500000)
-        elif price_range == '500000+':
-            properties = properties.filter(price__gte=500000)
-    
+        if price_range == 'under_100k':
+            properties = properties.filter(price_per_month__lt=100000)
+        elif price_range == '100k_200k':
+            properties = properties.filter(price_per_month__gte=100000, price_per_month__lte=200000)
+        elif price_range == '200k_500k':
+            properties = properties.filter(price_per_month__gte=200000, price_per_month__lte=500000)
+        elif price_range == 'over_500k':
+            properties = properties.filter(price_per_month__gt=500000)
+
+    # Contexte pour le template
     context = {
         'properties': properties,
         'location': location,
         'property_type': property_type,
         'price_range': price_range,
+        'categories': Category.objects.all()  # Pour le menu déroulant des types
     }
     return render(request, 'all_properties.html', context)
 

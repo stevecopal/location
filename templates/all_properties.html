@@ -13,44 +13,68 @@
     </div>
 
     <!-- Search and Filter Section -->
-    <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-8 mb-8">
-        <form id="search-form" method="get" action="{% url 'all_properties' %}" class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <!-- Location -->
-            <div class="relative">
-                <label for="location" class="block text-sm font-medium text-primary-blue mb-2">{% trans "Location" %}</label>
-                <input type="text" id="location" name="location" placeholder="{% trans 'Enter location' %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue transition-all duration-300" aria-label="{% trans 'Search by location' %}">
-            </div>
+            <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 mb-8">
+                <form id="search-form" method="get" action="{% url 'all_properties' %}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Location -->
+                    <div>
+                        <label for="location" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Location" %}</label>
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            value="{{ location }}"
+                            placeholder="{% trans 'Enter location' %}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
+                            aria-label="{% trans 'Search by location' %}"
+                        >
+                    </div>
 
-            <!-- Property Type -->
-            <div class="relative">
-                <label for="property_type" class="block text-sm font-medium text-primary-blue mb-2">{% trans "Property Type" %}</label>
-                <select id="property_type" name="property_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue transition-all duration-300" aria-label="{% trans 'Select property type' %}">
-                    <option value="">{% trans "All Types" %}</option>
-                    <option value="apartment">{% trans "Apartment" %}</option>
-                    <option value="house">{% trans "House" %}</option>
-                    <option value="villa">{% trans "Villa" %}</option>
-                    <option value="studio">{% trans "Studio" %}</option>
-                </select>
-            </div>
+                    <!-- Property Type -->
+                    <div>
+                        <label for="property_type" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Property Type" %}</label>
+                        <select
+                            id="property_type"
+                            name="property_type"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
+                            aria-label="{% trans 'Select property type' %}"
+                        >
+                            <option value="" {% if not property_type %}selected{% endif %}>{% trans "All Types" %}</option>
+                            {% for category in categories %}
+                                <option value="{{ category.name|lower }}" {% if property_type == category.name|lower %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-            <!-- Price Range -->
-            <div class="relative">
-                <label for="price_range" class="block text-sm font-medium text-primary-blue mb-2">{% trans "Price Range" %}</label>
-                <select id="price_range" name="price_range" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue transition-all duration-300" aria-label="{% trans 'Select price range' %}">
-                    <option value="">{% trans "Any Price" %}</option>
-                    <option value="under_100k">{% trans "Under FCFA 100,000" %}</option>
-                    <option value="100k_200k">{% trans "FCFA 100,000 - 200,000" %}</option>
-                    <option value="200k_500k">{% trans "FCFA 200,000 - 500,000" %}</option>
-                    <option value="over_500k">{% trans "Over FCFA 500,000" %}</option>
-                </select>
-            </div>
+                    <!-- Price Range -->
+                    <div>
+                        <label for="price_range" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Price Range" %}</label>
+                        <select
+                            id="price_range"
+                            name="price_range"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
+                            aria-label="{% trans 'Select price range' %}"
+                        >
+                            <option value="" {% if not price_range %}selected{% endif %}>{% trans "Any Price" %}</option>
+                            <option value="under_100k" {% if price_range == 'under_100k' %}selected{% endif %}>{% trans "Under FCFA 100,000" %}</option>
+                            <option value="100k_200k" {% if price_range == '100k_200k' %}selected{% endif %}>{% trans "FCFA 100,000 - 200,000" %}</option>
+                            <option value="200k_500k" {% if price_range == '200k_500k' %}selected{% endif %}>{% trans "FCFA 200,000 - 500,000" %}</option>
+                            <option value="over_500k" {% if price_range == 'over_500k' %}selected{% endif %}>{% trans "Over FCFA 500,000" %}</option>
+                        </select>
+                    </div>
 
-            <!-- Search Button -->
-            <div class="flex items-end">
-                <button type="submit" class="w-full bg-gradient-to-r from-accent-orange to-accent-light hover:from-accent-light hover:to-accent-orange text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-md inline-flex items-center" aria-label="{% trans 'Search properties' %}">
-                    <i class="fas fa-search mr-2 text-lg"></i>
-                    {% trans "Search" %}
-                </button>
+                    <!-- Search Button -->
+                    <div class="flex items-end">
+                        <button
+                            type="submit"
+                            class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors"
+                            aria-label="{% trans 'Search properties' %}"
+                        >
+                            {% trans "Search" %}
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <!-- Error Message -->
