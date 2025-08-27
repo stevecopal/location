@@ -149,14 +149,11 @@
                             <i class="fas fa-envelope text-accent-orange mr-3"></i>
                             <div>
                                 <p class="text-sm text-gray-600">{% trans "Email" %}</p>
-                                <p class="font-medium">{{ property.contact_email }}</p>
+                                <p class="font-medium">{{ property.owner.email }}</p>
                             </div>
                         </div>
                         
-                        <button class="w-full bg-accent-orange hover:bg-accent-light text-white py-2 px-4 rounded-full transition-colors mt-4">
-                            <i class="fas fa-calendar mr-2"></i>
-                            {% trans "Schedule Viewing" %}
-                        </button>
+                        
                     </div>
                 {% else %}
                     <div class="text-center py-4">

@@ -1,12 +1,50 @@
-
-# Register your models here.
 from django.contrib import admin
-from .models import ContactMessage, Owner, Tenant, Category, Property, Photo, Video, Review, Contact
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Owner, Tenant
+from django import forms
+from django.contrib.auth.hashers import make_password, is_password_usable
+from .models import ContactMessage, Owner, Tenant, Category, Property, Photo, Video, Review, Contact
 
+# Formulaire Admin personnalisé pour User
+class CustomUserAdminForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label='Mot de passe')
 
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        # Ne hacher que si le mot de passe n'est pas déjà haché
+        if not is_password_usable(password):
+            return make_password(password)
+        return password
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.password = self.cleaned_data['password']
+        if commit:
+            user.save()
+        return user
+
+# Admin personnalisé pour User
+class CustomUserAdmin(BaseUserAdmin):
+    form = CustomUserAdminForm
+    list_display = ('username', 'email', 'is_staff', 'is_active')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Informations personnelles', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Dates importantes', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password', 'is_staff', 'is_active'),
+        }),
+    )
+
+# Inline pour Photo et Video
 class PhotoInline(admin.TabularInline):
     model = Photo
     extra = 1
@@ -15,6 +53,29 @@ class VideoInline(admin.TabularInline):
     model = Video
     extra = 1
 
+def create_linked_user(email, password):
+    """
+    Crée un compte User si nécessaire, en évitant le double hachage.
+    """
+    if not User.objects.filter(email=email).exists():
+        # Si le mot de passe est déjà haché, passer le texte brut à create_user
+        if is_password_usable(password):
+            # On suppose que le mot de passe est déjà haché, donc on crée sans re-hacher
+            user = User.objects.create_user(
+                username=email,
+                email=email,
+                password=None  # On définira le mot de passe après
+            )
+            user.password = password
+            user.save()
+        else:
+            # Mot de passe non haché, create_user le hachera
+            User.objects.create_user(
+                username=email,
+                email=email,
+                password=password
+            )
+
 @admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'phone', 'location', 'is_active', 'created_at')
@@ -22,17 +83,13 @@ class OwnerAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email', 'phone')
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
-    
+
     def save_model(self, request, obj, form, change):
-        # Hash the password if it has been modified
+        # Hacher le mot de passe si modifié
         if 'password' in form.changed_data:
             obj.password = make_password(form.cleaned_data['password'])
         super().save_model(request, obj, form, change)
-        
-        def save_model(self, request, obj, form, change):
-            super().save_model(request, obj, form, change)
-            create_linked_user(obj.email, obj.password)
-
+        create_linked_user(obj.email, obj.password)
 
 @admin.register(Tenant)
 class TenantAdmin(admin.ModelAdmin):
@@ -41,10 +98,13 @@ class TenantAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email', 'phone')
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
+
     def save_model(self, request, obj, form, change):
+        # Hacher le mot de passe si modifié
+        if 'password' in form.changed_data:
+            obj.password = make_password(form.cleaned_data['password'])
         super().save_model(request, obj, form, change)
         create_linked_user(obj.email, obj.password)
-
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -78,23 +138,13 @@ class ContactAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email', 'message')
     date_hierarchy = 'date_contact'
     ordering = ('-date_contact',)
-    
+
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'subject', 'created_at')
     search_fields = ('name', 'email', 'subject', 'message')
     list_filter = ('created_at',)
 
-def create_linked_user(email, password):
-    """
-    Crée un compte User de base pour le reset et l'auth standard.
-    Si le User existe déjà, on ne fait rien.
-    """
-    if not User.objects.filter(email=email).exists():
-        User.objects.create_user(
-            username=email,
-            email=email,
-            password=password  # sera automatiquement haché
-        )
-
-
+# Enregistrer le modèle User avec l'Admin personnalisé
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)

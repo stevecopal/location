@@ -5,13 +5,11 @@ from .models import Tenant
 
 @receiver(post_save, sender=User)
 def create_tenant_for_admin_user(sender, instance, created, **kwargs):
-    if created and instance.email:
-        Tenant.objects.get_or_create(
+    if created and instance.email and not Tenant.objects.filter(email=instance.email).exists():
+        Tenant.objects.create(
+            name=instance.username,
             email=instance.email,
-            defaults={
-                'name': instance.username,
-                'phone': '',
-                'password': instance.password,
-                'is_active': True
-            }
+            phone='',
+            password=instance.password,  # Mot de passe déjà haché par CustomUserAdminForm
+            is_active=instance.is_active
         )

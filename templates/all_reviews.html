@@ -22,56 +22,20 @@
             <p class="text-sm text-gray-600">{% trans "Total Reviews" %}</p>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-star text-green-600 text-2xl"></i>
-            </div>
-            <p class="text-3xl font-bold text-primary-blue">4.8</p>
-            <p class="text-sm text-gray-600">{% trans "Average Rating" %}</p>
-        </div>
+        
 
         <div class="bg-white p-6 rounded-xl shadow-sm text-center">
             <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-users text-accent-orange text-2xl"></i>
             </div>
-            <p class="text-3xl font-bold text-primary-blue">250+</p>
+            <p class="text-3xl font-bold text-primary-blue">20+</p>
             <p class="text-sm text-gray-600">{% trans "Happy Tenants" %}</p>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-home text-purple-600 text-2xl"></i>
-            </div>
-            <p class="text-3xl font-bold text-primary-blue">120+</p>
-            <p class="text-sm text-gray-600">{% trans "Properties Reviewed" %}</p>
-        </div>
+        
     </div>
 
-    <!-- Filter Options -->
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <h3 class="text-lg font-semibold text-primary-blue">{% trans "Filter Reviews" %}</h3>
-            <div class="flex flex-wrap gap-4">
-                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-orange">
-                    <option>{% trans "All Properties" %}</option>
-                    <option>{% trans "Apartments" %}</option>
-                    <option>{% trans "Houses" %}</option>
-                    <option>{% trans "Villas" %}</option>
-                </select>
-                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-orange">
-                    <option>{% trans "All Ratings" %}</option>
-                    <option>5 {% trans "Stars" %}</option>
-                    <option>4 {% trans "Stars" %}</option>
-                    <option>3 {% trans "Stars" %}</option>
-                </select>
-                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-orange">
-                    <option>{% trans "Newest First" %}</option>
-                    <option>{% trans "Oldest First" %}</option>
-                    <option>{% trans "Highest Rated" %}</option>
-                </select>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Reviews Grid -->
     {% if reviews %}

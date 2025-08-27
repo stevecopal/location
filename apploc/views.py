@@ -25,7 +25,7 @@ def all_properties(request):
     property_type = request.GET.get('property_type', '')
     price_range = request.GET.get('price_range', '')
     
-    properties = Property.objects.all()
+    properties = Property.objects.select_related('category', 'owner').prefetch_related('photos').all()
     
     if location:
         properties = properties.filter(location__icontains=location)
@@ -72,6 +72,10 @@ def property_create(request):
         photo_formset = PhotoFormSet(request.POST, request.FILES, prefix='photos')
         video_formset = VideoFormSet(request.POST, request.FILES, prefix='videos')
         
+        print("request.FILES:", request.FILES)  # Débogage
+        print("Photo formset valid:", photo_formset.is_valid())  # Débogage
+        print("Photo formset errors:", photo_formset.errors)  # Débogage
+        
         if property_form.is_valid() and photo_formset.is_valid() and video_formset.is_valid():
             property = property_form.save(commit=False)
             property.owner_id = request.session['user_id']
@@ -82,6 +86,7 @@ def property_create(request):
                     photo = form.save(commit=False)
                     photo.property = property
                     photo.save()
+                    print(f"Photo saved: {photo.image.name}")  # Débogage
             
             for form in video_formset:
                 if form.cleaned_data.get('video_file'):
@@ -93,55 +98,15 @@ def property_create(request):
             return redirect('owner_dashboard')
     else:
         property_form = PropertyForm()
-        photo_formset = PhotoFormSet(prefix='photos')
-        video_formset = VideoFormSet(prefix='videos')
+        # Initialiser PhotoFormSet avec un queryset vide
+        photo_formset = PhotoFormSet(queryset=Photo.objects.none(), prefix='photos')
+        video_formset = VideoFormSet(queryset=Video.objects.none(), prefix='videos')
     
     return render(request, 'property_form.html', {
         'property_form': property_form,
         'photo_formset': photo_formset,
         'video_formset': video_formset,
         'action': _('Create')
-    })
-
-def property_update(request, property_id):
-    if request.session.get('user_type') != 'owner':
-        messages.error(request, _('Only owners can update properties.'))
-        return redirect('login')
-    
-    property = get_object_or_404(Property, id=property_id, owner_id=request.session['user_id'])
-    
-    if request.method == 'POST':
-        property_form = PropertyForm(request.POST, instance=property)
-        photo_formset = PhotoFormSet(request.POST, request.FILES, prefix='photos')
-        video_formset = VideoFormSet(request.POST, request.FILES, prefix='videos')
-        
-        if property_form.is_valid() and photo_formset.is_valid() and video_formset.is_valid():
-            property_form.save()
-            
-            for form in photo_formset:
-                if form.cleaned_data.get('image'):
-                    photo = form.save(commit=False)
-                    photo.property = property
-                    photo.save()
-            
-            for form in video_formset:
-                if form.cleaned_data.get('video_file'):
-                    video = form.save(commit=False)
-                    video.property = property
-                    video.save()
-            
-            messages.success(request, _('Property updated successfully.'))
-            return redirect('owner_dashboard')
-    else:
-        property_form = PropertyForm(instance=property)
-        photo_formset = PhotoFormSet(prefix='photos')
-        video_formset = VideoFormSet(prefix='videos')
-    
-    return render(request, 'property_form.html', {
-        'property_form': property_form,
-        'photo_formset': photo_formset,
-        'video_formset': video_formset,
-        'action': _('Update')
     })
 
 def property_delete(request, property_id):
@@ -228,33 +193,7 @@ def dashboard_redirect(request):
     messages.error(request, _('Please log in to access your dashboard.'))
     return redirect('login')
 
-# def contact(request):
-#     if request.method == "POST":
-#         form = ContactForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             data = form.cleaned_data
-#             subject = _("New Contact Message: {subject}").format(subject=data['subject'])
-#             from_email = settings.DEFAULT_FROM_EMAIL
-#             to_email = [settings.EMAIL_HOST_USER]
 
-#             html_content = render_to_string("emails/contact_email.html", {"data": data})
-#             text_content = _("Name: {name}\nEmail: {email}\nMessage: {message}").format(
-#                 name=data['name'], email=data['email'], message=data['message']
-#             )
-
-#             email = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-#             email.attach_alternative(html_content, "text/html")
-#             email.send(fail_silently=False)
-            
-            
-
-#             messages.success(request, _('Your message has been sent successfully!'))
-#             return redirect('contact')
-#     else:
-#         form = ContactForm()
-
-#     return render(request, "about.html", {"contact_form": form})
 def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
@@ -300,3 +239,44 @@ def set_language(request):
         return redirect(next_url)
 
     return redirect('/')
+
+def property_update(request, property_id):
+    if request.session.get('user_type') != 'owner':
+        messages.error(request, _('Only owners can update properties.'))
+        return redirect('login')
+    
+    property = get_object_or_404(Property, id=property_id, owner_id=request.session['user_id'])
+    
+    if request.method == 'POST':
+        property_form = PropertyForm(request.POST, instance=property)
+        photo_formset = PhotoFormSet(request.POST, request.FILES, prefix='photos')
+        video_formset = VideoFormSet(request.POST, request.FILES, prefix='videos')
+        
+        if property_form.is_valid() and photo_formset.is_valid() and video_formset.is_valid():
+            property_form.save()
+            
+            for form in photo_formset:
+                if form.cleaned_data.get('image'):
+                    photo = form.save(commit=False)
+                    photo.property = property
+                    photo.save()
+            
+            for form in video_formset:
+                if form.cleaned_data.get('video_file'):
+                    video = form.save(commit=False)
+                    video.property = property
+                    video.save()
+            
+            messages.success(request, _('Property updated successfully.'))
+            return redirect('owner_dashboard')
+    else:
+        property_form = PropertyForm(instance=property)
+        photo_formset = PhotoFormSet(prefix='photos')
+        video_formset = VideoFormSet(prefix='videos')
+    
+    return render(request, 'property_form.html', {
+        'property_form': property_form,
+        'photo_formset': photo_formset,
+        'video_formset': video_formset,
+        'action': _('Update')
+    })

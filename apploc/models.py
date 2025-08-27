@@ -6,6 +6,8 @@ from django.db import models
 import uuid
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _  # ← import pour i18n
+from django.utils.text import slugify
+import unicodedata
 
 class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -55,13 +57,17 @@ class Property(BaseModel):
     def __str__(self):
         return _("{category} - {location}").format(category=self.category.name, location=self.location)
 
+def photo_upload_path(instance, filename):
+    # Génère un nom de fichier unique basé sur l'ID de la propriété et un UUID
+    ext = filename.split('.')[-1]
+    return f'property_photos/{instance.property.id}_{uuid.uuid4()}.{ext}'
+
 class Photo(BaseModel):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='photos', verbose_name=_("Property"))
-    image = models.ImageField(_("Image"), upload_to='property_photos/')
+    image = models.ImageField(upload_to=photo_upload_path, verbose_name=_('Image'))
 
     def __str__(self):
         return _("Photo for {property}").format(property=self.property)
-
 class Video(BaseModel):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='videos', verbose_name=_("Property"))
     video_file = models.FileField(_("Video File"), upload_to='property_videos/')

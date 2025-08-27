@@ -39,7 +39,7 @@
         <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
             {% if property.photos.first %}
             <div class="h-56 overflow-hidden relative">
-                <img src="{{ property.photos.first.image.url }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" alt="{{ property }}">
+                <img src="{{ property.photos.first.image.url }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" alt="{{ property.category}}">
                 <div class="absolute top-4 left-4 bg-accent-orange text-white py-1 px-3 rounded-full text-sm font-medium">
                     {% trans "Featured" %}
                 </div>
@@ -55,7 +55,7 @@
                 
                 <div class="flex justify-between items-center">
                     <div>
-                        <span class="text-2xl font-bold text-accent-orange">${{ property.price_per_month }}</span>
+                        <span class="text-2xl font-bold text-accent-orange">Fcfa{{ property.price_per_month }}</span>
                         <span class="text-gray-600">/{% trans "month" %}</span>
                     </div>
                     <a href="{% url 'property_detail' property.id %}" class="bg-white border border-primary-blue text-primary-blue hover:bg-primary-blue hover:text-white py-2 px-4 rounded-full transition-colors duration-300">
