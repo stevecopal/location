@@ -43,8 +43,16 @@ INSTALLED_APPS = [
     
 ]
 
+if not DEBUG:
+    INSTALLED_APPS += [
+        'cloudinary',
+        'cloudinary_storage',
+    ]
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+        'whitenoise.middleware.WhiteNoiseMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',  # ← pour i18n
     'django.middleware.common.CommonMiddleware',
@@ -132,12 +140,30 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # utile en production avec collectstatic
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
+
+
+if DEBUG:
+    MEDIA_URL = '/media/'
+    
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    # Cloudinary configuration
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': config('CLOUDINARY_API_KEY'),
+        'API_SECRET': config('CLOUDINARY_API_SECRET'),
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
 
 LANGUAGES = [
     ('en', 'English'),
