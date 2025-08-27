@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-26 15:49+0100\n"
+"POT-Creation-Date: 2025-08-27 11:33+0100\n"
 "PO-Revision-Date: 2025-08-26 16:00+0100\n"
 "Last-Translator: Steve Satcheme <EMAIL@ADDRESS>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -17,103 +17,173 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apploc/authentication/views.py:16
-msgid "Email already exists."
-msgstr "Cet email existe déjà."
-
-#: apploc/authentication/views.py:21
-msgid "Account created successfully. Please log in."
-msgstr "Compte créé avec succès. Veuillez vous connecter."
-
-#: apploc/authentication/views.py:38
-msgid "Logged in successfully as Admin."
-msgstr "Connexion réussie en tant qu'administrateur."
-
-#: apploc/authentication/views.py:44
-msgid "Tenant account is disabled."
-msgstr "Le compte locataire est désactivé."
-
-#: apploc/authentication/views.py:48
-msgid "Logged in successfully as Tenant."
-msgstr "Connexion réussie en tant que locataire."
-
-#: apploc/authentication/views.py:51 apploc/authentication/views.py:63
-#: apploc/authentication/views.py:65
-msgid "Invalid email or password."
-msgstr "Email ou mot de passe invalide."
-
-#: apploc/authentication/views.py:56
-msgid "Owner account is disabled."
-msgstr "Le compte propriétaire est désactivé."
-
-#: apploc/authentication/views.py:60
-msgid "Logged in successfully as Owner."
-msgstr "Connexion réussie en tant que propriétaire."
-
-#: apploc/authentication/views.py:74
-msgid "You have been logged out successfully."
-msgstr "Vous vous êtes déconnecté avec succès."
-
-#: apploc/authentication/views.py:79
-msgid "Please log in as an owner to access the dashboard."
-msgstr "Veuillez vous connecter en tant que propriétaire pour accéder au tableau de bord."
-
-#: apploc/authentication/views.py:88
-msgid "Please log in as a tenant."
-msgstr "Veuillez vous connecter en tant que locataire."
-
-#: apploc/forms.py:11 apploc/models.py:45
-msgid "Category"
-msgstr "Catégorie"
-
-#: apploc/forms.py:12 apploc/models.py:21 apploc/models.py:46
-#: templates/all_properties.html:20
-msgid "Location"
-msgstr "Emplacement"
-
-#: apploc/forms.py:13 apploc/models.py:47
-msgid "Price per Month"
-msgstr "Prix par mois"
-
-#: apploc/forms.py:14 apploc/models.py:48 templates/property_detail.html:73
-msgid "Description"
-msgstr "Description"
-
-#: apploc/forms.py:15 apploc/models.py:49
-msgid "Contact Phone"
-msgstr "Téléphone de contact"
-
-#: apploc/forms.py:16 apploc/models.py:50
-msgid "Is Available"
-msgstr "Disponible"
-
-#: apploc/forms.py:24 apploc/models.py:57
-msgid "Image"
-msgstr "Image"
-
-#: apploc/forms.py:32 apploc/models.py:64
-msgid "Video File"
-msgstr "Fichier vidéo"
-
-#: apploc/forms.py:40 apploc/forms.py:54 apploc/models.py:72
-#: apploc/models.py:82 apploc/models.py:92
-#: templates/emails/contact_email.html:20
-msgid "Message"
-msgstr "Message"
-
-#: apploc/forms.py:51 apploc/models.py:17 apploc/models.py:28
-#: apploc/models.py:38 apploc/models.py:79 apploc/models.py:89
-#: templates/emails/contact_email.html:17
-msgid "Name"
-msgstr "Nom"
-
-#: apploc/forms.py:52 apploc/models.py:19 apploc/models.py:29
-#: apploc/models.py:80 apploc/models.py:90
+#: apploc/authentication/forms.py:23 apploc/forms.py:52 apploc/models.py:22
+#: apploc/models.py:32 apploc/models.py:83 apploc/models.py:93
 #: templates/emails/contact_email.html:18 templates/property_detail.html:151
 msgid "Email"
 msgstr "Email"
 
-#: apploc/forms.py:53 apploc/forms.py:59 apploc/models.py:91
+#: apploc/authentication/forms.py:24 apploc/models.py:23 apploc/models.py:34
+msgid "Password"
+msgstr "Mot de passe"
+
+#: apploc/authentication/views.py:24
+#, fuzzy
+#| msgid "Email already exists."
+msgid "Email already exists or is pending verification."
+msgstr "Cet email existe déjà."
+
+#: apploc/authentication/views.py:48
+msgid ""
+"A verification code has been sent to your email. Please check your inbox "
+"(and spam folder)."
+msgstr ""
+
+#: apploc/authentication/views.py:53
+msgid "Failed to send verification email. Please try again."
+msgstr ""
+
+#: apploc/authentication/views.py:65
+msgid "Verification code has expired. Please sign up again."
+msgstr ""
+
+#: apploc/authentication/views.py:93
+#, fuzzy
+#| msgid "Account created successfully. Please log in."
+msgid "Email verified successfully. Please log in."
+msgstr "Compte créé avec succès. Veuillez vous connecter."
+
+#: apploc/authentication/views.py:97 apploc/authentication/views.py:347
+#, fuzzy
+#| msgid "Invalid email or password."
+msgid "Invalid verification code."
+msgstr "Email ou mot de passe invalide."
+
+#: apploc/authentication/views.py:103
+msgid "Invalid verification request."
+msgstr ""
+
+#: apploc/authentication/views.py:120
+msgid "Logged in successfully as Admin."
+msgstr "Connexion réussie en tant qu'administrateur."
+
+#: apploc/authentication/views.py:129
+msgid "Tenant account is disabled."
+msgstr "Le compte locataire est désactivé."
+
+#: apploc/authentication/views.py:133
+msgid "Logged in successfully as Tenant."
+msgstr "Connexion réussie en tant que locataire."
+
+#: apploc/authentication/views.py:136 apploc/authentication/views.py:149
+#: apploc/authentication/views.py:151
+msgid "Invalid email or password."
+msgstr "Email ou mot de passe invalide."
+
+#: apploc/authentication/views.py:142
+msgid "Owner account is disabled."
+msgstr "Le compte propriétaire est désactivé."
+
+#: apploc/authentication/views.py:146
+msgid "Logged in successfully as Owner."
+msgstr "Connexion réussie en tant que propriétaire."
+
+#: apploc/authentication/views.py:159
+msgid "You have been logged out successfully."
+msgstr "Vous vous êtes déconnecté avec succès."
+
+#: apploc/authentication/views.py:165
+msgid "Please log in as an owner to access the dashboard."
+msgstr ""
+"Veuillez vous connecter en tant que propriétaire pour accéder au tableau de "
+"bord."
+
+#: apploc/authentication/views.py:174
+msgid "Please log in as a tenant."
+msgstr "Veuillez vous connecter en tant que locataire."
+
+#: apploc/authentication/views.py:199
+msgid "No Tenant or Owner account linked to this user."
+msgstr ""
+
+#: apploc/authentication/views.py:210 apploc/views.py:228
+msgid "Please log in to access your dashboard."
+msgstr "Veuillez vous connecter pour accéder à votre tableau de bord."
+
+#: apploc/authentication/views.py:229
+msgid "A password reset code has been sent to your email."
+msgstr ""
+
+#: apploc/authentication/views.py:233
+msgid "Failed to send reset email. Please try again."
+msgstr ""
+
+#: apploc/authentication/views.py:287 apploc/authentication/views.py:320
+#: apploc/authentication/views.py:332 apploc/authentication/views.py:344
+msgid "No account found with this email."
+msgstr ""
+
+#: apploc/authentication/views.py:300
+msgid "Reset code has expired. Please request a new one."
+msgstr ""
+
+#: apploc/authentication/views.py:316 apploc/authentication/views.py:328
+#: apploc/authentication/views.py:340
+#, fuzzy
+#| msgid "Account created successfully. Please log in."
+msgid "Password reset successfully. Please log in."
+msgstr "Compte créé avec succès. Veuillez vous connecter."
+
+#: apploc/authentication/views.py:353
+msgid "Invalid reset request."
+msgstr ""
+
+#: apploc/forms.py:11 apploc/models.py:48
+msgid "Category"
+msgstr "Catégorie"
+
+#: apploc/forms.py:12 apploc/models.py:24 apploc/models.py:49
+#: templates/all_properties.html:20
+msgid "Location"
+msgstr "Emplacement"
+
+#: apploc/forms.py:13 apploc/models.py:50
+msgid "Price per Month"
+msgstr "Prix par mois"
+
+#: apploc/forms.py:14 apploc/models.py:51 templates/property_detail.html:73
+msgid "Description"
+msgstr "Description"
+
+#: apploc/forms.py:15 apploc/models.py:52
+msgid "Contact Phone"
+msgstr "Téléphone de contact"
+
+#: apploc/forms.py:16 apploc/models.py:53
+msgid "Is Available"
+msgstr "Disponible"
+
+#: apploc/forms.py:24 apploc/models.py:60
+msgid "Image"
+msgstr "Image"
+
+#: apploc/forms.py:32 apploc/models.py:67
+msgid "Video File"
+msgstr "Fichier vidéo"
+
+#: apploc/forms.py:40 apploc/forms.py:54 apploc/models.py:75
+#: apploc/models.py:85 apploc/models.py:95
+#: templates/emails/contact_email.html:20
+msgid "Message"
+msgstr "Message"
+
+#: apploc/forms.py:51 apploc/models.py:20 apploc/models.py:31
+#: apploc/models.py:41 apploc/models.py:82 apploc/models.py:92
+#: templates/emails/contact_email.html:17
+msgid "Name"
+msgstr "Nom"
+
+#: apploc/forms.py:53 apploc/forms.py:59 apploc/models.py:94
 #: templates/emails/contact_email.html:19
 msgid "Subject"
 msgstr "Sujet"
@@ -130,142 +200,81 @@ msgstr "Votre email"
 msgid "Your Message"
 msgstr "Votre message"
 
-#: apploc/models.py:18 apploc/models.py:30 apploc/models.py:81
+#: apploc/models.py:21 apploc/models.py:33 apploc/models.py:84
 #: templates/property_detail.html:143
 msgid "Phone"
 msgstr "Téléphone"
 
-#: apploc/models.py:20 apploc/models.py:31
-msgid "Password"
-msgstr "Mot de passe"
-
-#: apploc/models.py:22 apploc/models.py:32
+#: apploc/models.py:25 apploc/models.py:35
 msgid "Is Active"
 msgstr "Actif"
 
-#: apploc/models.py:44
+#: apploc/models.py:47
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: apploc/models.py:53
+#: apploc/models.py:56
 #, python-brace-format
 msgid "{category} - {location}"
 msgstr "{category} - {location}"
 
-#: apploc/models.py:56 apploc/models.py:63 apploc/models.py:70
+#: apploc/models.py:59 apploc/models.py:66 apploc/models.py:73
 #: templates/property_confirm_delete.html:11 templates/property_form.html:5
-#: templates/property_form.html:11
+#: templates/property_form.html:13
 msgid "Property"
 msgstr "Propriété"
 
-#: apploc/models.py:60
+#: apploc/models.py:63
 #, python-brace-format
 msgid "Photo for {property}"
 msgstr "Photo de {property}"
 
-#: apploc/models.py:67
+#: apploc/models.py:70
 #, python-brace-format
 msgid "Video for {property}"
 msgstr "Vidéo de {property}"
 
-#: apploc/models.py:71
+#: apploc/models.py:74
 msgid "Tenant"
 msgstr "Locataire"
 
-#: apploc/models.py:73
+#: apploc/models.py:76
 msgid "Date Posted"
 msgstr "Date de publication"
 
-#: apploc/models.py:76
+#: apploc/models.py:79
 #, python-brace-format
 msgid "Review by {tenant} for {property}"
 msgstr "Avis de {tenant} sur {property}"
 
-#: apploc/models.py:83
+#: apploc/models.py:86
 msgid "Date Contact"
 msgstr "Date de contact"
 
-#: apploc/models.py:86
+#: apploc/models.py:89
 #, python-brace-format
 msgid "Contact from {name}"
 msgstr "Contact de {name}"
 
-#: apploc/models.py:95
+#: apploc/models.py:98
 #, python-brace-format
 msgid "Message from {name} - {subject}"
 msgstr "Message de {name} - {subject}"
 
-#: apploc/views.py:63
-msgid "Only owners can create properties."
-msgstr "Seuls les propriétaires peuvent créer des propriétés."
-#: apploc/views.py:88
-msgid "Property created successfully."
-msgstr "Propriété créée avec succès."
-
-#: apploc/views.py:99 apploc/views.py:180
-msgid "Create"
-msgstr "Créer"
-
-#: apploc/views.py:104
-msgid "Only owners can update properties."
-msgstr "Seuls les propriétaires peuvent modifier des propriétés."
-
-#: apploc/views.py:129
-msgid "Property updated successfully."
-msgstr "Propriété mise à jour avec succès."
-
-#: apploc/views.py:140 apploc/views.py:196
-msgid "Update"
-msgstr "Mettre à jour"
-
-#: apploc/views.py:145
-msgid "Only owners can delete properties."
-msgstr "Seuls les propriétaires peuvent supprimer des propriétés."
-
-#: apploc/views.py:151
-msgid "Property deleted successfully."
-msgstr "Propriété supprimée avec succès."
-
-#: apploc/views.py:157
-msgid "Only tenants can manage reviews."
-msgstr "Seuls les locataires peuvent gérer les avis."
-
-#: apploc/views.py:165
-msgid "Only tenants can create reviews."
-msgstr "Seuls les locataires peuvent créer des avis."
-
-#: apploc/views.py:176
-msgid "Review created successfully."
-msgstr "Avis créé avec succès."
-
-#: apploc/views.py:184
-msgid "Only tenants can update reviews."
-msgstr "Seuls les locataires peuvent modifier des avis."
-
-#: apploc/views.py:192
-msgid "Review updated successfully."
-msgstr "Avis mis à jour avec succès."
-
-#: apploc/views.py:200
-msgid "Only tenants can delete reviews."
-msgstr "Seuls les locataires peuvent supprimer des avis."
-
-#: apploc/views.py:206
-msgid "Review deleted successfully."
-msgstr "Avis supprimé avec succès."
-
-#: apploc/views.py:224
-msgid "Please log in to access your dashboard."
-msgstr "Veuillez vous connecter pour accéder à votre tableau de bord."
-
-#: apploc/views.py:233
+#: apploc/tasks.py:32
 #, python-brace-format
 msgid "New Contact Message: {subject}"
 msgstr "Nouveau message de contact : {subject}"
 
-#: apploc/views.py:238
-#, python-brace-format
+#: apploc/tasks.py:33
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Name: {name}\n"
+#| "Email: {email}\n"
+#| "Message: {message}"
 msgid ""
+"You have received a new contact message:\n"
+"\n"
 "Name: {name}\n"
 "Email: {email}\n"
 "Message: {message}"
@@ -274,7 +283,67 @@ msgstr ""
 "Email : {email}\n"
 "Message : {message}"
 
-#: apploc/views.py:246
+#: apploc/views.py:67
+msgid "Only owners can create properties."
+msgstr "Seuls les propriétaires peuvent créer des propriétés."
+
+#: apploc/views.py:92
+msgid "Property created successfully."
+msgstr "Propriété créée avec succès."
+
+#: apploc/views.py:103 apploc/views.py:184
+msgid "Create"
+msgstr "Créer"
+
+#: apploc/views.py:108
+msgid "Only owners can update properties."
+msgstr "Seuls les propriétaires peuvent modifier des propriétés."
+
+#: apploc/views.py:133
+msgid "Property updated successfully."
+msgstr "Propriété mise à jour avec succès."
+
+#: apploc/views.py:144 apploc/views.py:200
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: apploc/views.py:149
+msgid "Only owners can delete properties."
+msgstr "Seuls les propriétaires peuvent supprimer des propriétés."
+
+#: apploc/views.py:155
+msgid "Property deleted successfully."
+msgstr "Propriété supprimée avec succès."
+
+#: apploc/views.py:161
+msgid "Only tenants can manage reviews."
+msgstr "Seuls les locataires peuvent gérer les avis."
+
+#: apploc/views.py:169
+msgid "Only tenants can create reviews."
+msgstr "Seuls les locataires peuvent créer des avis."
+
+#: apploc/views.py:180
+msgid "Review created successfully."
+msgstr "Avis créé avec succès."
+
+#: apploc/views.py:188
+msgid "Only tenants can update reviews."
+msgstr "Seuls les locataires peuvent modifier des avis."
+
+#: apploc/views.py:196
+msgid "Review updated successfully."
+msgstr "Avis mis à jour avec succès."
+
+#: apploc/views.py:204
+msgid "Only tenants can delete reviews."
+msgstr "Seuls les locataires peuvent supprimer des avis."
+
+#: apploc/views.py:210
+msgid "Review deleted successfully."
+msgstr "Avis supprimé avec succès."
+
+#: apploc/views.py:273
 msgid "Your message has been sent successfully!"
 msgstr "Votre message a été envoyé avec succès !"
 
@@ -290,7 +359,9 @@ msgstr "À propos de CopalFinder"
 msgid ""
 "Discover the story behind our passion for connecting people with their "
 "perfect homes"
-msgstr "Découvrez l'histoire derrière notre passion pour connecter les gens à leur logement idéal."
+msgstr ""
+"Découvrez l'histoire derrière notre passion pour connecter les gens à leur "
+"logement idéal."
 
 #: templates/about.html:19
 msgid "Who We Are"
@@ -301,108 +372,129 @@ msgid ""
 "At <strong class=\"text-accent-orange\">CopalFinder</strong>, we are more "
 "than just a rental platform—we are a community dedicated to transforming the "
 "way people find and manage their perfect homes."
-msgstr "Chez <strong class=\"text-accent-orange\">CopalFinder</strong>, nous sommes plus qu'une plateforme de location — nous sommes une communauté dédiée à transformer la manière dont les gens trouvent et gèrent leur logement idéal."
+msgstr ""
+"Chez <strong class=\"text-accent-orange\">CopalFinder</strong>, nous sommes "
+"plus qu'une plateforme de location — nous sommes une communauté dédiée à "
+"transformer la manière dont les gens trouvent et gèrent leur logement idéal."
 
 #: templates/about.html:22
 msgid ""
 "Founded with a vision to simplify the rental process, we bring together "
 "property owners and tenants through a seamless, transparent, and user-"
 "friendly experience."
-msgstr "Fondé avec la vision de simplifier le processus de location, nous rapprochons propriétaires et locataires grâce à une expérience fluide, transparente et conviviale."
+msgstr ""
+"Fondé avec la vision de simplifier le processus de location, nous "
+"rapprochons propriétaires et locataires grâce à une expérience fluide, "
+"transparente et conviviale."
 
 #: templates/about.html:23
 msgid ""
 "Our team is driven by a commitment to excellence, ensuring every property "
 "listed meets the highest standards of quality and every tenant finds a place "
 "they can truly call home."
-msgstr "Notre équipe est animée par un engagement envers l'excellence, garantissant que chaque bien répertorié respecte les plus hauts standards de qualité et que chaque locataire trouve un lieu qu'il peut vraiment appeler « chez soi »."
+msgstr ""
+"Notre équipe est animée par un engagement envers l'excellence, garantissant "
+"que chaque bien répertorié respecte les plus hauts standards de qualité et "
+"que chaque locataire trouve un lieu qu'il peut vraiment appeler « chez soi »."
 
-#: templates/about.html:35
+#: templates/about.html:39
 msgid "Our Mission"
 msgstr "Notre mission"
 
-#: templates/about.html:36
+#: templates/about.html:40
 msgid ""
 "To empower property owners and tenants by providing a trusted platform that "
 "makes renting effortless, secure, and rewarding for everyone involved."
-msgstr "Donner du pouvoir aux propriétaires et aux locataires en leur offrant une plateforme fiable qui rend la location simple, sécurisée et bénéfique pour toutes les parties."
+msgstr ""
+"Donner du pouvoir aux propriétaires et aux locataires en leur offrant une "
+"plateforme fiable qui rend la location simple, sécurisée et bénéfique pour "
+"toutes les parties."
 
-#: templates/about.html:44
+#: templates/about.html:48
 msgid "Our Values"
 msgstr "Nos valeurs"
 
-#: templates/about.html:45
+#: templates/about.html:49
 msgid ""
 "Integrity, innovation, and customer satisfaction are at the heart of "
 "everything we do. We believe in building lasting relationships based on "
 "trust and mutual respect."
-msgstr "L'intégrité, l'innovation et la satisfaction des clients sont au cœur de tout ce que nous faisons. Nous croyons en la construction de relations durables basées sur la confiance et le respect mutuel."
+msgstr ""
+"L'intégrité, l'innovation et la satisfaction des clients sont au cœur de "
+"tout ce que nous faisons. Nous croyons en la construction de relations "
+"durables basées sur la confiance et le respect mutuel."
 
-#: templates/about.html:53
+#: templates/about.html:57
 msgid "Our Promise"
 msgstr "Notre promesse"
 
-#: templates/about.html:54
+#: templates/about.html:58
 msgid ""
 "We are committed to delivering exceptional service, from user-friendly tools "
 "for owners to personalized support for tenants throughout their journey."
-msgstr "Nous nous engageons à offrir un service exceptionnel, des outils conviviaux pour les propriétaires à un accompagnement personnalisé pour les locataires tout au long de leur parcours."
+msgstr ""
+"Nous nous engageons à offrir un service exceptionnel, des outils conviviaux "
+"pour les propriétaires à un accompagnement personnalisé pour les locataires "
+"tout au long de leur parcours."
 
-#: templates/about.html:63 templates/base.html:68 templates/base.html:84
+#: templates/about.html:67 templates/base.html:68 templates/base.html:98
 #: templates/home.html:32 templates/property_detail.html:14
 msgid "Properties"
 msgstr "Propriétés"
 
-#: templates/about.html:67
+#: templates/about.html:71
 msgid "Happy Clients"
 msgstr "Clients satisfaits"
 
-#: templates/about.html:71
+#: templates/about.html:75
 msgid "Cities"
 msgstr "Villes"
 
-#: templates/about.html:75
+#: templates/about.html:79
 msgid "Support"
 msgstr "Assistance"
 
-#: templates/about.html:82
+#: templates/about.html:86
 msgid "Our Leadership Team"
 msgstr "Notre équipe dirigeante"
 
-#: templates/about.html:89
+#: templates/about.html:93
 msgid "Founder & CEO"
 msgstr "Fondateur & PDG"
 
-#: templates/about.html:90
+#: templates/about.html:94
 msgid "Visionary leader"
 msgstr "Leader visionnaire"
 
-#: templates/about.html:97
+#: templates/about.html:101
 msgid "Chief Operations Officer"
 msgstr "Directeur des opérations"
 
-#: templates/about.html:98
+#: templates/about.html:102
 msgid "Expert in customer experience and operational excellence"
 msgstr "Expert en expérience client et en excellence opérationnelle"
 
-#: templates/about.html:105
+#: templates/about.html:109
 msgid "Technology Director"
 msgstr "Directeur technique"
 
-#: templates/about.html:106
+#: templates/about.html:110
 msgid "Tech innovator passionate about building seamless platforms"
-msgstr "Innovateur technologique passionné par la création de plateformes fluides"
+msgstr ""
+"Innovateur technologique passionné par la création de plateformes fluides"
 
-#: templates/about.html:113
+#: templates/about.html:117
 msgid "Contact Us"
 msgstr "Contactez-nous"
 
-#: templates/about.html:114
+#: templates/about.html:118
 msgid ""
 "Have questions or need assistance? Fill out the form below to get in touch."
-msgstr "Vous avez des questions ou besoin d'aide ? Remplissez le formulaire ci-dessous pour nous contacter."
+msgstr ""
+"Vous avez des questions ou besoin d'aide ? Remplissez le formulaire ci-"
+"dessous pour nous contacter."
 
-#: templates/about.html:130
+#: templates/about.html:134
 msgid "Send Message"
 msgstr "Envoyer le message"
 
@@ -416,7 +508,8 @@ msgstr "Découvrez nos propriétés"
 
 #: templates/all_properties.html:12
 msgid "Find your perfect rental home from our curated collection"
-msgstr "Trouvez votre logement idéal dans notre collection soigneusement sélectionnée"
+msgstr ""
+"Trouvez votre logement idéal dans notre collection soigneusement sélectionnée"
 
 #: templates/all_properties.html:21
 msgid "Enter location"
@@ -518,8 +611,11 @@ msgid "No properties found"
 msgstr "Aucune propriété trouvée"
 
 #: templates/all_properties.html:132
-msgid "Try adjusting your search criteria or check back later for new listings."
-msgstr "Essayez d’ajuster vos critères de recherche ou revenez plus tard pour de nouvelles annonces."
+msgid ""
+"Try adjusting your search criteria or check back later for new listings."
+msgstr ""
+"Essayez d’ajuster vos critères de recherche ou revenez plus tard pour de "
+"nouvelles annonces."
 
 #: templates/all_reviews.html:5
 msgid "All Reviews - CopalFinder"
@@ -531,7 +627,8 @@ msgstr "Avis des locataires"
 
 #: templates/all_reviews.html:12
 msgid "Discover what our community has to say about their rental experiences"
-msgstr "Découvrez ce que notre communauté pense de leurs expériences de location"
+msgstr ""
+"Découvrez ce que notre communauté pense de leurs expériences de location"
 
 #: templates/all_reviews.html:22 templates/review_list.html:30
 msgid "Total Reviews"
@@ -590,6 +687,12 @@ msgstr "Les plus anciens"
 msgid "Highest Rated"
 msgstr "Les mieux notés"
 
+#: templates/all_reviews.html:100
+#, fuzzy, python-format
+#| msgid "%(review.message|truncatewords:30)s"
+msgid "%(review.message|truncatewords:40)s\""
+msgstr "%(review.message|truncatewords:30)s"
+
 #: templates/all_reviews.html:128 templates/review_list.html:96
 msgid "No reviews yet"
 msgstr "Aucun avis pour l'instant"
@@ -610,30 +713,57 @@ msgstr "S'inscrire en tant que locataire"
 msgid "Browse Properties"
 msgstr "Parcourir les propriétés"
 
-#: templates/authentication/login.html:4
+#: templates/authentication/login.html:3
 msgid "Log In - CopalFinder"
 msgstr "Connexion - CopalFinder"
 
-#: templates/authentication/login.html:9
+#: templates/authentication/login.html:8
 msgid "Welcome Back"
 msgstr "Bon retour"
 
-#: templates/authentication/login.html:10
+#: templates/authentication/login.html:9
 msgid "Log in to your CopalFinder account"
 msgstr "Connectez-vous à votre compte CopalFinder"
 
-#: templates/authentication/login.html:29 templates/base.html:76
-#: templates/base.html:92 templates/property_detail.html:166
+#: templates/authentication/login.html:28 templates/base.html:76
+#: templates/base.html:106 templates/property_detail.html:166
 msgid "Log In"
 msgstr "Connexion"
 
 #: templates/authentication/login.html:35
+msgid "Forgot your password?"
+msgstr "mot de paase oublie?"
+
+#: templates/authentication/login.html:41
 msgid "Don't have an account?"
 msgstr "Vous n'avez pas de compte ?"
 
-#: templates/authentication/login.html:37
+#: templates/authentication/login.html:43
 msgid "Sign up"
 msgstr "Inscrivez-vous"
+
+#: templates/authentication/password_reset_verify.html:10
+msgid "Reset Your Password"
+msgstr "Réinitialiser votre mot de passe"
+
+#: templates/authentication/password_reset_verify.html:12
+#, python-format
+msgid "A 4-digit code has been sent to %(email)s. Enter the code and your new password below."
+msgstr "Un code à 4 chiffres a été envoyé à %(email)s. Saisissez le code et votre nouveau mot de passe ci-dessous."
+
+#: templates/authentication/password_reset_verify.html:36
+msgid "Reset Password"
+msgstr "Réinitialiser le mot de passe"
+
+#: templates/authentication/password_reset_verify.html:41
+#: templates/authentication/verify_email.html:52
+msgid "Didn't receive the code?"
+msgstr "Vous n'avez pas reçu le code ?"
+
+#: templates/authentication/password_reset_verify.html:42
+msgid "Request a new one"
+msgstr "Demander un nouveau code"
+
 
 #: templates/authentication/signup.html:4
 msgid "Tenant Sign Up - CopalFinder"
@@ -647,34 +777,56 @@ msgstr "Créer un compte locataire"
 msgid "Join CopalFinder to find your perfect rental home"
 msgstr "Rejoignez CopalFinder pour trouver votre maison idéale à louer"
 
-#: templates/authentication/signup.html:35
+#: templates/authentication/signup.html:43
 msgid "I agree to the"
 msgstr "J'accepte les"
 
-#: templates/authentication/signup.html:36
+#: templates/authentication/signup.html:44
 msgid "Terms of Service"
 msgstr "Conditions d'utilisation"
 
-#: templates/authentication/signup.html:37
+#: templates/authentication/signup.html:45
 msgid "and"
 msgstr "et"
 
-#: templates/authentication/signup.html:38
+#: templates/authentication/signup.html:46
 msgid "Privacy Policy"
 msgstr "Politique de confidentialité"
 
-#: templates/authentication/signup.html:43 templates/base.html:75
-#: templates/base.html:91
+#: templates/authentication/signup.html:51 templates/base.html:75
+#: templates/base.html:105
 msgid "Sign Up"
 msgstr "Inscription"
 
-#: templates/authentication/signup.html:49
+#: templates/authentication/signup.html:57
 msgid "Already have an account?"
 msgstr "Vous avez déjà un compte ?"
 
-#: templates/authentication/signup.html:51
+#: templates/authentication/signup.html:59
 msgid "Log in"
 msgstr "Se connecter"
+
+#: templates/authentication/verify_email.html:5
+msgid "Verify Email"
+msgstr "Vérifier l'email"
+
+#: templates/authentication/verify_email.html:13
+msgid "Verify Your Email"
+msgstr "Vérifiez votre email"
+
+#: templates/authentication/verify_email.html:18
+#, python-format
+msgid "A 4-digit code has been sent to %(email)s. Please enter it below to verify your account."
+msgstr "Un code à 4 chiffres a été envoyé à %(email)s. Veuillez le saisir ci-dessous pour vérifier votre compte."
+
+#: templates/authentication/verify_email.html:46
+msgid "Verify Code"
+msgstr "Vérifier le code"
+
+#: templates/authentication/verify_email.html:53
+msgid "Try again"
+msgstr "Réessayer"
+
 
 #: templates/base.html:7
 msgid "CopalFinder - Premium Rentals"
@@ -688,46 +840,48 @@ msgstr "Copal"
 msgid "Finder"
 msgstr "Finder"
 
-#: templates/base.html:67 templates/base.html:83
+#: templates/base.html:67 templates/base.html:97
 #: templates/property_detail.html:12
 msgid "Home"
 msgstr "Accueil"
 
-#: templates/base.html:69 templates/base.html:85
+#: templates/base.html:69 templates/base.html:99
 msgid "About"
 msgstr "À propos"
 
-#: templates/base.html:72 templates/base.html:88
+#: templates/base.html:72 templates/base.html:102
 #: templates/owner_dashboard.html:11 templates/tenant_dashboard.html:12
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: templates/base.html:73 templates/base.html:89
+#: templates/base.html:73 templates/base.html:103
 msgid "Log Out"
 msgstr "Déconnexion"
 
-#: templates/base.html:125 templates/home.html:90
+#: templates/base.html:153 templates/home.html:90
 msgid "CopalFinder"
 msgstr "CopalFinder"
 
-#: templates/base.html:126
+#: templates/base.html:154
 msgid ""
 "Find your perfect rental home for unforgettable experiences and memories."
-msgstr "Trouvez la maison idéale à louer pour des expériences et souvenirs inoubliables."
+msgstr ""
+"Trouvez la maison idéale à louer pour des expériences et souvenirs "
+"inoubliables."
 
-#: templates/base.html:144
+#: templates/base.html:172
 msgid "Quick Links"
 msgstr "Liens rapides"
 
-#: templates/base.html:146
+#: templates/base.html:174
 msgid "About Us"
 msgstr "À propos de nous"
 
-#: templates/base.html:147 templates/property_detail.html:136
+#: templates/base.html:175 templates/property_detail.html:136
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/base.html:152
+#: templates/base.html:180
 msgid "CopalFinder - Premium Rental Homes. All rights reserved."
 msgstr "CopalFinder - Maisons en location premium. Tous droits réservés."
 
@@ -748,8 +902,8 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"        Vous êtes redirigé vers votre tableau de bord. Si la redirection ne se fait pas, "
-"veuillez <a href=\"%(login_url)s\">vous connecter</a>.\n"
+"        Vous êtes redirigé vers votre tableau de bord. Si la redirection ne "
+"se fait pas, veuillez <a href=\"%(login_url)s\">vous connecter</a>.\n"
 "        "
 
 #: templates/emails/contact_email.html:16
@@ -772,7 +926,9 @@ msgstr "Maison idéale à louer"
 msgid ""
 "Discover exceptional properties in the most beautiful locations for "
 "unforgettable stays"
-msgstr "Découvrez des propriétés exceptionnelles dans des lieux magnifiques pour des séjours inoubliables"
+msgstr ""
+"Découvrez des propriétés exceptionnelles dans des lieux magnifiques pour des "
+"séjours inoubliables"
 
 #: templates/home.html:15
 msgid "500+ Premium Properties"
@@ -794,7 +950,9 @@ msgstr "En vedette"
 msgid ""
 "Discover our handpicked selection of exceptional homes in the most sought-"
 "after locations"
-msgstr "Découvrez notre sélection exclusive de maisons exceptionnelles dans les zones les plus prisées"
+msgstr ""
+"Découvrez notre sélection exclusive de maisons exceptionnelles dans les "
+"zones les plus prisées"
 
 #: templates/home.html:59 templates/owner_dashboard.html:82
 #: templates/property_detail.html:39 templates/property_detail.html:182
@@ -828,7 +986,9 @@ msgstr "Propriétés vérifiées"
 
 #: templates/home.html:100
 msgid "Every property is personally verified to ensure quality and accuracy."
-msgstr "Chaque propriété est vérifiée personnellement pour garantir qualité et exactitude."
+msgstr ""
+"Chaque propriété est vérifiée personnellement pour garantir qualité et "
+"exactitude."
 
 #: templates/home.html:107
 msgid "24/7 Support"
@@ -844,7 +1004,8 @@ msgstr "Expérience Premium"
 
 #: templates/home.html:116
 msgid "Enjoy a seamless rental experience from booking to checkout."
-msgstr "Profitez d'une expérience de location fluide, de la réservation au départ."
+msgstr ""
+"Profitez d'une expérience de location fluide, de la réservation au départ."
 
 #: templates/home.html:124
 msgid "What Our"
@@ -856,11 +1017,14 @@ msgstr "locataires disent"
 
 #: templates/home.html:125
 msgid "Discover why tenants love finding their perfect home with us"
-msgstr "Découvrez pourquoi nos locataires adorent trouver leur maison idéale avec nous"
+msgstr ""
+"Découvrez pourquoi nos locataires adorent trouver leur maison idéale avec "
+"nous"
 
 #: templates/home.html:152
 msgid "No reviews yet. Be the first to share your experience!"
-msgstr "Aucun avis pour le moment. Soyez le premier à partager votre expérience !"
+msgstr ""
+"Aucun avis pour le moment. Soyez le premier à partager votre expérience !"
 
 #: templates/home.html:154
 msgid "Add a Review"
@@ -924,19 +1088,20 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"            Êtes-vous sûr de vouloir supprimer \"%(property_name)s\" ? Cette action est irréversible.\n"
+"            Êtes-vous sûr de vouloir supprimer \"%(property_name)s\" ? Cette "
+"action est irréversible.\n"
 "            "
 
 #: templates/property_confirm_delete.html:25
 msgid "Delete Property"
 msgstr "Supprimer la propriété"
 
-#: templates/property_confirm_delete.html:29 templates/property_form.html:86
+#: templates/property_confirm_delete.html:29 templates/property_form.html:91
 #: templates/review_confirm_delete.html:30 templates/review_form.html:85
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/property_detail.html:16 templates/property_form.html:26
+#: templates/property_detail.html:16 templates/property_form.html:31
 msgid "Property Details"
 msgstr "Détails de la propriété"
 
@@ -949,8 +1114,8 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Veuillez <a href=\"%(login_url)s\">vous connecter</a> "
-"pour voir l'emplacement exact\n"
+"                                Veuillez <a href=\"%(login_url)s\">vous "
+"connecter</a> pour voir l'emplacement exact\n"
 "                            "
 
 #: templates/property_detail.html:45
@@ -965,7 +1130,7 @@ msgstr "Indisponible"
 msgid "Property photo"
 msgstr "Photo de la propriété"
 
-#: templates/property_detail.html:80 templates/property_form.html:61
+#: templates/property_detail.html:80 templates/property_form.html:66
 msgid "Videos"
 msgstr "Vidéos"
 
@@ -1001,19 +1166,19 @@ msgstr "Propriétés similaires"
 msgid "No similar properties found."
 msgstr "Aucune propriété similaire trouvée."
 
-#: templates/property_form.html:15
+#: templates/property_form.html:17
 msgid "Add a new property to your CopalFinder portfolio."
 msgstr "Ajoutez une nouvelle propriété à votre portfolio CopalFinder."
 
-#: templates/property_form.html:17
+#: templates/property_form.html:19
 msgid "Update the details of your existing property."
 msgstr "Mettez à jour les détails de votre propriété existante."
 
-#: templates/property_form.html:42
+#: templates/property_form.html:47
 msgid "Photos"
 msgstr "Photos"
 
-#: templates/property_form.html:82
+#: templates/property_form.html:87
 #, python-format
 msgid "%(action)s Property"
 msgstr "%(action)s la propriété"
@@ -1036,7 +1201,8 @@ msgstr "Êtes-vous sûr de vouloir supprimer cet avis ?"
 #, python-format
 msgid ""
 "Review for %(review.property.category.name)s - %(review.property.location)s"
-msgstr "Avis pour %(review.property.category.name)s - %(review.property.location)s"
+msgstr ""
+"Avis pour %(review.property.category.name)s - %(review.property.location)s"
 
 #: templates/review_confirm_delete.html:20
 #, python-format
@@ -1045,13 +1211,16 @@ msgstr "%(review.message|truncatewords:30)s"
 
 #: templates/review_confirm_delete.html:22
 msgid "This action cannot be undone. Please confirm to delete the review."
-msgstr "Cette action est irréversible. Veuillez confirmer pour supprimer l'avis."
+msgstr ""
+"Cette action est irréversible. Veuillez confirmer pour supprimer l'avis."
 
 #: templates/review_form.html:15
 #, python-format
 msgid ""
 "Share your experience for %(property.category.name)s in %(property.location)s"
-msgstr "Partagez votre expérience pour %(property.category.name)s à %(property.location)s"
+msgstr ""
+"Partagez votre expérience pour %(property.category.name)s à "
+"%(property.location)s"
 
 #: templates/review_form.html:47
 msgid "Rating"
@@ -1085,6 +1254,7 @@ msgstr "Soyez honnête et précis sur votre expérience"
 msgid "Focus on the property features and amenities"
 msgstr "Concentrez-vous sur les caractéristiques et équipements de la propriété"
 
+
 #: templates/review_form.html:105
 msgid "Mention the location and neighborhood"
 msgstr "Mentionnez l'emplacement et le quartier"
@@ -1105,10 +1275,15 @@ msgstr "Gérez et modifiez vos avis sur les propriétés"
 msgid "Back to Properties"
 msgstr "Retour aux propriétés"
 
+#: templates/review_list.html:74
+#, python-format
+msgid "Posted on %(review.date_posted|date:\"F d, Y\")s"
+msgstr ""
+
 #: templates/review_list.html:97
-msgid ""
-"You haven't posted any reviews yet. Share your experience with other tenants!"
+msgid "You haven't posted any reviews yet. Share your experience with other tenants!"
 msgstr "Vous n'avez pas encore publié d'avis. Partagez votre expérience avec les autres locataires !"
+
 
 #: templates/review_list.html:108
 msgid "Pagination"
@@ -1129,7 +1304,8 @@ msgstr "Tableau de bord Locataire - CopalFinder"
 #: templates/tenant_dashboard.html:15
 msgid ""
 "Welcome back! Discover your next perfect home from our curated collection."
-msgstr "Bon retour ! Découvrez votre prochaine maison idéale dans notre sélection."
+msgstr ""
+"Bon retour ! Découvrez votre prochaine maison idéale dans notre sélection."
 
 #: templates/tenant_dashboard.html:28
 msgid "Available Properties"
@@ -1145,4 +1321,6 @@ msgstr "Aucune propriété disponible"
 
 #: templates/tenant_dashboard.html:111
 msgid "Check back later for new listings or try adjusting your search filters."
-msgstr "Revenez plus tard pour de nouvelles annonces ou essayez de modifier vos filtres de recherche."
+msgstr ""
+"Revenez plus tard pour de nouvelles annonces ou essayez de modifier vos "
+"filtres de recherche."
