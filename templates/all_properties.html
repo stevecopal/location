@@ -57,10 +57,10 @@
                             aria-label="{% trans 'Select price range' %}"
                         >
                             <option value="" {% if not price_range %}selected{% endif %}>{% trans "Any Price" %}</option>
-                            <option value="under_100k" {% if price_range == 'under_100k' %}selected{% endif %}>{% trans "Under FCFA 100,000" %}</option>
-                            <option value="100k_200k" {% if price_range == '100k_200k' %}selected{% endif %}>{% trans "FCFA 100,000 - 200,000" %}</option>
-                            <option value="200k_500k" {% if price_range == '200k_500k' %}selected{% endif %}>{% trans "FCFA 200,000 - 500,000" %}</option>
-                            <option value="over_500k" {% if price_range == 'over_500k' %}selected{% endif %}>{% trans "Over FCFA 500,000" %}</option>
+                            <option value="under_100k" {% if price_range == 'under_100k' %}selected{% endif %}>{% trans "Under  100,000 Fcfa" %}</option>
+                            <option value="100k_200k" {% if price_range == '100k_200k' %}selected{% endif %}>{% trans " 100,000 - 200,000 Fcfa" %}</option>
+                            <option value="200k_500k" {% if price_range == '200k_500k' %}selected{% endif %}>{% trans " 200,000 - 500,000 Fcfa" %}</option>
+                            <option value="over_500k" {% if price_range == 'over_500k' %}selected{% endif %}>{% trans "Over 500,000 Fcfa" %}</option>
                         </select>
                     </div>
 
@@ -139,7 +139,7 @@
                     </span>
                 </div>
                 <div class="flex items-center justify-between border-t border-gray-100 pt-3">
-                    <span class="text-xl font-bold text-accent-orange">Fcfa{{ property.price_per_month }}</span>
+                    <span class="text-xl font-bold text-accent-orange">{{ property.price_per_month }} Fcfa</span>
                     <span class="text-sm text-gray-600">{% trans "/month" %}</span>
                 </div>
                 <a href="{% url 'property_detail' property.id %}" class="block w-full bg-primary-blue hover:bg-primary-light text-white text-center py-2 px-4 rounded-lg mt-4 transition-colors">

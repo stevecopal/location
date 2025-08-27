@@ -36,7 +36,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="text-2xl font-bold text-accent-orange">Fcfa{{ property.price_per_month }}<span class="text-sm font-normal text-gray-600">/{% trans "month" %}</span></div>
+            <div class="text-2xl font-bold text-accent-orange">{{ property.price_per_month }} Fcfa<span class="text-sm font-normal text-gray-600">/{% trans "month" %}</span></div>
         </div>
         
         <div class="flex flex-wrap gap-3 mt-4">
@@ -176,7 +176,7 @@
                         <img src="{{ similar.photos.first.image.url }}" class="w-full h-32 object-cover rounded mb-2" alt="{{ similar.category.name }}">
                         {% endif %}
                         <h4 class="font-semibold text-sm">{{ similar.category.name }}</h4>
-                        <p class="text-accent-orange font-bold text-sm">Fcfa{{ similar.price_per_month }}/{% trans "month" %}</p>
+                        <p class="text-accent-orange font-bold text-sm">{{ similar.price_per_month }} Fcfa/{% trans "month" %}</p>
                         <a href="{% url 'property_detail' similar.id %}" class="text-primary-blue hover:text-accent-orange text-sm transition-colors">
                             {% trans "View Details" %} →
                         </a>

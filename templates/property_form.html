@@ -2,107 +2,83 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{{ action }} {% trans "Property" %} - CopalFinder{% endblock %}
+{% block title %}{{ action }} {% trans "Property" %} - LuxStay{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto px-4 py-8">
+<div class="max-w-4xl mx-auto px-4 py-8">
     <!-- Header -->
-    <div class="text-center mb-12">
-        <div class="w-20 h-20 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fas fa-home text-white text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-primary-blue mb-2">
+    <div class="text-center mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-primary-blue">
             {{ action }} <span class="text-accent-orange">{% trans "Property" %}</span>
         </h1>
-        <p class="text-gray-600">
+        <p class="text-gray-600 mt-2">
             {% if action == 'Create' %}
-                {% trans "Add a new property to your Copalfinder portfolio" %}
+                {% trans "Add a new property to your portfolio" %}
             {% else %}
-                {% trans "Update your property details and media" %}
+                {% trans "Update your property details" %}
             {% endif %}
         </p>
     </div>
 
-    <!-- Form Card -->
-    <div class="bg-white rounded-xl shadow-lg p-8">
-        <form method="post" enctype="multipart/form-data" class="space-y-8">
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
             {% csrf_token %}
 
-            <!-- Property Details Section -->
+            <!-- Property Details -->
             <div>
-                <h3 class="text-xl font-semibold text-primary-blue mb-6 flex items-center">
-                    <i class="fas fa-info-circle text-accent-orange mr-3"></i>
-                    {% trans "Property Information" %}
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h3 class="text-lg font-semibold text-primary-blue mb-4">{% trans "Property Details" %}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {% for field in property_form %}
-                    <div class="space-y-2">
-                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
                             {{ field.label }}
-                            {% if field.field.required %}<span class="text-red-500 ml-1">*</span>{% endif %}
                         </label>
                         {{ field }}
-                        {% if field.help_text %}
-                        <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
-                        {% endif %}
                         {% if field.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                            <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
                         {% endif %}
                     </div>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- Photos Section -->
-            <div class="border-t border-gray-100 pt-8">
-                <h3 class="text-xl font-semibold text-primary-blue mb-6 flex items-center">
-                    <i class="fas fa-camera text-accent-orange mr-3"></i>
-                    {% trans "Property Photos" %}
-                </h3>
+            <!-- Photos -->
+            <div class="border-t border-gray-100 pt-6">
+                <h3 class="text-lg font-semibold text-primary-blue mb-4">{% trans "Photos" %}</h3>
                 {{ photo_formset.management_form }}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
                     {% for form in photo_formset %}
-                    <div class="bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-200 hover:border-accent-orange transition-colors">
+                    <div class="bg-gray-50 p-4 rounded-lg">
                         {% for field in form %}
-                        <div class="space-y-2">
-                            {% if not field.is_hidden %}
-                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
                                 {{ field.label }}
                             </label>
-                            {% endif %}
                             {{ field }}
                             {% if field.errors %}
-                            <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                                <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
                             {% endif %}
-                        </div>
                         {% endfor %}
                     </div>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- Videos Section -->
-            <div class="border-t border-gray-100 pt-8">
-                <h3 class="text-xl font-semibold text-primary-blue mb-6 flex items-center">
-                    <i class="fas fa-video text-accent-orange mr-3"></i>
-                    {% trans "Property Videos" %}
-                </h3>
+            <!-- Videos -->
+            <div class="border-t border-gray-100 pt-6">
+                <h3 class="text-lg font-semibold text-primary-blue mb-4">{% trans "Videos" %}</h3>
                 {{ video_formset.management_form }}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
                     {% for form in video_formset %}
-                    <div class="bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-200 hover:border-accent-orange transition-colors">
+                    <div class="bg-gray-50 p-4 rounded-lg">
                         {% for field in form %}
-                        <div class="space-y-2">
-                            {% if not field.is_hidden %}
-                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
                                 {{ field.label }}
                             </label>
-                            {% endif %}
                             {{ field }}
                             {% if field.errors %}
-                            <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                                <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
                             {% endif %}
-                        </div>
                         {% endfor %}
                     </div>
                     {% endfor %}
@@ -110,133 +86,42 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="border-t border-gray-100 pt-8">
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button type="submit" class="bg-accent-orange hover:bg-accent-light text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center">
-                        <i class="fas fa-save mr-2"></i>
+            <div class="border-t border-gray-100 pt-6">
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button type="submit" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         {% if action == 'Create' %}{% trans "Create Property" %}{% else %}{% trans "Update Property" %}{% endif %}
                     </button>
-                    <a href="{% url 'owner_dashboard' %}" class="border border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center justify-center">
-                        <i class="fas fa-times mr-2"></i>
+                    <a href="{% url 'owner_dashboard' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors text-center">
                         {% trans "Cancel" %}
                     </a>
                 </div>
             </div>
         </form>
     </div>
-
-    <!-- Help Tips -->
-    <div class="bg-blue-50 rounded-xl p-6 mt-8">
-        <h3 class="text-lg font-semibold text-primary-blue mb-4 flex items-center">
-            <i class="fas fa-lightbulb text-accent-orange mr-2"></i>
-            {% trans "Quick Tips" %}
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-            <div class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
-                <span>{% trans "Use high-quality, well-lit photos" %}</span>
-            </div>
-            <div class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
-                <span>{% trans "Write a detailed and honest description" %}</span>
-            </div>
-        </div>
-    </div>
 </div>
 
 <style>
-    /* Form field styling */
     input[type="text"],
     input[type="number"],
-    input[type="email"],
-    input[type="tel"],
     input[type="file"],
     select,
     textarea {
         width: 100%;
-        padding: 0.75rem 1rem;
+        padding: 0.5rem 0.75rem;
         border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        transition: all 0.2s ease;
-        font-size: 0.875rem;
+        border-radius: 0.375rem;
     }
-
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    input[type="email"]:focus,
-    input[type="tel"]:focus,
-    input[type="file"]:focus,
+    
+    input:focus,
     select:focus,
     textarea:focus {
         outline: none;
         border-color: #1e4a76;
         box-shadow: 0 0 0 3px rgba(30, 74, 118, 0.1);
     }
-
-    /* Select styling */
-    select {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-        background-position: right 0.5rem center;
-        background-repeat: no-repeat;
-        background-size: 1.5em 1.5em;
-        padding-right: 2.5rem;
-    }
-
-    /* Textarea specific */
-    textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
-
-    /* File input styling */
-    input[type="file"] {
-        padding: 0.5rem;
-        background-color: #f9fafb;
-    }
-
-    /* Transition effects */
+    
     .transition-colors {
-        transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-    }
-
-    /* Hover effects for file upload areas */
-    .border-dashed:hover {
-        border-color: #ff7e30;
+        transition: color 0.2s, background-color 0.2s;
     }
 </style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Enhance file inputs with filename display
-        const fileInputs = document.querySelectorAll('input[type="file"]');
-        fileInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                const fileName = this.files[0]?.name || '{% trans "No file chosen" %}';
-                const container = this.closest('.bg-gray-50');
-                if (container) {
-                    let fileNameDisplay = container.querySelector('.file-name');
-                    if (!fileNameDisplay) {
-                        fileNameDisplay = document.createElement('p');
-                        fileNameDisplay.className = 'file-name text-xs text-gray-500 mt-2';
-                        container.appendChild(fileNameDisplay);
-                    }
-                    fileNameDisplay.textContent = fileName;
-                }
-            });
-        });
-
-        // Add character counter for description textarea
-        const textarea = document.querySelector('textarea');
-        if (textarea) {
-            const counter = document.createElement('div');
-            counter.className = 'text-xs text-gray-500 text-right mt-1';
-            textarea.parentNode.appendChild(counter);
-            
-            textarea.addEventListener('input', function() {
-                const maxLength = this.getAttribute('maxlength') || 500;
-                counter.textContent = `${this.value.length}/${maxLength} {% trans "characters" %}`;
-            });
-        }
-    });
-</script>
 {% endblock %}

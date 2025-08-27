@@ -27,7 +27,7 @@ def all_properties(request):
     price_range = request.GET.get('price_range', '')
 
     # Filtrer les propriétés disponibles
-    properties = Property.objects.select_related('category', 'owner').prefetch_related('photos').filter(is_available=True)
+    properties = Property.objects.select_related('category', 'owner').prefetch_related('photos')
 
     # Filtre par localisation
     if location:
@@ -256,8 +256,12 @@ def property_update(request, property_id):
     
     if request.method == 'POST':
         property_form = PropertyForm(request.POST, instance=property)
-        photo_formset = PhotoFormSet(request.POST, request.FILES, prefix='photos')
-        video_formset = VideoFormSet(request.POST, request.FILES, prefix='videos')
+        photo_formset = PhotoFormSet(request.POST, request.FILES, prefix='photos', queryset=Photo.objects.filter(property=property))
+        video_formset = VideoFormSet(request.POST, request.FILES, prefix='videos', queryset=Video.objects.filter(property=property))
+        
+        print("request.FILES:", request.FILES)  # Débogage
+        print("Photo formset valid:", photo_formset.is_valid())  # Débogage
+        print("Photo formset errors:", photo_formset.errors)  # Débogage
         
         if property_form.is_valid() and photo_formset.is_valid() and video_formset.is_valid():
             property_form.save()
@@ -267,6 +271,7 @@ def property_update(request, property_id):
                     photo = form.save(commit=False)
                     photo.property = property
                     photo.save()
+                    print(f"Photo saved: {photo.image.name}")  # Débogage
             
             for form in video_formset:
                 if form.cleaned_data.get('video_file'):
@@ -278,8 +283,8 @@ def property_update(request, property_id):
             return redirect('owner_dashboard')
     else:
         property_form = PropertyForm(instance=property)
-        photo_formset = PhotoFormSet(prefix='photos')
-        video_formset = VideoFormSet(prefix='videos')
+        photo_formset = PhotoFormSet(queryset=Photo.objects.filter(property=property), prefix='photos')
+        video_formset = VideoFormSet(queryset=Video.objects.filter(property=property), prefix='videos')
     
     return render(request, 'property_form.html', {
         'property_form': property_form,
