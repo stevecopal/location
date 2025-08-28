@@ -14,7 +14,7 @@ from decouple import config
 from pathlib import Path
 import os
 from django.urls import reverse_lazy 
-
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,10 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = config('DEBUG')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')  # Par défaut pour dev
 
 
 # Application definition
@@ -98,14 +97,11 @@ if DEBUG:
 else:
     # PostgreSQL en production
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            'PORT': config('DB_PORT', default='5432'),
-        }
+        'default': dj_database_url.config(
+            default=config('DATABASE_URL'),
+            conn_max_age=600,
+            ssl_require=True  # Activer SSL pour PostgreSQL sur Render
+        )
     }
 
 # Password validation
@@ -181,8 +177,8 @@ TAILWIND_APP_NAME = 'theme'
 
 LOGIN_URL = '/auth/login/'  # Redirige vers votre URL de connexion personnalisée
 # Celery Configuration
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://localhost:6379/0')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -197,3 +193,11 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 CONTACT_EMAIL = config('CONTACT_EMAIL')
 DEFAULT_FROM_EMAIL = 'stevesatcheme@gmail.com'
 
+# Paramètres de sécurité pour la production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 an
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

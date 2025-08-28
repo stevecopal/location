@@ -1,0 +1,2 @@
+web: gunicorn location.wsgi:application --bind 0.0.0.0:$PORT
+worker: celery -A location worker --loglevel=info
