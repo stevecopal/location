@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')  # Par défaut pour dev
 
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     
 ]
 
-if not DEBUG:
+if DEBUG:
     INSTALLED_APPS += [
         'cloudinary',
         'cloudinary_storage',
@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'location.wsgi.application'
 
 
 
-if DEBUG:
+if not DEBUG:
     # SQLite en développement
     DATABASES = {
         'default': {
@@ -149,7 +149,7 @@ LOCALE_PATHS = [
 ]
 
 
-if DEBUG:
+if not DEBUG:
     MEDIA_URL = '/media/'
     
     MEDIA_ROOT = BASE_DIR / 'media'
