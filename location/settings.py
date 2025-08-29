@@ -28,7 +28,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = config('DEBUG', default=False, cast=bool)  # Convertit en booléen, False par défaut en production
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')  # Par défaut pour dev# ALLOWED_HOSTS=[]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')  # Par défaut pour dev
+ALLOWED_HOSTS=[]
 # Application definition
 
 INSTALLED_APPS = [
@@ -170,7 +171,10 @@ LANGUAGES = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TAILWIND_APP_NAME = 'theme'
+AUTH_USER_MODEL = 'apploc.CustomUser'  # Modèle d'utilisateur personnalisé
+LOGIN_URL = '/auth/login/'  # URL de la page de connexion
+LOGIN_REDIRECT_URL = '/auth/dashboard/'  # Redirection après connexion
+LOGOUT_REDIRECT_URL = '/auth/login/'  # Redirection après déconnexion
 
 LOGIN_URL = '/auth/login/'  # Redirige vers votre URL de connexion personnalisée
 # Celery Configuration
