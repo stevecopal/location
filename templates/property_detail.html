@@ -49,7 +49,7 @@
 
     <!-- Property Gallery -->
     <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-        {% if property.photos.all %}
+        {% if property.photos.exists %}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {% for photo in property.photos.all %}
                     <div class="overflow-hidden rounded-lg">

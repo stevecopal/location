@@ -2,7 +2,7 @@ from datetime import timedelta
 from django.utils import timezone
 import logging
 import random
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -18,32 +18,33 @@ def signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
+
+            # Vérifier si l'email existe déjà
             if CustomUser.objects.filter(email=email).exists() or PendingUser.objects.filter(email=email).exists():
                 messages.error(request, _('Email already exists or is pending verification.'))
                 logger.warning(f"Signup attempt with existing email: {email}")
                 return render(request, 'authentication/signup.html', {'form': form})
-            
-            # Générer le username automatiquement à partir de l'email
+
+            # Générer le username automatiquement
             username = email.split('@')[0] + str(random.randint(100, 999))
 
-            # Generate 4-digit verification code
+            # Générer le code de vérification
             verification_code = str(random.randint(1000, 9999))
             expires_at = timezone.now() + timedelta(minutes=10)
 
-            # Store pending user data
-            pending_user = PendingUser(
+            # Enregistrer le PendingUser avec mot de passe hashé
+            pending_user = PendingUser.objects.create(
                 username=username,
                 email=email,
-                phone=form.cleaned_data.get('phone', ''),  # Optional for tenants
+                phone=form.cleaned_data.get('phone', ''),
                 password=make_password(form.cleaned_data['password1']),
                 verification_code=verification_code,
                 expires_at=expires_at,
-                user_type=form.cleaned_data['user_type'],  # 'tenant' or 'owner'
+                user_type=form.cleaned_data['user_type'],  # 'tenant' ou 'owner'
             )
-            pending_user.save()
             logger.info(f"Pending user created: {email}, type: {pending_user.user_type}")
 
-            # Send verification email in the background
+            # Envoyer le mail de vérification
             try:
                 send_verification_email.delay(email, verification_code)
                 messages.success(request, _('A verification code has been sent to your email. Please check your inbox (and spam folder).'))
@@ -58,48 +59,50 @@ def signup(request):
         form = SignupForm()
     return render(request, 'authentication/signup.html', {'form': form})
 
-def verify_email(request, email):
-    try:
-        pending_user = PendingUser.objects.get(email=email)
-        if pending_user.expires_at < timezone.now():
-            pending_user.delete()
-            messages.error(request, _('Verification code has expired. Please sign up again.'))
-            logger.warning(f"Expired verification code for: {email}")
-            return redirect('signup')
 
-        if request.method == 'POST':
-            form = VerificationCodeForm(request.POST)
-            if form.is_valid():
-                code = form.cleaned_data['code']
-                if code == pending_user.verification_code:
-                    # Create CustomUser
-                    user = CustomUser.objects.create_user(
-                        username=pending_user.username,
-                        email=pending_user.email,
-                        password=pending_user.password,  # déjà haché
-                        phone=pending_user.phone,
-                        role=pending_user.user_type,
-                        is_approved=False,  # Owners require admin approval
-                        is_active=(pending_user.user_type == 'tenant')  # Tenants are active immediately
-                    )
-                    pending_user.delete()
-                    if user.role == 'tenant':
-                        messages.success(request, _('Email verified successfully. You can now log in.'))
-                        logger.info(f"Email verified and tenant created: {email}")
-                    else:
-                        messages.success(request, _('Email verified successfully. Your account is pending admin approval.'))
-                        logger.info(f"Email verified and owner created (pending approval): {email}")
-                    return redirect('login')
-                else:
-                    messages.error(request, _('Invalid verification code.'))
-                    logger.warning(f"Invalid verification code attempt for: {email}, entered: {code}")
-        else:
-            form = VerificationCodeForm()
-        return render(request, 'authentication/verify_email.html', {'form': form, 'email': email})
-    except PendingUser.DoesNotExist:
-        messages.error(request, _('Invalid verification request.'))
-        logger.error(f"Invalid verification request for email: {email}")
+def verify_email(request, email):
+    pending_user = get_object_or_404(PendingUser, email=email)
+
+    # Vérifier l'expiration du code
+    if pending_user.expires_at < timezone.now():
+        pending_user.delete()
+        messages.error(request, _('Verification code has expired. Please sign up again.'))
+        logger.warning(f"Expired verification code for: {email}")
         return redirect('signup')
+
+    if request.method == 'POST':
+        form = VerificationCodeForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            if code == pending_user.verification_code:
+                # Créer l'utilisateur final
+                user = CustomUser.objects.create_user(
+                    username=pending_user.username,
+                    email=pending_user.email,
+                    password=pending_user.password,  # mot de passe déjà hashé
+                    phone=pending_user.phone,
+                    role=pending_user.user_type,
+                    is_approved=(pending_user.user_type == 'tenant'),  # Locataires approuvés automatiquement
+                    is_active=(pending_user.user_type == 'tenant')     # Locataires actifs directement
+                )
+                pending_user.delete()
+
+                if user.role == 'tenant':
+                    login(request, user)
+                    messages.success(request, _('Email verified successfully. You are now logged in.'))
+                    logger.info(f"Email verified and tenant created: {email}")
+                    return redirect('home')
+                else:
+                    messages.success(request, _('Email verified successfully. Your account is pending admin approval.'))
+                    logger.info(f"Email verified and owner created (pending approval): {email}")
+                    return redirect('login')
+            else:
+                messages.error(request, _('Invalid verification code.'))
+                logger.warning(f"Invalid verification code attempt for: {email}, entered: {code}")
+    else:
+        form = VerificationCodeForm()
+
+    return render(request, 'authentication/verify_email.html', {'form': form, 'email': email})
 
 def login(request):
     if request.method == 'POST':

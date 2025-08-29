@@ -70,29 +70,33 @@ def property_create(request):
         return redirect('login')
 
     if request.method == 'POST':
-        property_form = PropertyForm(request.POST)
+        property_form = PropertyForm(request.POST, request.FILES)
         photo_formset = PhotoFormSet(request.POST, request.FILES, prefix='photos')
         video_formset = VideoFormSet(request.POST, request.FILES, prefix='videos')
 
         if property_form.is_valid() and photo_formset.is_valid() and video_formset.is_valid():
+            # 1. Sauvegarder la propriété
             property = property_form.save(commit=False)
             property.owner = request.user
             property.save()
 
+            # 2. Sauvegarder les photos
             for form in photo_formset:
-                if form.cleaned_data.get('image'):
+                if form.cleaned_data.get('image'):  # Vérifie qu'il y a bien un fichier
                     photo = form.save(commit=False)
                     photo.property = property
                     photo.save()
 
+            # 3. Sauvegarder les vidéos
             for form in video_formset:
-                if form.cleaned_data.get('video_file'):
+                if form.cleaned_data.get('video_file'):  # Vérifie qu'il y a bien un fichier
                     video = form.save(commit=False)
                     video.property = property
                     video.save()
 
             messages.success(request, _('Property created successfully.'))
             return redirect('owner_dashboard')
+
     else:
         property_form = PropertyForm()
         photo_formset = PhotoFormSet(queryset=Photo.objects.none(), prefix='photos')
@@ -104,6 +108,7 @@ def property_create(request):
         'video_formset': video_formset,
         'action': _('Create')
     })
+
 
 @login_required
 def property_update(request, property_id):

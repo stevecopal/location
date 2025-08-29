@@ -50,12 +50,13 @@ class PhotoForm(forms.ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image:
-            if image.size > 5 * 1024 * 1024:  # 5MB max
-                raise forms.ValidationError(_("L'image ne doit pas dépasser 5 Mo."))
-            valid_formats = ['image/jpeg', 'image/png']
-            if image.content_type not in valid_formats:
-                raise forms.ValidationError(_("Format d'image non supporté. Utilisez JPEG ou PNG."))
-        return image
+            # Vérifier que c'est bien un fichier uploadé
+            if hasattr(image, 'content_type'):
+                valid_formats = ['image/jpeg', 'image/png', 'image/jpg']
+                if image.content_type not in valid_formats:
+                    raise forms.ValidationError("Format d'image non valide. Utilisez JPEG ou PNG.")
+                if image.size > 5 * 1024 * 1024:
+                    raise forms.ValidationError("L'image ne doit pas dépasser 5 Mo.")
 
 class VideoForm(forms.ModelForm):
     class Meta:
@@ -71,11 +72,14 @@ class VideoForm(forms.ModelForm):
     def clean_video_file(self):
         video = self.cleaned_data.get('video_file')
         if video:
-            if video.size > 50 * 1024 * 1024:  # 50MB max
-                raise forms.ValidationError(_("La vidéo ne doit pas dépasser 50 Mo."))
-            valid_formats = ['video/mp4', 'video/avi']
-            if video.content_type not in valid_formats:
-                raise forms.ValidationError(_("Format vidéo non supporté. Utilisez MP4 ou AVI."))
+            # Vérifier si c'est un nouveau fichier uploadé
+            if hasattr(video, 'content_type'):
+                valid_formats = ['video/mp4', 'video/webm', 'video/ogg']
+                if video.content_type not in valid_formats:
+                    raise forms.ValidationError("Format de vidéo non valide. Utilisez MP4, WEBM ou OGG.")
+                if video.size > 50 * 1024 * 1024:  # 50 Mo max
+                    raise forms.ValidationError("La vidéo ne doit pas dépasser 50 Mo.")
+        return video
         return video
 
 class ReviewForm(forms.ModelForm):

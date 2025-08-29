@@ -19,7 +19,7 @@ class CustomUserAdminForm(forms.ModelForm):
         fields = '__all__'
 
     def clean_password(self):
-        password = self.cleaned_data.get('password')
+        password = self.cleaned_data.get('password1')
         if password:
             return make_password(password)
         return self.instance.password  

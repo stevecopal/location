@@ -149,7 +149,6 @@ LOCALE_PATHS = [
 
 if DEBUG:
     MEDIA_URL = '/media/'
-    
     MEDIA_ROOT = BASE_DIR / 'media'
 else:
     # Cloudinary configuration

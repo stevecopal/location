@@ -112,13 +112,15 @@
         {% for property in properties %}
         <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
             <div class="relative">
-                {% if property.photos.first %}
-                    <img src="{{ property.photos.first.image.url }}" class="w-full h-48 object-cover" alt="{{ property.category.name }}">
+                {% with first_photo=property.photos.first %}
+                {% if first_photo %}
+                    <img src="{{ first_photo.image.url }}" class="w-full h-48 object-cover" alt="{{ property.category.name }}">
                 {% else %}
                     <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
                         <i class="fas fa-home text-4xl text-gray-400"></i>
                     </div>
                 {% endif %}
+            {% endwith %}
                 <div class="absolute top-3 left-3">
                     <span class="bg-accent-orange text-white text-xs px-2 py-1 rounded-full">
                         {{ property.category.name }}
