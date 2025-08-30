@@ -58,27 +58,3 @@ def set_language(request):
         return redirect(next_url)
     return redirect('/')
 
-def create_superuser(request):
-         if request.method == 'POST':
-             try:
-                 # Vérifier si le superutilisateur existe déjà
-                 if CustomUser.objects.filter(email='admin@admin.com').exists():
-                     messages.error(request, _('Superutilisateur avec cet email existe déjà.'))
-                     return redirect('admin:index')
-                 # Créer le superutilisateur
-                 user = CustomUser.objects.create_superuser(
-                     email='admin@admin.com',
-                     password='admin',
-                     username='admin',  # Généré automatiquement sinon
-                     role='admin',
-                     is_approved=True,
-                     is_active=True,
-                     is_staff=True,
-                     is_superuser=True
-                 )
-                 messages.success(request, _('Superutilisateur créé avec succès : admin@admin.com / admin'))
-                 return redirect('admin:index')
-             except Exception as e:
-                 messages.error(request, f"Erreur : {str(e)}")
-                 return render(request, 'create_superuser.html')
-         return render(request, 'create_superuser.html')
