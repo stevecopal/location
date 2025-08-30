@@ -64,6 +64,18 @@ class CustomUser(AbstractUser, BaseModel):
 
     def __str__(self):
         return self.username
+    
+    def save(self, *args, **kwargs):
+        if not self.username:
+            # Générer un username à partir de l'email ou d'un UUID
+            base_username = self.email.split('@')[0].replace('.', '').replace('_', '')[:30]
+            self.username = base_username
+            # Assurer l'unicité du username
+            counter = 1
+            while CustomUser.objects.filter(username=self.username).exclude(id=self.id).exists():
+                self.username = f"{base_username}{counter}"
+                counter += 1
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("User")

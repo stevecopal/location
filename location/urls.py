@@ -8,6 +8,8 @@ from django.conf.urls.i18n import i18n_patterns  # ← import pour i18n
 urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
     path('auth/', include('apploc.authentication.urls')),
+    path('pro/', include('apploc.reviews.urls')),
+    path('rev/', include('apploc.property.urls')),
     path('', include('apploc.urls')),
 )
 
