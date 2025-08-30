@@ -77,6 +77,7 @@ class PendingUser(BaseModel):
     verification_code = models.CharField(_("Verification Code"), max_length=4)
     expires_at = models.DateTimeField(_("Expires At"))
     user_type = models.CharField(_("User Type"), max_length=20, choices=[('tenant', 'Tenant'), ('owner', 'Owner')], default='tenant')
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Pending {self.username} ({self.email})"

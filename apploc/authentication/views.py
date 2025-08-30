@@ -10,6 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from apploc.tasks import send_reset_password_email, send_verification_email
 from .forms import PasswordResetForm, PasswordResetRequestForm, SignupForm, LoginForm, VerificationCodeForm
 from ..models import CustomUser, PendingUser, Property
+from django.contrib.auth import login as auth_login
+
 
 logger = logging.getLogger(__name__)
 
@@ -19,46 +21,40 @@ def signup(request):
         if form.is_valid():
             email = form.cleaned_data['email']
 
-            # Vérifier si l'email existe déjà
-            if CustomUser.objects.filter(email=email).exists() or PendingUser.objects.filter(email=email).exists():
-                messages.error(request, _('Email already exists or is pending verification.'))
-                logger.warning(f"Signup attempt with existing email: {email}")
-                return render(request, 'authentication/signup.html', {'form': form})
+            # Vérifier si un PendingUser existe déjà
+            pending_user = PendingUser.objects.filter(email=email).first()
+            if pending_user:
+                # Vérifier le délai de 3 minutes
+                if pending_user.updated_at and timezone.now() < pending_user.updated_at + timedelta(minutes=3):
+                    messages.error(request, _('You must wait 3 minutes before requesting a new code.'))
+                    return render(request, 'authentication/signup.html', {'form': form})
+                # Mettre à jour le code et l'expiration
+                pending_user.verification_code = str(random.randint(1000, 9999))
+                pending_user.expires_at = timezone.now() + timedelta(minutes=10)
+                pending_user.save()
+                messages.info(request, _('A new verification code has been sent to your email.'))
+            else:
+                # Créer un nouveau pending user
+                username = email.split('@')[0] + str(random.randint(100, 999))
+                verification_code = str(random.randint(1000, 9999))
+                expires_at = timezone.now() + timedelta(minutes=10)
 
-            # Générer le username automatiquement
-            username = email.split('@')[0] + str(random.randint(100, 999))
+                pending_user = PendingUser.objects.create(
+                    username=username,
+                    email=email,
+                    phone=form.cleaned_data.get('phone', ''),
+                    password=form.cleaned_data['password1'],
+                    verification_code=verification_code,
+                    expires_at=expires_at,
+                    user_type=form.cleaned_data['user_type'],
+                )
+                messages.success(request, _('A verification code has been sent to your email.'))
 
-            # Générer le code de vérification
-            verification_code = str(random.randint(1000, 9999))
-            expires_at = timezone.now() + timedelta(minutes=10)
+            return redirect('verify_email', email=email)
 
-            # Enregistrer le PendingUser avec mot de passe hashé
-            pending_user = PendingUser.objects.create(
-                username=username,
-                email=email,
-                phone=form.cleaned_data.get('phone', ''),
-                password=make_password(form.cleaned_data['password1']),
-                verification_code=verification_code,
-                expires_at=expires_at,
-                user_type=form.cleaned_data['user_type'],  # 'tenant' ou 'owner'
-            )
-            logger.info(f"Pending user created: {email}, type: {pending_user.user_type}")
-
-            # Envoyer le mail de vérification
-            try:
-                send_verification_email.delay(email, verification_code)
-                messages.success(request, _('A verification code has been sent to your email. Please check your inbox (and spam folder).'))
-                logger.info(f"Verification email queued for: {email}")
-                return redirect('verify_email', email=email)
-            except Exception as e:
-                pending_user.delete()
-                messages.error(request, _('Failed to send verification email. Please try again.'))
-                logger.error(f"Failed to send verification email to {email}: {str(e)}")
-                return render(request, 'authentication/signup.html', {'form': form})
     else:
         form = SignupForm()
     return render(request, 'authentication/signup.html', {'form': form})
-
 
 def verify_email(request, email):
     pending_user = get_object_or_404(PendingUser, email=email)
@@ -79,16 +75,19 @@ def verify_email(request, email):
                 user = CustomUser.objects.create_user(
                     username=pending_user.username,
                     email=pending_user.email,
-                    password=pending_user.password,  # mot de passe déjà hashé
+                    password=pending_user.password,  # sera hashé correctement
                     phone=pending_user.phone,
                     role=pending_user.user_type,
-                    is_approved=(pending_user.user_type == 'tenant'),  # Locataires approuvés automatiquement
-                    is_active=(pending_user.user_type == 'tenant')     # Locataires actifs directement
+                    is_approved=(pending_user.user_type == 'tenant'),
+                    is_active=(pending_user.user_type == 'tenant')
                 )
+
+                # Supprimer le pending_user après création
                 pending_user.delete()
 
+                # Connexion auto si locataire
                 if user.role == 'tenant':
-                    login(request, user)
+                    auth_login(request, user)
                     messages.success(request, _('Email verified successfully. You are now logged in.'))
                     logger.info(f"Email verified and tenant created: {email}")
                     return redirect('home')
@@ -197,18 +196,28 @@ def password_reset_request(request):
         form = PasswordResetRequestForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            verification_code = str(random.randint(1000, 9999))
-            expires_at = timezone.now() + timedelta(minutes=10)
 
             try:
                 user = CustomUser.objects.get(email=email)
                 pending_user = PendingUser.objects.filter(email=email).first()
+
                 if pending_user:
-                    pending_user.verification_code = verification_code
-                    pending_user.expires_at = expires_at
-                    pending_user.user_type = user.role
+                    # Vérifier le délai de 3 minutes
+                    if pending_user.updated_at and timezone.now() < pending_user.updated_at + timedelta(minutes=3):
+                        messages.error(request, _('You must wait 3 minutes before requesting a new reset code.'))
+                        return render(request, 'authentication/password_reset_request.html', {'form': form})
+
+                    # Mettre à jour le code et l'expiration
+                    pending_user.verification_code = str(random.randint(1000, 9999))
+                    pending_user.expires_at = timezone.now() + timedelta(minutes=10)
+                    pending_user.user_type = 'reset_password'
                     pending_user.save()
+                    messages.info(request, _('A new reset code has been sent to your email.'))
                 else:
+                    # Créer un nouveau pending user
+                    verification_code = str(random.randint(1000, 9999))
+                    expires_at = timezone.now() + timedelta(minutes=10)
+
                     pending_user = PendingUser.objects.create(
                         username=user.username,
                         email=email,
@@ -216,20 +225,15 @@ def password_reset_request(request):
                         password=user.password,
                         verification_code=verification_code,
                         expires_at=expires_at,
-                        user_type=user.role
+                        user_type='reset_password'
                     )
-                try:
-                    send_reset_password_email.delay(email, verification_code)
                     messages.success(request, _('A password reset code has been sent to your email.'))
-                    logger.info(f"Password reset email queued for: {email}")
-                    return redirect('password_reset_verify', email=email)
-                except Exception as e:
-                    pending_user.delete()
-                    messages.error(request, _('Failed to send reset email. Please try again.'))
-                    logger.error(f"Failed to send reset email to {email}: {str(e)}")
+
+                return redirect('password_reset_verify', email=email)
+
             except CustomUser.DoesNotExist:
                 messages.error(request, _('No account found with this email.'))
-                logger.warning(f"Password reset attempt with non-existent email: {email}")
+
     else:
         form = PasswordResetRequestForm()
     return render(request, 'authentication/password_reset_request.html', {'form': form})

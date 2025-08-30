@@ -2,200 +2,256 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{{ property.category.name }} - {{ property.location }} | CopalFinder{% endblock %}
+{% block title %}{{ property.title }} - CopalFinder{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4">
-    <!-- Breadcrumb Navigation -->
-    <nav class="mb-6">
-        <ol class="flex items-center space-x-2 text-sm text-gray-600">
-            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">{% trans "Home" %}</a></li>
-            <li><i class="fas fa-chevron-right text-xs"></i></li>
-            <li><a href="{% url 'home' %}" class="hover:text-accent-orange transition-colors">{% trans "Properties" %}</a></li>
-            <li><i class="fas fa-chevron-right text-xs"></i></li>
-            <li class="text-accent-orange">{% trans "Property Details" %}</li>
-        </ol>
-    </nav>
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4 max-w-6xl">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+            <ol class="flex items-center space-x-2 text-sm text-gray-600">
+                <li><a href="{% url 'home' %}" class="hover:text-primary-blue transition-colors">{% trans "Home" %}</a></li>
+                <li class="flex items-center">
+                    <span class="mx-2">›</span>
+                    <a href="{% url 'all_properties' %}" class="hover:text-primary-blue transition-colors">{% trans "Properties" %}</a>
+                </li>
+                <li class="flex items-center">
+                    <span class="mx-2">›</span>
+                    <span class="text-primary-blue font-medium">{{ property.title|truncatewords:5 }}</span>
+                </li>
+            </ol>
+        </nav>
 
-    <!-- Property Header -->
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
-            <div>
-                <div class="flex items-center mt-2 text-gray-600">
-                    <i class="fas fa-map-marker-alt text-accent-orange mr-2"></i>
-                    {% if show_sensitive_info %}
-                        {{ property.location }}
-                    {% else %}
-                        {% url 'login' as login_url %}
-                        <span>
-                            {% blocktrans %}
-                                Please <a href="{{ login_url }}">log in</a> to view exact location
-                            {% endblocktrans %}
-                        </span>
-
-                    {% endif %}
-                </div>
-            </div>
-            <div class="text-2xl font-bold text-accent-orange">{{ property.price_per_month }} Fcfa<span class="text-sm font-normal text-gray-600">/{% trans "month" %}</span></div>
-        </div>
-        
-        <div class="flex flex-wrap gap-3 mt-4">
-            <div class="flex items-center bg-gray-100 px-3 py-1 rounded-full text-sm">
-                <i class="fas fa-calendar-check text-primary-blue mr-2"></i>
-                {% if property.is_available %}{% trans "Available Now" %}{% else %}{% trans "Not Available" %}{% endif %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Property Gallery -->
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-        {% if property.photos.exists %}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {% for photo in property.photos.all %}
-                    <div class="overflow-hidden rounded-lg">
-                        <img src="{{ photo.image.url }}" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" alt="{% trans "Property photo" %}">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <!-- Galerie améliorée -->
+            <div class="space-y-4">
+                {% if property.photos.all %}
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                        <img src="{{ property.photos.first.image.url }}" alt="{{ property.title }}" 
+                             class="w-full h-96 object-cover transition-transform duration-300 hover:scale-105">
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm font-medium">
+                                {{ property.get_property_type_display }}
+                            </span>
+                        </div>
                     </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                <i class="fas fa-home text-4xl text-gray-400"></i>
-            </div>
-        {% endif %}
-    </div>
-
-    <!-- Property Details -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Main Content -->
-        <div class="lg:col-span-2 space-y-6">
-            <!-- Description -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Description" %}</h2>
-                <p class="text-gray-600 leading-relaxed">{{ property.description }}</p>
-            </div>
-
-            <!-- Videos -->
-            {% if property.videos.all %}
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Videos" %}</h2>
-                <div class="grid gap-4">
-                    {% for video in property.videos.all %}
-                    <video class="w-full rounded-lg" controls>
-                        <source src="{{ video.video_file.url }}" type="video/mp4">
-                        {% trans "Your browser does not support the video tag." %}
-                    </video>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Reviews -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold text-primary-blue mb-4">{% trans "Reviews" %}</h2>
-                {% if property.reviews.all %}
-                    <div class="space-y-4">
-                        {% for review in property.reviews.all %}
-                        <div class="border-b border-gray-100 pb-4 last:border-b-0">
-                            <div class="flex items-center mb-2">
-                                <div class="w-10 h-10 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold mr-3">
-                                    {{ review.tenant.name|first|upper }}
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold">{{ review.tenant.name }}</h4>
-                                    <div class="flex text-accent-orange text-sm">
-                                        {% for i in "12345" %}
-                                            <i class="fas fa-star{% if forloop.counter > review.rating %}-o{% endif %}"></i>
-                                        {% endfor %}
-                                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-3">
+                        {% for photo in property.photos.all|slice:"1:5" %}
+                            <div class="relative group cursor-pointer">
+                                <img src="{{ photo.image.url }}" alt="Photo {{ forloop.counter }}" 
+                                     class="w-full h-24 object-cover rounded-xl shadow-md transition-transform duration-300 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-xl transition-all duration-300"></div>
+                            </div>
+                        {% endfor %}
+                        {% if property.photos.count > 5 %}
+                            <div class="relative group cursor-pointer">
+                                <div class="w-full h-24 bg-primary-blue rounded-xl flex items-center justify-center">
+                                    <span class="text-white font-bold text-lg">+{{ property.photos.count|add:"-4" }}</span>
                                 </div>
                             </div>
-                            <p class="text-gray-600 text-sm">{{ review.message }}</p>
-                            <p class="text-gray-400 text-xs mt-2">{{ review.date_posted|date:"M d, Y" }}</p>
-                        </div>
-                        {% endfor %}
+                        {% endif %}
                     </div>
                 {% else %}
-                    <p class="text-gray-600 text-center py-4">{% trans "No reviews yet." %}</p>
+                    <div class="w-full h-96 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl shadow-xl">
+                        <div class="text-center">
+                            <i class="fas fa-home text-gray-400 text-6xl mb-4"></i>
+                            <p class="text-gray-500 font-medium">{% trans "No photos available" %}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Informations principales -->
+            <div class="space-y-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-primary-blue leading-tight">{{ property.title }}</h1>
+                    <div class="flex items-center mt-3 space-x-4">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-map-marker-alt mr-2 text-accent-orange"></i>
+                            <span class="font-medium">{{ property.location }}</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-calendar-alt mr-2 text-accent-orange"></i>
+                            <span class="font-medium">{{ property.created_at|date:"d M Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-3xl font-bold text-accent-orange">{{ property.price}} FCFA</span>
+                        {% if property.is_available %}
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                {% trans "Available" %}
+                            </span>
+                        {% else %}
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                                {% trans "Rented" %}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-gray-700 leading-relaxed text-lg">{{ property.description }}</p>
+
+                    <!-- Caractéristiques -->
+                    
+                </div>
+
+                <!-- Informations sensibles -->
+                {% if show_sensitive_info %}
+                <div class="bg-gradient-to-r from-primary-blue to-blue-700 rounded-2xl p-6 text-white shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-shield-alt mr-3"></i>
+                        {% trans "Contact Information" %}
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-accent-orange"></i>
+                            <span>{{ property.owner.email }}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-accent-orange"></i>
+                            <span>{{ property.owner.phone }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100">
+                    <h3 class="text-lg font-semibold text-primary-blue mb-3">{% trans "Interested in this property?" %}</h3>
+                    <p class="text-gray-600 mb-4">{% trans "Sign in to view contact information and schedule a visit" %}</p>
+                    <a href="{% url 'login' %}?next={{ request.path }}" 
+                       class="bg-accent-orange hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-flex items-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        {% trans "Sign In to Contact" %}
+                    </a>
+                </div>
                 {% endif %}
 
-                {% if request.session.user_type == 'tenant' %}
-                <div class="mt-6 text-center">
-                    <a href="{% url 'review_create' property.id %}" class="bg-accent-orange hover:bg-accent-light text-white px-6 py-2 rounded-full transition-colors inline-flex items-center">
-                        <i class="fas fa-plus mr-2"></i>
-                        {% trans "Add Review" %}
+                <!-- Bouton Ajouter un avis -->
+                {% if request.user.is_authenticated and request.user.role == 'tenant' %}
+                <div class="text-center">
+                    <a href="{% url 'review_create' property.id %}" 
+                       class="bg-accent-orange hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center">
+                        <i class="fas fa-star mr-3"></i>
+                        {% trans "Add Your Review" %}
                     </a>
                 </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Sidebar -->
-        <div class="space-y-6">
-            <!-- Contact Information -->
-            <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
-                <h3 class="text-lg font-semibold text-primary-blue mb-4">{% trans "Contact" %}</h3>
-                
-                {% if show_sensitive_info %}
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <i class="fas fa-phone text-accent-orange mr-3"></i>
-                            <div>
-                                <p class="text-sm text-gray-600">{% trans "Phone" %}</p>
-                                <p class="font-medium">{{ property.contact_phone }}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope text-accent-orange mr-3"></i>
-                            <div>
-                                <p class="text-sm text-gray-600">{% trans "Email" %}</p>
-                                <p class="font-medium">{{ property.owner.email }}</p>
-                            </div>
-                        </div>
-                        
-                        
+        <!-- Avis section -->
+        <div class="mt-16">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-primary-blue">
+                    <i class="fas fa-star text-accent-orange mr-3"></i>
+                    {% trans "Reviews" %} ({{ property.reviews.count }})
+                </h2>
+                {% if property.reviews.count > 0 %}
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-primary-blue mr-2">
+                        {{ property.average_rating|default:0 }}/5
+                    </span>
+                    <div class="flex text-accent-orange">
+                        {% for i in "12345" %}
+                            <i class="fas fa-star {% if forloop.counter <= property.average_rating %}text-accent-orange{% else %}text-gray-300{% endif %}"></i>
+                        {% endfor %}
                     </div>
-                {% else %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-lock text-3xl text-accent-orange mb-3"></i>
-                        <p class="text-gray-600 mb-4">{% trans "Log in to view contact information" %}</p>
-                        <a href="{% url 'login' %}" class="bg-accent-orange hover:bg-accent-light text-white py-2 px-4 rounded-full transition-colors">
-                            {% trans "Log In" %}
-                        </a>
-                    </div>
+                </div>
                 {% endif %}
             </div>
 
-            <!-- Similar Properties -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-primary-blue mb-4">{% trans "Similar Properties" %}</h3>
-                <div class="space-y-4">
-                    {% for similar in similar_properties|slice:":2" %}
-                    <div class="border border-gray-100 rounded-lg p-3 hover:shadow-md transition-shadow">
-                        {% if similar.photos.first %}
-                        <img src="{{ similar.photos.first.image.url }}" class="w-full h-32 object-cover rounded mb-2" alt="{{ similar.category.name }}">
-                        {% endif %}
-                        <h4 class="font-semibold text-sm">{{ similar.category.name }}</h4>
-                        <p class="text-accent-orange font-bold text-sm">{{ similar.price_per_month }} Fcfa/{% trans "month" %}</p>
-                        <a href="{% url 'property_detail' similar.id %}" class="text-primary-blue hover:text-accent-orange text-sm transition-colors">
-                            {% trans "View Details" %} →
-                        </a>
+            {% if property.reviews.all %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for review in property.reviews.all %}
+                    <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    {{ review.user.username|first|upper }}
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold text-gray-800">{{ review.user.username }}</h4>
+                                    <p class="text-sm text-gray-500">{{ review.created_at|timesince }} {% trans "ago" %}</p>
+                                </div>
+                            </div>
+                            <div class="flex text-accent-orange">
+                                {% for i in "12345" %}
+                                    <i class="fas fa-star {% if forloop.counter <= review.rating %}text-accent-orange{% else %}text-gray-300{% endif %} text-sm"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">{{ review.comment }}</p>
                     </div>
-                    {% empty %}
-                    <p class="text-gray-600 text-sm">{% trans "No similar properties found." %}</p>
                     {% endfor %}
                 </div>
-            </div>
+            {% else %}
+                <div class="text-center py-12 bg-white rounded-2xl shadow-lg">
+                    <i class="fas fa-star text-gray-300 text-6xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">{% trans "No reviews yet" %}</h3>
+                    <p class="text-gray-500">{% trans "Be the first to share your experience!" %}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Biens similaires -->
+        <div class="mt-16">
+            <h2 class="text-3xl font-bold text-primary-blue mb-8">
+                <i class="fas fa-home mr-3 text-accent-orange"></i>
+                {% trans "Similar Properties" %}
+            </h2>
+            
+            {% if similar_properties %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for similar in similar_properties %}
+                    <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group">
+                        {% if similar.photos.first %}
+                            <div class="relative overflow-hidden">
+                                <img src="{{ similar.photos.first.image.url }}" alt="{{ similar.title }}" 
+                                     class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-primary-blue text-white px-2 py-1 rounded-full text-xs font-medium">
+                                        {{ similar.get_property_type_display }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="w-full h-48 flex items-center justify-center bg-gray-100">
+                                <i class="fas fa-home text-gray-300 text-3xl"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-primary-blue mb-2 group-hover:text-accent-orange transition-colors">
+                                {{ similar.title }}
+                            </h3>
+                            <p class="text-gray-600 mb-3">{{ similar.location }}</p>
+                            
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-accent-orange">{{ similar.price|floatformat:0 }} FCFA</span>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <i class="fas fa-bed mr-1"></i>
+                                    <span>{{ similar.bedrooms }}</span>
+                                </div>
+                            </div>
+                            
+                            <a href="{% url 'property_detail' similar.id %}" 
+                               class="w-full bg-primary-blue hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors text-center block">
+                                {% trans "View Details" %}
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-12 bg-white rounded-2xl shadow-lg">
+                    <i class="fas fa-home text-gray-300 text-6xl mb-4"></i>
+                    <p class="text-gray-500 text-lg">{% trans "No similar properties found at the moment." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
-</div>
-
-<style>
-    .transition-colors {
-        transition: color 0.2s, background-color 0.2s;
-    }
-    .transition-transform {
-        transition: transform 0.3s;
-    }
-</style>
+</section>
 {% endblock %}

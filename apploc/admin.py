@@ -63,7 +63,7 @@ class VideoInline(admin.TabularInline):
 # Admin pour PendingUser
 @admin.register(PendingUser)
 class PendingUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'phone', 'user_type', 'created_at')
+    list_display = ('username', 'email', 'phone', 'user_type', 'created_at' , 'updated_at')
     list_filter = ('user_type', 'created_at')
     search_fields = ('username', 'email', 'phone')
     date_hierarchy = 'created_at'
