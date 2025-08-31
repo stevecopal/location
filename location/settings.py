@@ -40,14 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apploc',
+    'cloudinary',
+    'cloudinary_storage',
     
 ]
 
-if not DEBUG:
-    INSTALLED_APPS += [
-        'cloudinary',
-        'cloudinary_storage',
-    ]
 
 
 MIDDLEWARE = [
