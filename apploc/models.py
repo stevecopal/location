@@ -66,16 +66,18 @@ class CustomUser(AbstractUser, BaseModel):
         return self.username
     
     def save(self, *args, **kwargs):
-        if not self.username:
-            # Générer un username à partir de l'email ou d'un UUID
+        # Générer username si vide ou si email a changé
+        if not self.username or (self.pk and self.email != CustomUser.objects.get(pk=self.pk).email):
             base_username = self.email.split('@')[0].replace('.', '').replace('_', '')[:30]
             self.username = base_username
-            # Assurer l'unicité du username
             counter = 1
             while CustomUser.objects.filter(username=self.username).exclude(id=self.id).exists():
                 self.username = f"{base_username}{counter}"
                 counter += 1
-        super().save(*args, **kwargs)
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            raise ValueError(f"Erreur lors de la sauvegarde de l'utilisateur : {str(e)}")
 
     class Meta:
         verbose_name = _("User")

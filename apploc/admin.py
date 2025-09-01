@@ -9,13 +9,13 @@ class CustomUserAdminForm(forms.ModelForm):
     password1 = forms.CharField(
         label='Mot de passe',
         widget=forms.PasswordInput,
-        required=True,  # Requis pour la création
-        help_text='Entrez le mot de passe pour le nouvel utilisateur.'
+        required=False,  # Non requis pour la modification
+        help_text='Entrez le mot de passe pour le nouvel utilisateur ou laissez vide pour ne pas modifier.'
     )
     password2 = forms.CharField(
         label='Confirmation du mot de passe',
         widget=forms.PasswordInput,
-        required=True,
+        required=False,  # Non requis pour la modification
         help_text='Confirmez le mot de passe.'
     )
 
@@ -27,17 +27,20 @@ class CustomUserAdminForm(forms.ModelForm):
         cleaned_data = super().clean()
         password1 = cleaned_data.get('password1')
         password2 = cleaned_data.get('password2')
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Les mots de passe ne correspondent pas.")
+        # Valider les mots de passe uniquement si l'un est fourni
+        if password1 or password2:
+            if password1 != password2:
+                raise forms.ValidationError("Les mots de passe ne correspondent pas.")
         return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password1'])  # Hacher le mot de passe
+        password1 = self.cleaned_data.get('password1')
+        if password1:  # Ne hacher le mot de passe que si fourni
+            user.set_password(password1)
         if commit:
             user.save()
         return user
-
 # Admin personnalisé pour CustomUser
 class CustomUserAdmin(BaseUserAdmin):
     form = CustomUserAdminForm
