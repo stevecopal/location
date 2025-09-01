@@ -129,10 +129,10 @@
             <div class="bg-white p-6 rounded-xl shadow-md">
                 <div class="flex items-center mb-4">
                     <div class="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center text-white font-bold mr-4">
-                        {{ review.tenant.name|slice:":2" }}
+                        {{ review.tenant.email|slice:":2" }}
                     </div>
                     <div>
-                        <h4 class="font-semibold text-primary-blue">{{ review.tenant.name }}</h4>
+                        <h4 class="font-semibold text-primary-blue">{{ review.tenant.email }}</h4>
                         <div class="flex text-accent-orange">
                             {% for i in "12345"|slice:":review.rating" %}
                                 <i class="fas fa-star"></i>

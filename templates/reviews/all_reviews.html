@@ -40,7 +40,9 @@
                     {% if review.tenant %}{{ review.tenant.email|slice:":2"|upper }}{% else %}?{% endif %}
                 </div>
                 <div class="flex-1">
-                    <h4 class="font-semibold text-primary-blue">{% if review.tenant %}{{ review.tenant.email }}{% else %}{% trans "Unknown User" %}{% endif %}</h4>
+                    <h4 class="font-semibold text-primary-blue">
+                        {% if review.tenant %}{{ review.tenant.email }}{% else %}{% trans "Unknown User" %}{% endif %}
+                    </h4>
                     <p class="text-sm text-gray-500">
                         {% if review.property %}
                             {% if review.property.category %}
@@ -48,7 +50,7 @@
                             {% else %}
                                 {% trans "No Category" %}
                             {% endif %}
-                            {% if request.session.user_id %}- {{ review.property.location }}{% endif %}
+                            {% if review.property.location %}- {{ review.property.location }}{% endif %}
                         {% else %}
                             {% trans "Unknown Property" %}
                         {% endif %}
@@ -56,10 +58,14 @@
                 </div>
             </div>
 
+            <!-- Review Message -->
             <div class="mb-4">
-                <p class="text-gray-700 italic">"{% blocktrans trimmed %}{{ review.message|truncatewords:40 }}"{% endblocktrans %}</p>
+                <p class="text-gray-700 italic">
+                    "{{ review.message|default:_('No message') }}"
+                </p>
             </div>
 
+            <!-- Action Buttons -->
             <div class="flex items-center justify-between border-t border-gray-100 pt-4">
                 <span class="text-sm text-gray-500">
                     <i class="far fa-clock mr-1"></i>
@@ -80,6 +86,7 @@
         {% endfor %}
     </div>
     {% else %}
+    <!-- No Reviews Message -->
     <div class="bg-white rounded-xl shadow-sm p-12 text-center">
         <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="fas fa-comments text-3xl text-gray-400"></i>
