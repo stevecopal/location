@@ -21,9 +21,6 @@
             <p class="text-3xl font-bold text-primary-blue">{{ reviews.count }}</p>
             <p class="text-sm text-gray-600">{% trans "Total Reviews" %}</p>
         </div>
-
-        
-
         <div class="bg-white p-6 rounded-xl shadow-sm text-center">
             <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-users text-accent-orange text-2xl"></i>
@@ -31,11 +28,7 @@
             <p class="text-3xl font-bold text-primary-blue">20+</p>
             <p class="text-sm text-gray-600">{% trans "Happy Tenants" %}</p>
         </div>
-
-        
     </div>
-
-    
 
     <!-- Reviews Grid -->
     {% if reviews %}
@@ -44,19 +37,22 @@
         <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-300">
             <div class="flex items-center mb-4">
                 <div class="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold mr-4">
-                    {{ review.tenant.name|slice:":1"|upper }}
+                    {% if review.tenant %}{{ review.tenant.email|slice:":2"|upper }}{% else %}?{% endif %}
                 </div>
                 <div class="flex-1">
-                    <h4 class="font-semibold text-primary-blue">{{ review.tenant.name }}</h4>
+                    <h4 class="font-semibold text-primary-blue">{% if review.tenant %}{{ review.tenant.email }}{% else %}{% trans "Unknown User" %}{% endif %}</h4>
                     <p class="text-sm text-gray-500">
-                        {{ review.property.category.name }}
-                        {% if request.session.user_id %}- {{ review.property.location }}{% endif %}
+                        {% if review.property %}
+                            {% if review.property.category %}
+                                {{ review.property.category.name }}
+                            {% else %}
+                                {% trans "No Category" %}
+                            {% endif %}
+                            {% if request.session.user_id %}- {{ review.property.location }}{% endif %}
+                        {% else %}
+                            {% trans "Unknown Property" %}
+                        {% endif %}
                     </p>
-                </div>
-                <div class="flex text-accent-orange text-sm">
-                    {% for i in "12345" %}
-                        <i class="fas fa-star{% if forloop.counter > review.rating %}-o{% endif %}"></i>
-                    {% endfor %}
                 </div>
             </div>
 
@@ -69,8 +65,7 @@
                     <i class="far fa-clock mr-1"></i>
                     {{ review.date_posted|date:"M d, Y" }}
                 </span>
-                
-                {% if request.session.user_type == 'tenant' and review.tenant_id == request.session.user_id %}
+                {% if request.session.user_type == 'tenant' and review.tenant and request.session.user_id == review.tenant.id %}
                 <div class="flex space-x-2">
                     <a href="{% url 'review_update' review.id %}" class="text-primary-blue hover:text-accent-orange transition-colors">
                         <i class="fas fa-edit"></i>
