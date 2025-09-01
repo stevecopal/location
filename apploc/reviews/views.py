@@ -11,7 +11,7 @@ from django.utils.translation import activate
 
 def all_reviews(request):
     reviews = Review.objects.select_related('tenant', 'property').filter(deleted_at__isnull=True).order_by('-date_posted')
-    return render(request, 'all_reviews.html', {
+    return render(request, 'reviews/all_reviews.html', {
         'reviews': reviews,
         'is_authenticated': request.user.is_authenticated
     })
