@@ -29,7 +29,8 @@
                     <!-- Image principale responsive -->
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-white max-w-full">
                         <img src="{{ photos.first.image.url }}" alt="{{ property.category.name }} - {{ property.location }}"
-                             class="w-full h-64 sm:h-80 md:h-[32rem] object-cover transition-transform duration-500 hover:scale-110 rounded-3xl">
+                             class="w-full h-64 sm:h-80 md:h-[32rem] object-cover transition-transform duration-500 hover:scale-105 rounded-3xl cursor-pointer"
+                             data-index="0" data-src="{{ photos.first.image.url }}" data-type="image">
                         <div class="absolute top-4 left-4">
                             <span class="bg-primary-blue text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md">
                                 {{ property.category.name }}
@@ -39,20 +40,14 @@
 
                     <!-- Miniatures responsive -->
                     <div class="grid grid-cols-3 sm:grid-cols-5 gap-4">
-                        {% for photo in photos|slice:"1:5" %}
+                        {% for photo in photos %}
                             <div class="relative group cursor-pointer">
                                 <img src="{{ photo.image.url }}" alt="Photo {{ forloop.counter }}"
-                                     class="w-full h-20 sm:h-24 md:h-28 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105">
+                                     class="w-full h-20 sm:h-24 md:h-28 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                                     data-index="{{ forloop.counter0 }}" data-src="{{ photo.image.url }}" data-type="image">
                                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-lg transition-all duration-300"></div>
                             </div>
                         {% endfor %}
-                        {% if photos.count > 5 %}
-                            <div class="relative group cursor-pointer">
-                                <div class="w-full h-20 sm:h-24 md:h-28 bg-primary-blue rounded-lg flex items-center justify-center shadow-md">
-                                    <span class="text-white font-semibold text-lg">+{{ photos.count|add:"-4" }}</span>
-                                </div>
-                            </div>
-                        {% endif %}
                     </div>
                 {% else %}
                     <div class="w-full h-64 sm:h-80 md:h-[32rem] flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl shadow-2xl">
@@ -68,14 +63,15 @@
                     <h2 class="text-2xl font-semibold text-primary-blue mt-8 mb-4">{% trans "Videos" %}</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {% for video in videos %}
-                            <video controls class="w-full h-48 rounded-lg shadow-md">
+                            <video controls class="w-full h-48 rounded-lg shadow-md cursor-pointer"
+                                   data-index="{{ photos.count|add:forloop.counter0 }}" data-src="{{ video.video_file.url }}" data-type="video">
                                 <source src="{{ video.video_file.url }}" type="video/mp4">
                                 {% trans "Your browser does not support the video tag." %}
                             </video>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-gray-500 mt-4">{% trans "No videos available." %}</p>
+                    <p class="text-gray-500 mt-4">{% trans "No videos available" %}</p>
                 {% endif %}
             </div>
 
@@ -97,7 +93,7 @@
 
                 <div class="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
                     <div class="flex items-center justify-between mb-5">
-                        <span class="text-2xl lg:text-3xl font-bold text-accent-orange">{{ property.price_per_month|floatformat:0 }} FCFA/mois</span>
+                        <span class="text-2xl lg:text-3xl font-bold text-accent-orange">{{ property.price_per_month|floatformat:"0" }} FCFA/mois</span>
                         {% if property.is_available %}
                             <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
                                 {% trans "Available" %}
@@ -195,5 +191,126 @@
                 </div>
             {% endif %}
         </div>
+
+        <!-- Lightbox pour agrandir les médias -->
+        <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 hidden flex items-center justify-center z-50 transition-opacity duration-300">
+            <div class="relative max-w-5xl w-full mx-4">
+                <!-- Contenu de la lightbox -->
+                <div id="lightbox-content" class="bg-white rounded-2xl overflow-hidden shadow-2xl"></div>
+                <!-- Bouton fermer -->
+                <button id="lightbox-close" class="absolute top-4 right-4 bg-primary-blue text-white p-3 rounded-full hover:bg-primary-light transition-colors duration-200">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+                <!-- Boutons de navigation -->
+                <button id="lightbox-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-primary-blue text-white p-4 rounded-full hover:bg-primary-light transition-colors duration-200 opacity-0 group-hover:opacity-100">
+                    <i class="fas fa-chevron-left text-xl"></i>
+                </button>
+                <button id="lightbox-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-primary-blue text-white p-4 rounded-full hover:bg-primary-light transition-colors duration-200 opacity-0 group-hover:opacity-100">
+                    <i class="fas fa-chevron-right text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxContent = document.getElementById('lightbox-content');
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+
+    const mediaItems = Array.from(document.querySelectorAll('[data-src]')).map(item => ({
+        src: item.dataset.src,
+        type: item.dataset.type || 'image',
+        alt: item.getAttribute('alt') || 'Media'
+    }));
+
+    if (mediaItems.length === 0) {
+        console.error("Aucun média disponible pour cette propriété.");
+    }
+
+    let currentIndex = 0;
+
+    function showLightbox(index) {
+        if (mediaItems.length === 0) return;
+        currentIndex = parseInt(index, 10);
+        updateLightboxContent();
+        lightbox.classList.remove('hidden');
+        setTimeout(() => lightbox.classList.add('opacity-100'), 50);
+    }
+
+    function updateLightboxContent() {
+        const media = mediaItems[currentIndex];
+        if (media.type === 'image') {
+            lightboxContent.innerHTML = `
+                <img src="${media.src}" alt="${media.alt}" class="w-full max-h-[85vh] object-contain rounded-2xl transition-transform duration-300">
+            `;
+        } else if (media.type === 'video') {
+            lightboxContent.innerHTML = `
+                <video controls autoplay class="w-full max-h-[85vh] object-contain rounded-2xl">
+                    <source src="${media.src}" type="video/mp4">
+                    {% trans "Your browser does not support the video tag." %}
+                </video>`;
+        }
+        // Gérer les boutons de navigation
+        prevBtn.style.display = currentIndex === 0 ? 'none' : 'block';
+        nextBtn.style.display = currentIndex === mediaItems.length - 1 ? 'none' : 'block';
+        // Arrêter les vidéos précédentes
+        const videos = lightboxContent.getElementsByTagName('video');
+        for (let video of videos) {
+            video.pause();
+        }
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('opacity-100');
+        setTimeout(() => lightbox.classList.add('hidden'), 300);
+        // Arrêter toutes les vidéos
+        const videos = lightboxContent.getElementsByTagName('video');
+        for (let video of videos) {
+            video.pause();
+        }
+    }
+
+    document.querySelectorAll('[data-src]').forEach(item => {
+        item.addEventListener('click', () => showLightbox(item.dataset.index));
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
+        updateLightboxContent();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % mediaItems.length;
+        updateLightboxContent();
+    });
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('hidden')) {
+            if (e.key === 'ArrowLeft') prevBtn.click();
+            if (e.key === 'ArrowRight') nextBtn.click();
+            if (e.key === 'Escape') closeBtn.click();
+        }
+    });
+
+    // Afficher les boutons de navigation au survol
+    lightbox.addEventListener('mouseenter', () => {
+        prevBtn.classList.add('opacity-100');
+        nextBtn.classList.add('opacity-100');
+    });
+    lightbox.addEventListener('mouseleave', () => {
+        prevBtn.classList.remove('opacity-100');
+        nextBtn.classList.remove('opacity-100');
+    });
+});
+</script>
 {% endblock %}
