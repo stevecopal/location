@@ -25,39 +25,57 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Galerie -->
             <div class="lg:col-span-2 space-y-6">
-                {% if property.photos.all %}
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-white">
-                        <img src="{{ property.photos.first.image.url }}" alt="{{ property.category.name }} - {{ property.location }}"
-                             class="w-full h-[32rem] object-cover transition-transform duration-500 hover:scale-110">
+                {% if photos %}
+                    <!-- Image principale responsive -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-white max-w-full">
+                        <img src="{{ photos.first.image.url }}" alt="{{ property.category.name }} - {{ property.location }}"
+                             class="w-full h-64 sm:h-80 md:h-[32rem] object-cover transition-transform duration-500 hover:scale-110 rounded-3xl">
                         <div class="absolute top-4 left-4">
                             <span class="bg-primary-blue text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md">
                                 {{ property.category.name }}
                             </span>
                         </div>
                     </div>
-                    <div class="grid grid-cols-5 gap-4">
-                        {% for photo in property.photos.all|slice:"1:5" %}
+
+                    <!-- Miniatures responsive -->
+                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-4">
+                        {% for photo in photos|slice:"1:5" %}
                             <div class="relative group cursor-pointer">
                                 <img src="{{ photo.image.url }}" alt="Photo {{ forloop.counter }}"
-                                     class="w-full h-28 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105">
+                                     class="w-full h-20 sm:h-24 md:h-28 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105">
                                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-lg transition-all duration-300"></div>
                             </div>
                         {% endfor %}
-                        {% if property.photos.count > 5 %}
+                        {% if photos.count > 5 %}
                             <div class="relative group cursor-pointer">
-                                <div class="w-full h-28 bg-primary-blue rounded-lg flex items-center justify-center shadow-md">
-                                    <span class="text-white font-semibold text-lg">+{{ property.photos.count|add:"-4" }}</span>
+                                <div class="w-full h-20 sm:h-24 md:h-28 bg-primary-blue rounded-lg flex items-center justify-center shadow-md">
+                                    <span class="text-white font-semibold text-lg">+{{ photos.count|add:"-4" }}</span>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
                 {% else %}
-                    <div class="w-full h-[32rem] flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl shadow-2xl">
+                    <div class="w-full h-64 sm:h-80 md:h-[32rem] flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl shadow-2xl">
                         <div class="text-center">
                             <i class="fas fa-home text-gray-400 text-7xl mb-4"></i>
                             <p class="text-gray-600 font-medium text-lg">{% trans "No photos available" %}</p>
                         </div>
                     </div>
+                {% endif %}
+
+                <!-- Vidéos -->
+                {% if videos %}
+                    <h2 class="text-2xl font-semibold text-primary-blue mt-8 mb-4">{% trans "Videos" %}</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {% for video in videos %}
+                            <video controls class="w-full h-48 rounded-lg shadow-md">
+                                <source src="{{ video.video_file.url }}" type="video/mp4">
+                                {% trans "Your browser does not support the video tag." %}
+                            </video>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-500 mt-4">{% trans "No videos available." %}</p>
                 {% endif %}
             </div>
 
@@ -105,9 +123,14 @@
                                 <i class="fas fa-envelope mr-3 text-accent-orange text-lg"></i>
                                 <span>{{ property.owner.email }}</span>
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-phone mr-3 text-accent-orange text-lg"></i>
-                                <span>{{ property.owner.phone }}</span>
+                            <!-- Bouton WhatsApp -->
+                            <div class="mt-4">
+                                <a href="https://wa.me/{{ property.owner.phone|cut:' ' }}?text={{ 'Bonjour, je suis intéressé par votre propriété située à ' }}{{ property.location|urlencode }}"
+                                   target="_blank"
+                                   class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-300 inline-flex items-center shadow-md hover:shadow-lg">
+                                    <i class="fab fa-whatsapp mr-2 text-lg"></i>
+                                    Contacter le propriétaire maintenant
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -141,23 +164,13 @@
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-2xl lg:text-3xl font-bold text-primary-blue">
                     <i class="fas fa-star text-accent-orange mr-3"></i>
-                    {% trans "Reviews" %} ({{ property.reviews.count }})
+                    {% trans "Reviews" %} ({{ reviews.count }})
                 </h2>
-                {% if property.reviews.count > 0 %}
-                    <div class="flex items-center">
-                        <span class="text-xl lg:text-2xl font-bold text-primary-blue mr-2">{{ property.average_rating|floatformat:1 }}/5</span>
-                        <div class="flex text-accent-orange">
-                            {% for i in "12345" %}
-                                <i class="fas fa-star {% if forloop.counter <= property.average_rating|floatformat:0 %}text-accent-orange{% else %}text-gray-300{% endif %} text-lg"></i>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
             </div>
 
-            {% if property.reviews.all %}
+            {% if reviews %}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {% for review in property.reviews.all %}
+                    {% for review in reviews %}
                         <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -165,14 +178,9 @@
                                         {{ review.tenant.username|first|upper }}
                                     </div>
                                     <div class="ml-4">
-                                        <h4 class="font-semibold text-gray-800">{{ review.tenant.username }}</h4>
+                                        <h4 class="font-semibold text-gray-800">{{ review.tenant.email }}</h4>
                                         <p class="text-sm text-gray-500">{{ review.created_at|timesince }} {% trans "ago" %}</p>
                                     </div>
-                                </div>
-                                <div class="flex text-accent-orange">
-                                    {% for i in "12345" %}
-                                        <i class="fas fa-star {% if forloop.counter <= review.rating %}text-accent-orange{% else %}text-gray-300{% endif %} text-sm"></i>
-                                    {% endfor %}
                                 </div>
                             </div>
                             <p class="text-gray-700 leading-relaxed text-base">{{ review.message }}</p>
@@ -187,55 +195,5 @@
                 </div>
             {% endif %}
         </div>
-
-        <!-- Biens similaires -->
-        <div class="mt-16">
-            <h2 class="text-2xl lg:text-3xl font-bold text-primary-blue mb-8">
-                <i class="fas fa-home mr-3 text-accent-orange"></i>
-                {% trans "Similar Properties" %}
-            </h2>
-            {% if similar_properties %}
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {% for similar in similar_properties %}
-                        <div class="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group">
-                            {% if similar.photos.first %}
-                                <div class="relative overflow-hidden">
-                                    <img src="{{ similar.photos.first.image.url }}" alt="{{ similar.category.name }} - {{ similar.location }}"
-                                         class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
-                                    <div class="absolute top-4 left-4">
-                                        <span class="bg-primary-blue text-white px-3 py-1 rounded-full text-sm font-semibold shadow-sm">
-                                            {{ similar.category.name }}
-                                        </span>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="w-full h-48 flex items-center justify-center bg-gray-100 rounded-t-3xl">
-                                    <i class="fas fa-home text-gray-300 text-4xl"></i>
-                                </div>
-                            {% endif %}
-                            <div class="p-6">
-                                <h3 class="text-lg lg:text-xl font-bold text-primary-blue mb-2 group-hover:text-accent-orange transition-colors duration-200">
-                                    {{ similar.category.name }} - {{ similar.location|truncatewords:5 }}
-                                </h3>
-                                <p class="text-gray-600 mb-3 text-base">{{ similar.location }}</p>
-                                <div class="flex items-center justify-between mb-4">
-                                    <span class="text-xl font-bold text-accent-orange">{{ similar.price_per_month|floatformat:0 }} FCFA</span>
-                                </div>
-                                <a href="{% url 'property_detail' similar.id %}"
-                                   class="w-full bg-primary-blue hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors duration-300 text-center block shadow-md hover:shadow-lg">
-                                    {% trans "View Details" %}
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="text-center py-12 bg-white rounded-3xl shadow-lg">
-                    <i class="fas fa-home text-gray-300 text-6xl mb-4"></i>
-                    <p class="text-gray-500 text-base">{% trans "No similar properties found at the moment." %}</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
 </section>
 {% endblock %}

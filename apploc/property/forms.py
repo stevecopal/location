@@ -40,9 +40,7 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
         fields = ['image']
-        labels = {
-            'image': _('Image'),
-        }
+        labels = {'image': _('Image')}
         widgets = {
             'image': forms.ClearableFileInput(attrs={'class': 'w-full p-3 border border-gray-300 rounded-lg'}),
         }
@@ -58,13 +56,12 @@ class PhotoForm(forms.ModelForm):
                     raise forms.ValidationError(_("L'image ne doit pas dépasser 5 Mo."))
         return image
 
+
 class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
         fields = ['video_file']
-        labels = {
-            'video_file': _('Fichier vidéo'),
-        }
+        labels = {'video_file': _('Fichier vidéo')}
         widgets = {
             'video_file': forms.ClearableFileInput(attrs={'class': 'w-full p-3 border border-gray-300 rounded-lg'}),
         }
@@ -79,6 +76,6 @@ class VideoForm(forms.ModelForm):
                 if video.size > 50 * 1024 * 1024:
                     raise forms.ValidationError(_("La vidéo ne doit pas dépasser 50 Mo."))
         return video
-
+    
 PhotoFormSet = modelformset_factory(Photo, form=PhotoForm, extra=3, can_delete=True)
 VideoFormSet = modelformset_factory(Video, form=VideoForm, extra=2, can_delete=True)

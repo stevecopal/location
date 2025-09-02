@@ -13,76 +13,74 @@
     </div>
 
     <!-- Search and Filter Section -->
-            <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 mb-8">
-                <form id="search-form" method="get" action="{% url 'all_properties' %}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Location -->
-                    <div>
-                        <label for="location" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Location" %}</label>
-                        <input
-                            type="text"
-                            id="location"
-                            name="location"
-                            value="{{ location }}"
-                            placeholder="{% trans 'Enter location' %}"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
-                            aria-label="{% trans 'Search by location' %}"
-                        >
-                    </div>
-
-                    <!-- Property Type -->
-                    <div>
-                        <label for="property_type" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Property Type" %}</label>
-                        <select
-                            id="property_type"
-                            name="property_type"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
-                            aria-label="{% trans 'Select property type' %}"
-                        >
-                            <option value="" {% if not property_type %}selected{% endif %}>{% trans "All Types" %}</option>
-                            {% for category in categories %}
-                                <option value="{{ category.name|lower }}" {% if property_type == category.name|lower %}selected{% endif %}>
-                                    {{ category.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <!-- Price Range -->
-                    <div>
-                        <label for="price_range" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Price Range" %}</label>
-                        <select
-                            id="price_range"
-                            name="price_range"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
-                            aria-label="{% trans 'Select price range' %}"
-                        >
-                            <option value="" {% if not price_range %}selected{% endif %}>{% trans "Any Price" %}</option>
-                            <option value="under_100k" {% if price_range == 'under_100k' %}selected{% endif %}>{% trans "Under  100,000 Fcfa" %}</option>
-                            <option value="100k_200k" {% if price_range == '100k_200k' %}selected{% endif %}>{% trans " 100,000 - 200,000 Fcfa" %}</option>
-                            <option value="200k_500k" {% if price_range == '200k_500k' %}selected{% endif %}>{% trans " 200,000 - 500,000 Fcfa" %}</option>
-                            <option value="over_500k" {% if price_range == 'over_500k' %}selected{% endif %}>{% trans "Over 500,000 Fcfa" %}</option>
-                        </select>
-                    </div>
-
-                    <!-- Search Button -->
-                    <div class="flex items-end">
-                        <button
-                            type="submit"
-                            class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors"
-                            aria-label="{% trans 'Search properties' %}"
-                        >
-                            {% trans "Search" %}
-                        </button>
-                    </div>
-                </form>
+    <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 mb-8">
+        <form id="search-form" method="get" action="{% url 'all_properties' %}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Location -->
+            <div>
+                <label for="location" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Location" %}</label>
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value="{{ location }}"
+                    placeholder="{% trans 'Enter location' %}"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
+                    aria-label="{% trans 'Search by location' %}"
+                >
             </div>
 
-            <!-- Error Message -->
-            <div id="search-error" class="col-span-1 md:col-span-4 hidden text-red-600 text-sm mt-2" role="alert">
-                <i class="fas fa-exclamation-circle mr-1"></i>
-                {% trans "Please enter at least one search criterion." %}
+            <!-- Property Type -->
+            <div>
+                <label for="property_type" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Property Type" %}</label>
+                <select
+                    id="property_type"
+                    name="property_type"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
+                    aria-label="{% trans 'Select property type' %}"
+                >
+                    <option value="" {% if not property_type %}selected{% endif %}>{% trans "All Types" %}</option>
+                    {% for category in categories %}
+                        <option value="{{ category.name|lower }}" {% if property_type == category.name|lower %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Price Range -->
+            <div>
+                <label for="price_range" class="block text-sm font-medium text-primary-blue mb-1">{% trans "Price Range" %}</label>
+                <select
+                    id="price_range"
+                    name="price_range"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition duration-200"
+                    aria-label="{% trans 'Select price range' %}"
+                >
+                    <option value="" {% if not price_range %}selected{% endif %}>{% trans "Any Price" %}</option>
+                    <option value="under_100k" {% if price_range == 'under_100k' %}selected{% endif %}>{% trans "Under  100,000 Fcfa" %}</option>
+                    <option value="100k_200k" {% if price_range == '100k_200k' %}selected{% endif %}>{% trans " 100,000 - 200,000 Fcfa" %}</option>
+                    <option value="200k_500k" {% if price_range == '200k_500k' %}selected{% endif %}>{% trans " 200,000 - 500,000 Fcfa" %}</option>
+                    <option value="over_500k" {% if price_range == 'over_500k' %}selected{% endif %}>{% trans "Over 500,000 Fcfa" %}</option>
+                </select>
+            </div>
+
+            <!-- Search Button -->
+            <div class="flex items-end">
+                <button
+                    type="submit"
+                    class="bg-accent-orange hover:bg-accent-light text-white font-medium py-2 px-4 rounded-full transition-colors"
+                    aria-label="{% trans 'Search properties' %}"
+                >
+                    {% trans "Search" %}
+                </button>
             </div>
         </form>
+    </div>
+
+    <!-- Error Message -->
+    <div id="search-error" class="col-span-1 md:col-span-4 hidden text-red-600 text-sm mt-2" role="alert">
+        <i class="fas fa-exclamation-circle mr-1"></i>
+        {% trans "Please enter at least one search criterion." %}
     </div>
 
     <style>
@@ -114,13 +112,14 @@
             <div class="relative">
                 {% with first_photo=property.photos.first %}
                 {% if first_photo %}
-                    <img src="{{ first_photo.image.url }}" class="w-full h-48 object-cover" alt="{{ property.category.name }}">
+                    <!-- IMAGE RESPONSIVE -->
+                    <img src="{{ first_photo.image.url }}" class="w-full h-48 sm:h-56 md:h-64 lg:h-72 object-cover rounded-t-lg" alt="{{ property.category.name }}">
                 {% else %}
-                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-t-lg">
                         <i class="fas fa-home text-4xl text-gray-400"></i>
                     </div>
                 {% endif %}
-            {% endwith %}
+                {% endwith %}
                 <div class="absolute top-3 left-3">
                     <span class="bg-accent-orange text-white text-xs px-2 py-1 rounded-full">
                         {{ property.category.name }}

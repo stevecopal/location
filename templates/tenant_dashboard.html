@@ -7,34 +7,34 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 py-6">
     <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-primary-blue mb-2">
+    <div class="mb-8 text-center md:text-left">
+        <h1 class="text-2xl md:text-3xl font-bold text-primary-blue mb-2">
             {{ tenant.name }} {% trans "Dashboard" %}
         </h1>
-        <p class="text-gray-600">
+        <p class="text-gray-600 text-sm md:text-base">
             {% trans "Welcome back! Discover your next perfect home from our curated collection." %}
         </p>
     </div>
 
     <!-- Quick Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+        <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="flex items-center">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                    <i class="fas fa-home text-primary-blue text-xl"></i>
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-home text-primary-blue text-lg md:text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-primary-blue">{{ properties.count }}</p>
-                    <p class="text-sm text-gray-600">{% trans "Available Properties" %}</p>
+                    <p class="text-xl md:text-2xl font-bold text-primary-blue">{{ properties.count }}</p>
+                    <p class="text-xs md:text-sm text-gray-600">{% trans "Available Properties" %}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Action Button -->
-    <div class="mb-8">
+    <div class="mb-8 text-center md:text-left">
         <a href="{% url 'review_list' %}" 
-           class="bg-primary-blue hover:bg-primary-light text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center transition-colors">
+           class="bg-primary-blue hover:bg-primary-light text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold inline-flex items-center transition-colors text-sm md:text-base">
             <i class="fas fa-comments mr-2"></i>
             {% trans "Manage Your Reviews" %}
         </a>
@@ -42,22 +42,22 @@
 
     <!-- Properties Grid -->
     {% if properties %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         {% for property in properties %}
         <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
             <!-- Property Image -->
-            <div class="relative">
+            <div class="relative aspect-[4/3]">
                 {% if property.photos.first %}
                     <img src="{{ property.photos.first.image.url }}" 
-                         class="w-full h-48 object-cover" 
+                         class="w-full h-full object-cover" 
                          alt="{{ property.category.name }}">
                 {% else %}
-                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                        <i class="fas fa-home text-4xl text-gray-400"></i>
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-home text-3xl md:text-4xl text-gray-400"></i>
                     </div>
                 {% endif %}
                 <div class="absolute top-3 left-3">
-                    <span class="bg-{% if property.is_available %}green{% else %}gray{% endif %}-500 text-white text-xs px-2 py-1 rounded-full">
+                    <span class="bg-{% if property.is_available %}green{% else %}gray{% endif %}-500 text-white text-[10px] md:text-xs px-2 py-1 rounded-full">
                         {% if property.is_available %}
                             {% trans "Available" %}
                         {% else %}
@@ -65,34 +65,34 @@
                         {% endif %}
                     </span>
                 </div>
-                <button class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-sm hover:bg-accent-orange hover:text-white transition-colors">
-                    <i class="fas fa-heart"></i>
+                <button class="absolute top-3 right-3 bg-white p-1.5 md:p-2 rounded-full shadow-sm hover:bg-accent-orange hover:text-white transition-colors">
+                    <i class="fas fa-heart text-xs md:text-sm"></i>
                 </button>
             </div>
 
             <!-- Property Details -->
-            <div class="p-5">
-                <h3 class="font-semibold text-lg text-primary-blue mb-2">
+            <div class="p-4 md:p-5">
+                <h3 class="font-semibold text-base md:text-lg text-primary-blue mb-1 md:mb-2">
                     {{ property.category.name }}
                 </h3>
-                <p class="text-gray-600 text-sm mb-3 flex items-center">
-                    <i class="fas fa-map-marker-alt text-accent-orange mr-2"></i>
+                <p class="text-gray-600 text-xs md:text-sm mb-2 md:mb-3 flex items-center">
+                    <i class="fas fa-map-marker-alt text-accent-orange mr-1 md:mr-2"></i>
                     {{ property.location }}
                 </p>
-                <p class="text-gray-700 text-sm mb-4 line-clamp-2">
+                <p class="text-gray-700 text-xs md:text-sm mb-3 md:mb-4 line-clamp-2">
                     {{ property.description|truncatewords:20 }}
                 </p>
             </div>
 
-            <div class="flex items-center justify-between mb-4 px-5">
-                <span class="text-xl font-bold text-accent-orange">
+            <div class="flex items-center justify-between mb-3 md:mb-4 px-4 md:px-5">
+                <span class="text-base md:text-xl font-bold text-accent-orange">
                     ${{ property.price_per_month }}
                 </span>
-                <span class="text-sm text-gray-600">/{% trans "month" %}</span>
+                <span class="text-xs md:text-sm text-gray-600">/{% trans "month" %}</span>
             </div>
 
             <a href="{% url 'property_detail' property.id %}" 
-               class="block w-full bg-accent-orange hover:bg-accent-light text-white text-center py-2 px-4 rounded-lg font-semibold transition-colors">
+               class="block w-full bg-accent-orange hover:bg-accent-light text-white text-center py-2 px-4 rounded-lg font-semibold transition-colors text-sm md:text-base">
                 {% trans "View Details" %}
             </a>
         </div>
@@ -100,14 +100,14 @@
     </div>
     {% else %}
     <!-- Empty State -->
-    <div class="bg-white rounded-xl shadow-sm p-12 text-center">
-        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="fas fa-search text-3xl text-gray-400"></i>
+    <div class="bg-white rounded-xl shadow-sm p-8 md:p-12 text-center">
+        <div class="w-16 h-16 md:w-24 md:h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+            <i class="fas fa-search text-2xl md:text-3xl text-gray-400"></i>
         </div>
-        <h3 class="text-xl font-semibold text-gray-600 mb-2">
+        <h3 class="text-lg md:text-xl font-semibold text-gray-600 mb-1 md:mb-2">
             {% trans "No properties available" %}
         </h3>
-        <p class="text-gray-500">
+        <p class="text-gray-500 text-xs md:text-sm">
             {% trans "Check back later for new listings or try adjusting your search filters." %}
         </p>
     </div>
@@ -115,27 +115,27 @@
 
     <!-- Pagination -->
     {% if properties.has_other_pages %}
-    <div class="flex justify-center mt-8">
+    <div class="flex justify-center mt-6 md:mt-8">
         <nav class="flex items-center space-x-2">
             {% if properties.has_previous %}
                 <a href="?page={{ properties.previous_page_number }}" 
-                   class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                   class="px-2 md:px-3 py-1 md:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base">
                     <i class="fas fa-chevron-left"></i>
                 </a>
             {% endif %}
 
             {% for num in properties.paginator.page_range %}
                 {% if properties.number == num %}
-                    <span class="px-3 py-2 bg-accent-orange text-white rounded-lg">{{ num }}</span>
+                    <span class="px-2 md:px-3 py-1 md:py-2 bg-accent-orange text-white rounded-lg text-sm md:text-base">{{ num }}</span>
                 {% else %}
                     <a href="?page={{ num }}" 
-                       class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">{{ num }}</a>
+                       class="px-2 md:px-3 py-1 md:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base">{{ num }}</a>
                 {% endif %}
             {% endfor %}
 
             {% if properties.has_next %}
                 <a href="?page={{ properties.next_page_number }}" 
-                   class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                   class="px-2 md:px-3 py-1 md:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base">
                     <i class="fas fa-chevron-right"></i>
                 </a>
             {% endif %}

@@ -69,12 +69,50 @@ class CustomUserAdmin(BaseUserAdmin):
 # Inline pour Photo et Video
 class PhotoInline(admin.TabularInline):
     model = Photo
-    extra = 1
+    extra = 1  # Nombre de formulaires vides par défaut
+    fields = ('image', 'order', 'created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
+    can_delete = True  # Permettre la suppression
+    show_change_link = True  # Permettre la modification
+    ordering = ('order',)
+    def get_queryset(self, request):
+        # Filtrer les photos non supprimées
+        return super().get_queryset(request).filter(deleted_at__isnull=True)
 
 class VideoInline(admin.TabularInline):
     model = Video
     extra = 1
+    fields = ('video_file', 'order', 'created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
+    can_delete = True
+    show_change_link = True
+    ordering = ('order',)
+    def get_queryset(self, request):
+        # Filtrer les vidéos non supprimées
+        return super().get_queryset(request).filter(deleted_at__isnull=True)
+    
+admin.register(Photo)
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ('property', 'image', 'order', 'created_at', 'deleted_at')
+    list_filter = ('property', 'created_at', 'deleted_at')
+    search_fields = ('property__location',)
+    readonly_fields = ('created_at', 'updated_at')
+    ordering = ('order',)
+    def get_queryset(self, request):
+        # Filtrer les photos non supprimées dans la liste
+        return super().get_queryset(request).filter(deleted_at__isnull=True)
 
+@admin.register(Video)
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ('property', 'video_file', 'order', 'created_at', 'deleted_at')
+    list_filter = ('property', 'created_at', 'deleted_at')
+    search_fields = ('property__location',)
+    readonly_fields = ('created_at', 'updated_at')
+    ordering = ('order',)
+    def get_queryset(self, request):
+        # Filtrer les vidéos non supprimées dans la liste
+        return super().get_queryset(request).filter(deleted_at__isnull=True)
+    
 # Admin pour PendingUser
 @admin.register(PendingUser)
 class PendingUserAdmin(admin.ModelAdmin):

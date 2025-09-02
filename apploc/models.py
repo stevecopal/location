@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from django.contrib.auth.models import AbstractUser
 import unicodedata
+from django.core.exceptions import ValidationError
 
 class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -125,14 +126,24 @@ def photo_upload_path(instance, filename):
 class Photo(BaseModel):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='photos', verbose_name=_("Property"))
     image = models.ImageField(upload_to=photo_upload_path, verbose_name=_('Image'))
+    order = models.PositiveIntegerField(_("Order"), default=0)
 
     def __str__(self):
-        return _("Photo for {property}").format(property=self.property)
+        return _("Photo for {property} (Order: {order})").format(property=self.property, order=self.order)
+
+    class Meta:
+        ordering = ['order']
 
 class Video(BaseModel):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='videos', verbose_name=_("Property"))
     video_file = models.FileField(_("Video File"), upload_to='property_videos/')
+    order = models.PositiveIntegerField(_("Order"), default=0)
 
+    def __str__(self):
+        return _("Video for {property} (Order: {order})").format(property=self.property, order=self.order)
+
+    class Meta:
+        ordering = ['order']
     def __str__(self):
         return _("Video for {property}").format(property=self.property)
 
