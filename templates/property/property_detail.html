@@ -7,7 +7,7 @@
 {% block content %}
 <section class="py-16 bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <!-- Breadcrumb -->
+        <!-- Breadcrumb (unchanged) -->
         <nav class="mb-10">
             <ol class="flex items-center space-x-3 text-sm text-gray-500 font-medium">
                 <li><a href="{% url 'home' %}" class="hover:text-primary-blue transition-colors duration-200">{% trans "Home" %}</a></li>
@@ -25,12 +25,14 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Galerie -->
             <div class="lg:col-span-2 space-y-6">
-                {% if photos %}
-                    <!-- Image principale responsive -->
+                {% if photos or videos %}
+                    <!-- Main Media Area -->
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-white max-w-full">
-                        <img src="{{ photos.first.image.url }}" alt="{{ property.category.name }} - {{ property.location }}"
-                             class="w-full h-64 sm:h-80 md:h-[32rem] object-cover transition-transform duration-500 hover:scale-105 rounded-3xl cursor-pointer"
+                        <div id="main-media" class="w-full h-64 sm:h-80 md:h-[32rem] object-cover transition-transform duration-500 hover:scale-105 rounded-3xl cursor-pointer"
                              data-index="0" data-src="{{ photos.first.image.url }}" data-type="image">
+                            <img src="{{ photos.first.image.url }}" alt="{{ property.category.name }} - {{ property.location }}"
+                                 class="w-full h-full object-cover rounded-3xl main-media-content">
+                        </div>
                         <div class="absolute top-4 left-4">
                             <span class="bg-primary-blue text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md">
                                 {{ property.category.name }}
@@ -38,14 +40,25 @@
                         </div>
                     </div>
 
-                    <!-- Miniatures responsive -->
+                    <!-- Thumbnails -->
                     <div class="grid grid-cols-3 sm:grid-cols-5 gap-4">
                         {% for photo in photos %}
                             <div class="relative group cursor-pointer">
                                 <img src="{{ photo.image.url }}" alt="Photo {{ forloop.counter }}"
-                                     class="w-full h-20 sm:h-24 md:h-28 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105"
+                                     class="w-full h-20 sm:h-24 md:h-28 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105 thumbnail"
                                      data-index="{{ forloop.counter0 }}" data-src="{{ photo.image.url }}" data-type="image">
                                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-lg transition-all duration-300"></div>
+                            </div>
+                        {% endfor %}
+                        {% for video in videos %}
+                            <div class="relative group cursor-pointer">
+                                <video class="w-full h-20 sm:h-24 md:h-28 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105 thumbnail"
+                                       data-index="{{ photos.count|add:forloop.counter0 }}" data-src="{{ video.video_file.url }}" data-type="video">
+                                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                                </video>
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-lg transition-all duration-300 flex items-center justify-center">
+                                    <i class="fas fa-play text-white text-xl opacity-50 group-hover:opacity-75"></i>
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
@@ -57,25 +70,9 @@
                         </div>
                     </div>
                 {% endif %}
-
-                <!-- Vidéos -->
-                {% if videos %}
-                    <h2 class="text-2xl font-semibold text-primary-blue mt-8 mb-4">{% trans "Videos" %}</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {% for video in videos %}
-                            <video controls class="w-full h-48 rounded-lg shadow-md cursor-pointer"
-                                   data-index="{{ photos.count|add:forloop.counter0 }}" data-src="{{ video.video_file.url }}" data-type="video">
-                                <source src="{{ video.video_file.url }}" type="video/mp4">
-                                {% trans "Your browser does not support the video tag." %}
-                            </video>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="text-gray-500 mt-4">{% trans "No videos available" %}</p>
-                {% endif %}
             </div>
 
-            <!-- Informations principales -->
+            <!-- Informations principales (unchanged) -->
             <div class="space-y-6">
                 <div>
                     <h1 class="text-3xl lg:text-4xl font-bold text-primary-blue leading-tight">{{ property.category.name }} - {{ property.location }}</h1>
@@ -107,7 +104,7 @@
                     <p class="text-gray-700 leading-relaxed text-base lg:text-lg">{{ property.description }}</p>
                 </div>
 
-                <!-- Informations sensibles -->
+                <!-- Informations sensibles (unchanged) -->
                 {% if show_sensitive_info %}
                     <div class="bg-gradient-to-r from-primary-blue to-blue-700 rounded-3xl p-6 text-white shadow-lg">
                         <h3 class="text-xl font-semibold mb-4 flex items-center">
@@ -119,7 +116,6 @@
                                 <i class="fas fa-envelope mr-3 text-accent-orange text-lg"></i>
                                 <span>{{ property.owner.email }}</span>
                             </div>
-                            <!-- Bouton WhatsApp -->
                             <div class="mt-4">
                                 <a href="https://wa.me/{{ property.owner.phone|cut:' ' }}?text={{ 'Bonjour, je suis intéressé par votre propriété située à ' }}{{ property.location|urlencode }}"
                                    target="_blank"
@@ -142,7 +138,7 @@
                     </div>
                 {% endif %}
 
-                <!-- Bouton Ajouter un avis -->
+                <!-- Bouton Ajouter un avis (unchanged) -->
                 {% if request.user.is_authenticated and request.user.role == 'tenant' %}
                     <div class="text-center">
                         <a href="{% url 'review_create' property.id %}"
@@ -155,7 +151,7 @@
             </div>
         </div>
 
-        <!-- Section Avis -->
+        <!-- Section Avis (unchanged) -->
         <div class="mt-16">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-2xl lg:text-3xl font-bold text-primary-blue">
@@ -192,22 +188,22 @@
             {% endif %}
         </div>
 
-        <!-- Lightbox pour agrandir les médias -->
-        <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 hidden flex items-center justify-center z-50 transition-opacity duration-300">
-            <div class="relative max-w-5xl w-full mx-4">
-                <!-- Contenu de la lightbox -->
-                <div id="lightbox-content" class="bg-white rounded-2xl overflow-hidden shadow-2xl"></div>
-                <!-- Bouton fermer -->
-                <button id="lightbox-close" class="absolute top-4 right-4 bg-primary-blue text-white p-3 rounded-full hover:bg-primary-light transition-colors duration-200">
-                    <i class="fas fa-times text-lg"></i>
+        <!-- Lightbox for enlarged image view -->
+        <div id="image-lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center hidden">
+            <div class="relative max-w-4xl w-full mx-4">
+                <button id="lightbox-close" class="absolute -top-12 right-0 text-white text-3xl z-10 hover:text-accent-orange transition-colors">
+                    <i class="fas fa-times"></i>
                 </button>
-                <!-- Boutons de navigation -->
-                <button id="lightbox-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-primary-blue text-white p-4 rounded-full hover:bg-primary-light transition-colors duration-200 opacity-0 group-hover:opacity-100">
-                    <i class="fas fa-chevron-left text-xl"></i>
+                <button id="lightbox-prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-3xl ml-4 z-10 hover:text-accent-orange transition-colors">
+                    <i class="fas fa-chevron-left"></i>
                 </button>
-                <button id="lightbox-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-primary-blue text-white p-4 rounded-full hover:bg-primary-light transition-colors duration-200 opacity-0 group-hover:opacity-100">
-                    <i class="fas fa-chevron-right text-xl"></i>
+                <button id="lightbox-next" class="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-3xl mr-4 z-10 hover:text-accent-orange transition-colors">
+                    <i class="fas fa-chevron-right"></i>
                 </button>
+                <div class="w-full h-full flex items-center justify-center">
+                    <img id="lightbox-image" src="" alt="" class="max-w-full max-h-[90vh] object-contain rounded-lg">
+                </div>
+                <div id="lightbox-counter" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-lg font-medium bg-black bg-opacity-50 px-4 py-2 rounded-full"></div>
             </div>
         </div>
     </div>
@@ -215,102 +211,207 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxContent = document.getElementById('lightbox-content');
+    // Lightbox functionality for image enlargement
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCounter = document.getElementById('lightbox-counter');
     const closeBtn = document.getElementById('lightbox-close');
     const prevBtn = document.getElementById('lightbox-prev');
     const nextBtn = document.getElementById('lightbox-next');
-
-    const mediaItems = Array.from(document.querySelectorAll('[data-src]')).map(item => ({
+    
+    // Get all image elements (both main and thumbnails)
+    const mainMediaImage = document.querySelector('#main-media img');
+    const thumbnailImages = document.querySelectorAll('.thumbnail[data-type="image"]');
+    
+    // Create array of all image URLs
+    const imageUrls = [];
+    
+    // Add main image if it exists
+    if (mainMediaImage && mainMediaImage.src) {
+        imageUrls.push(mainMediaImage.src);
+    }
+    
+    // Add all thumbnail images
+    thumbnailImages.forEach(img => {
+        if (img.dataset.src && !imageUrls.includes(img.dataset.src)) {
+            imageUrls.push(img.dataset.src);
+        }
+    });
+    
+    let currentImageIndex = 0;
+    
+    // Function to open lightbox with specific image
+    function openLightbox(index) {
+        if (imageUrls.length === 0) return;
+        
+        currentImageIndex = index;
+        lightboxImage.src = imageUrls[currentImageIndex];
+        lightboxCounter.textContent = `${currentImageIndex + 1} / ${imageUrls.length}`;
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when lightbox is open
+        
+        // Show/hide navigation buttons
+        prevBtn.style.display = imageUrls.length > 1 ? 'block' : 'none';
+        nextBtn.style.display = imageUrls.length > 1 ? 'block' : 'none';
+        lightboxCounter.style.display = imageUrls.length > 1 ? 'block' : 'none';
+    }
+    
+    // Function to close lightbox
+    function closeLightbox() {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = ''; // Re-enable scrolling
+    }
+    
+    // Function to show next image
+    function showNextImage() {
+        currentImageIndex = (currentImageIndex + 1) % imageUrls.length;
+        openLightbox(currentImageIndex);
+    }
+    
+    // Function to show previous image
+    function showPrevImage() {
+        currentImageIndex = (currentImageIndex - 1 + imageUrls.length) % imageUrls.length;
+        openLightbox(currentImageIndex);
+    }
+    
+    // Add click event to main media image
+    if (mainMediaImage) {
+        mainMediaImage.parentElement.addEventListener('click', () => {
+            const src = mainMediaImage.src;
+            const index = imageUrls.indexOf(src);
+            if (index !== -1) {
+                openLightbox(index);
+            }
+        });
+    }
+    
+    // Add click events to all thumbnail images
+    thumbnailImages.forEach((img) => {
+        img.addEventListener('click', () => {
+            const src = img.dataset.src;
+            const foundIndex = imageUrls.indexOf(src);
+            if (foundIndex !== -1) {
+                openLightbox(foundIndex);
+            }
+        });
+    });
+    
+    // Lightbox control events
+    closeBtn.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', showPrevImage);
+    nextBtn.addEventListener('click', showNextImage);
+    
+    // Close lightbox when clicking on the background
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('hidden')) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowRight') {
+                showNextImage();
+            } else if (e.key === 'ArrowLeft') {
+                showPrevImage();
+            }
+        }
+    });
+    
+    // Your existing media gallery script
+    const mainMedia = document.getElementById('main-media');
+    const mediaItems = Array.from(document.querySelectorAll('.thumbnail')).map(item => ({
         src: item.dataset.src,
         type: item.dataset.type || 'image',
         alt: item.getAttribute('alt') || 'Media'
     }));
 
-    if (mediaItems.length === 0) {
-        console.error("Aucun média disponible pour cette propriété.");
-    }
+    if (mediaItems.length > 0) {
+        let currentIndex = 0;
 
-    let currentIndex = 0;
+        // Update main media area
+        function updateMainMedia(index) {
+            const media = mediaItems[index];
+            currentIndex = parseInt(index, 10);
+            mainMedia.dataset.index = currentIndex;
+            mainMedia.dataset.src = media.src;
+            mainMedia.dataset.type = media.type;
 
-    function showLightbox(index) {
-        if (mediaItems.length === 0) return;
-        currentIndex = parseInt(index, 10);
-        updateLightboxContent();
-        lightbox.classList.remove('hidden');
-        setTimeout(() => lightbox.classList.add('opacity-100'), 50);
-    }
-
-    function updateLightboxContent() {
-        const media = mediaItems[currentIndex];
-        if (media.type === 'image') {
-            lightboxContent.innerHTML = `
-                <img src="${media.src}" alt="${media.alt}" class="w-full max-h-[85vh] object-contain rounded-2xl transition-transform duration-300">
+            if (media.type === 'image') {
+                mainMedia.innerHTML = `
+                    <img src="${media.src}" alt="${media.alt}" class="w-full h-full object-cover rounded-3xl main-media-content cursor-zoom-in">
+                `;
+                // Re-add the click event to the new image
+                const newImage = mainMedia.querySelector('img');
+                newImage.addEventListener('click', () => {
+                    const src = newImage.src;
+                    const foundIndex = imageUrls.indexOf(src);
+                    if (foundIndex !== -1) {
+                        openLightbox(foundIndex);
+                    }
+                });
+            } else if (media.type === 'video') {
+                mainMedia.innerHTML = `
+                    <video controls autoplay class="w-full h-full object-cover rounded-3xl main-media-content">
+                        <source src="${media.src}" type="video/mp4">
+                        {% trans "Your browser does not support the video tag." %}
+                    </video>
+                `;
+            }
+            // Pause any existing videos
+            const videos = mainMedia.getElementsByTagName('video');
+            for (let video of videos) {
+                video.pause();
+            }
+            
+            // Re-add the category badge
+            const badge = document.createElement('div');
+            badge.className = 'absolute top-4 left-4';
+            badge.innerHTML = `
+                <span class="bg-primary-blue text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md">
+                    ${document.querySelector('.absolute.top-4.left-4 span').textContent}
+                </span>
             `;
-        } else if (media.type === 'video') {
-            lightboxContent.innerHTML = `
-                <video controls autoplay class="w-full max-h-[85vh] object-contain rounded-2xl">
-                    <source src="${media.src}" type="video/mp4">
-                    {% trans "Your browser does not support the video tag." %}
-                </video>`;
+            mainMedia.appendChild(badge);
         }
-        // Gérer les boutons de navigation
-        prevBtn.style.display = currentIndex === 0 ? 'none' : 'block';
-        nextBtn.style.display = currentIndex === mediaItems.length - 1 ? 'none' : 'block';
-        // Arrêter les vidéos précédentes
-        const videos = lightboxContent.getElementsByTagName('video');
-        for (let video of videos) {
-            video.pause();
-        }
+
+        // Thumbnail click: Update main media
+        document.querySelectorAll('.thumbnail').forEach(item => {
+            item.addEventListener('click', () => {
+                updateMainMedia(item.dataset.index);
+            });
+        });
     }
-
-    function closeLightbox() {
-        lightbox.classList.remove('opacity-100');
-        setTimeout(() => lightbox.classList.add('hidden'), 300);
-        // Arrêter toutes les vidéos
-        const videos = lightboxContent.getElementsByTagName('video');
-        for (let video of videos) {
-            video.pause();
-        }
-    }
-
-    document.querySelectorAll('[data-src]').forEach(item => {
-        item.addEventListener('click', () => showLightbox(item.dataset.index));
-    });
-
-    closeBtn.addEventListener('click', closeLightbox);
-
-    prevBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
-        updateLightboxContent();
-    });
-
-    nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % mediaItems.length;
-        updateLightboxContent();
-    });
-
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('hidden')) {
-            if (e.key === 'ArrowLeft') prevBtn.click();
-            if (e.key === 'ArrowRight') nextBtn.click();
-            if (e.key === 'Escape') closeBtn.click();
-        }
-    });
-
-    // Afficher les boutons de navigation au survol
-    lightbox.addEventListener('mouseenter', () => {
-        prevBtn.classList.add('opacity-100');
-        nextBtn.classList.add('opacity-100');
-    });
-    lightbox.addEventListener('mouseleave', () => {
-        prevBtn.classList.remove('opacity-100');
-        nextBtn.classList.remove('opacity-100');
-    });
 });
 </script>
+
+<style>
+#image-lightbox {
+    transition: opacity 0.3s ease;
+}
+#image-lightbox:not(.hidden) {
+    display: flex !important;
+}
+#lightbox-prev, #lightbox-next {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#lightbox-prev:hover, #lightbox-next:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.main-media-content {
+    cursor: zoom-in;
+}
+.thumbnail {
+    cursor: pointer;
+}
+</style>
 {% endblock %}
