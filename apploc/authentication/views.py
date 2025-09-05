@@ -1,4 +1,5 @@
 from datetime import timedelta
+from django.db import IntegrityError
 from django.utils import timezone
 import logging
 import random
@@ -19,51 +20,86 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            email = form.cleaned_data['email'].lower().strip()
+            phone = form.cleaned_data.get('phone', '')
+            user_type = form.cleaned_data['user_type'].lower()
+            password = form.cleaned_data['password1']
+
+            # Vérifier si l'email existe déjà
+            if CustomUser.objects.filter(email=email).exists():
+                messages.error(request, _("Cet email est déjà utilisé. Veuillez vous connecter."))
+                logger.warning(f"Tentative d'inscription avec email existant : {email}")
+                return render(request, 'authentication/signup.html', {'form': form})
 
             # Vérifier si un PendingUser existe déjà
             pending_user = PendingUser.objects.filter(email=email).first()
             if pending_user:
-                # Vérifier le délai de 3 minutes
                 if pending_user.updated_at and timezone.now() < pending_user.updated_at + timedelta(minutes=3):
-                    messages.error(request, _('You must wait 3 minutes before requesting a new code.'))
+                    messages.error(request, _("Vous devez attendre 3 minutes avant de demander un nouveau code."))
+                    logger.warning(f"Délai de 3 minutes non écoulé pour : {email}")
                     return render(request, 'authentication/signup.html', {'form': form})
-                # Mettre à jour le code et l'expiration
                 pending_user.verification_code = str(random.randint(1000, 9999))
                 pending_user.expires_at = timezone.now() + timedelta(minutes=10)
                 pending_user.save()
-                messages.info(request, _('A new verification code has been sent to your email.'))
+                messages.info(request, _("Un nouveau code de vérification a été envoyé à votre email."))
             else:
+                # Générer un username unique
+                base_username = email.split('@')[0].replace('.', '').replace('_', '')[:30]
+                username = base_username
+                counter = 1
+                while CustomUser.objects.filter(username=username).exists() or PendingUser.objects.filter(username=username).exists():
+                    username = f"{base_username}{counter}"
+                    counter += 1
+
+                # Vérifier user_type
+                if user_type not in ['tenant', 'owner']:
+                    messages.error(request, _("Type d'utilisateur invalide."))
+                    logger.error(f"Type d'utilisateur invalide lors de l'inscription : {user_type}")
+                    return render(request, 'authentication/signup.html', {'form': form})
+
                 # Créer un nouveau pending user
-                username = email.split('@')[0] + str(random.randint(100, 999))
                 verification_code = str(random.randint(1000, 9999))
                 expires_at = timezone.now() + timedelta(minutes=10)
-
                 pending_user = PendingUser.objects.create(
                     username=username,
                     email=email,
-                    phone=form.cleaned_data.get('phone', ''),
-                    password=form.cleaned_data['password1'],
+                    phone=phone,
+                    password=password,  # Stocké en clair temporairement
                     verification_code=verification_code,
                     expires_at=expires_at,
-                    user_type=form.cleaned_data['user_type'],
+                    user_type=user_type,
                 )
-                messages.success(request, _('A verification code has been sent to your email.'))
+                messages.success(request, _("Un code de vérification a été envoyé à votre email."))
+
+            # Envoyer l'email de vérification
+            try:
+                send_verification_email.delay(email, verification_code)  # Utilisation de Celery
+                logger.info(f"Code OTP envoyé pour : {email}")
+            except Exception as e:
+                pending_user.delete()
+                messages.error(request, _("Erreur lors de l'envoi de l'email. Veuillez réessayer."))
+                logger.error(f"Erreur envoi email pour {email} : {str(e)}")
+                return render(request, 'authentication/signup.html', {'form': form})
 
             return redirect('verify_email', email=email)
-
     else:
         form = SignupForm()
     return render(request, 'authentication/signup.html', {'form': form})
 
 def verify_email(request, email):
-    pending_user = get_object_or_404(PendingUser, email=email)
+    email = email.lower().strip()  # Normaliser l'email
+    try:
+        pending_user = get_object_or_404(PendingUser, email=email)
+    except PendingUser.DoesNotExist:
+        messages.error(request, _("Aucun utilisateur en attente trouvé avec cet email."))
+        logger.warning(f"Tentative de vérification pour un email non existant : {email}")
+        return redirect('signup')
 
     # Vérifier l'expiration du code
     if pending_user.expires_at < timezone.now():
         pending_user.delete()
-        messages.error(request, _('Verification code has expired. Please sign up again.'))
-        logger.warning(f"Expired verification code for: {email}")
+        messages.error(request, _("Le code de vérification a expiré. Veuillez vous réinscrire."))
+        logger.warning(f"Code de vérification expiré pour : {email}")
         return redirect('signup')
 
     if request.method == 'POST':
@@ -71,33 +107,71 @@ def verify_email(request, email):
         if form.is_valid():
             code = form.cleaned_data['code']
             if code == pending_user.verification_code:
-                # Créer l'utilisateur final
-                user = CustomUser.objects.create_user(
-                    username=pending_user.username,
-                    email=pending_user.email,
-                    password=pending_user.password,  # sera hashé correctement
-                    phone=pending_user.phone,
-                    role=pending_user.user_type,
-                    is_approved=(pending_user.user_type == 'tenant'),
-                    is_active=(pending_user.user_type == 'tenant')
-                )
+                try:
+                    # Vérifier l'unicité de l'email et du username
+                    if CustomUser.objects.filter(email=pending_user.email).exists():
+                        pending_user.delete()
+                        messages.error(request, _("Un compte avec cet email existe déjà. Veuillez vous connecter."))
+                        logger.error(f"Tentative de création d'un utilisateur existant : {email}")
+                        return redirect('login')
+                    if CustomUser.objects.filter(username=pending_user.username).exists():
+                        pending_user.delete()
+                        messages.error(request, _("Ce nom d'utilisateur est déjà pris. Veuillez vous réinscrire."))
+                        logger.error(f"Tentative de création avec un nom d'utilisateur existant : {pending_user.username}")
+                        return redirect('signup')
 
-                # Supprimer le pending_user après création
-                pending_user.delete()
+                    # Normaliser user_type pour correspondre à role
+                    user_type = pending_user.user_type.lower()
+                    if user_type not in ['tenant', 'owner']:
+                        pending_user.delete()
+                        messages.error(request, _("Type d'utilisateur invalide. Veuillez vous réinscrire."))
+                        logger.error(f"Type d'utilisateur invalide pour {email}: {pending_user.user_type}")
+                        return redirect('signup')
 
-                # Connexion auto si locataire
-                if user.role == 'tenant':
-                    auth_login(request, user)
-                    messages.success(request, _('Email verified successfully. You are now logged in.'))
-                    logger.info(f"Email verified and tenant created: {email}")
-                    return redirect('home')
-                else:
-                    messages.success(request, _('Email verified successfully. Your account is pending admin approval.'))
-                    logger.info(f"Email verified and owner created (pending approval): {email}")
-                    return redirect('login')
+                    # Créer l'utilisateur final
+                    user = CustomUser.objects.create_user(
+                        username=pending_user.username,
+                        email=pending_user.email.lower().strip(),
+                        password=pending_user.password,  # Le mot de passe sera hashé
+                        phone=pending_user.phone or '',
+                        role=user_type,
+                        is_approved=(user_type == 'tenant'),
+                        is_active=(user_type == 'tenant')
+                    )
+
+                    # Supprimer l'utilisateur en attente
+                    pending_user.delete()
+
+                    # Connexion automatique pour les locataires
+                    if user.role == 'tenant':
+                        auth_login(request, user)
+                        messages.success(request, _("Email vérifié avec succès. Vous êtes maintenant connecté."))
+                        logger.info(f"Email vérifié et locataire connecté : {email}")
+                        return redirect('home')
+                    else:
+                        messages.success(request, _("Email vérifié avec succès. Votre compte est en attente d'approbation par l'administrateur."))
+                        logger.info(f"Email vérifié et compte propriétaire créé (en attente d'approbation) : {email}")
+                        return redirect('login')
+
+                except IntegrityError as e:
+                    messages.error(request, _("Erreur : Cet email ou nom d'utilisateur est déjà utilisé."))
+                    logger.error(f"IntegrityError lors de la création de l'utilisateur pour {email} : {str(e)}")
+                    pending_user.delete()
+                    return redirect('signup')
+                except ValueError as e:
+                    messages.error(request, _("Erreur : Données invalides pour la création de l'utilisateur."))
+                    logger.error(f"ValueError lors de la création de l'utilisateur pour {email} : {str(e)}")
+                    pending_user.delete()
+                    return redirect('signup')
+                except Exception as e:
+                    messages.error(request, _("Erreur inattendue lors de la création de l'utilisateur. Veuillez réessayer."))
+                    logger.error(f"Erreur inattendue lors de la création de l'utilisateur pour {email} : {str(e)}")
+                    return redirect('signup')
             else:
-                messages.error(request, _('Invalid verification code.'))
-                logger.warning(f"Invalid verification code attempt for: {email}, entered: {code}")
+                messages.error(request, _("Code de vérification invalide."))
+                logger.warning(f"Tentative de code invalide pour : {email}, code saisi : {code}")
+        else:
+            messages.error(request, _("Formulaire invalide. Veuillez vérifier les informations saisies."))
     else:
         form = VerificationCodeForm()
 

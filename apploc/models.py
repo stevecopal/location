@@ -61,20 +61,35 @@ class CustomUser(AbstractUser, BaseModel):
     location = models.CharField(_("Location"), max_length=200, blank=True)
     role = models.CharField(_("Role"), max_length=20, choices=ROLE_CHOICES, default='tenant')
     is_approved = models.BooleanField(_("Is Approved"), default=False)
-    objects = CustomUserManager() 
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.username
-    
+
     def save(self, *args, **kwargs):
-        # Générer username si vide ou si email a changé
-        if not self.username or (self.pk and self.email != CustomUser.objects.get(pk=self.pk).email):
+        # Normaliser l'email
+        self.email = self.email.lower().strip()
+        # Générer username si vide
+        if not self.username:
             base_username = self.email.split('@')[0].replace('.', '').replace('_', '')[:30]
             self.username = base_username
             counter = 1
             while CustomUser.objects.filter(username=self.username).exclude(id=self.id).exists():
                 self.username = f"{base_username}{counter}"
                 counter += 1
+        # Vérifier si l'email a changé pour un utilisateur existant
+        if self.pk:
+            try:
+                existing_user = CustomUser.objects.get(pk=self.pk)
+                if self.email != existing_user.email:
+                    base_username = self.email.split('@')[0].replace('.', '').replace('_', '')[:30]
+                    self.username = base_username
+                    counter = 1
+                    while CustomUser.objects.filter(username=self.username).exclude(id=self.id).exists():
+                        self.username = f"{base_username}{counter}"
+                        counter += 1
+            except CustomUser.DoesNotExist:
+                pass  # Ignorer si l'utilisateur n'existe pas encore
         try:
             super().save(*args, **kwargs)
         except Exception as e:
@@ -83,7 +98,7 @@ class CustomUser(AbstractUser, BaseModel):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
-
+        
 class PendingUser(BaseModel):
     username = models.CharField(_("Username"), max_length=150, unique=True)
     email = models.EmailField(_("Email"), unique=True)
